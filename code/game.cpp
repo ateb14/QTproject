@@ -124,8 +124,8 @@ void Game::start(){
     connect(timer, &QTimer::timeout, this, &Game::updateGame);
 
     /* Player Init */
-    player1 = new PlayerObject(WIDTH/4, HEIGHT/2, 65, 65, player1Src, this);
-    player2 = new PlayerObject(3*WIDTH/4, HEIGHT/2, 50, 50, player2Src, this);
+    player1 = new GamePlayer(WIDTH/4, HEIGHT/2, 65, player1Src, this);
+    player2 = new GamePlayer(3*WIDTH/4, HEIGHT/2, 50, player2Src, this);
 
     this->globalTime = 0;
     this->timer->start(T);
