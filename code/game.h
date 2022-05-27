@@ -13,7 +13,7 @@
 #include <object.h>
 #include <player.h>
 #include <windows.h>
-#include <vector>
+#include <list>
 
 enum windowMode{
     HOME = 0,
@@ -28,7 +28,7 @@ class Game:public QGraphicsScene{
 public:
     Game();
     friend class GameObject;
-    friend class PlayerObject;
+    friend class GamePlayer;
 protected:
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
@@ -62,8 +62,8 @@ private:
 
     /* objects */
     /* player */
-    PlayerObject *player1, *player2;
-    std::vector<GameObject> gameObjects;
+    GamePlayer *player1, *player2;
+    std::list<GameObject *> gameObjects;
 
     int getMoveHorizental(int playerID);
     int getMoveVertical(int playerID);
