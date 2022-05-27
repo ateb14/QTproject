@@ -44,6 +44,7 @@ private:
     /* Keyboard Control Flags*/
     bool isPressingW,isPressingA,isPressingS,isPressingD;
     bool isPressingUp,isPressingDown,isPressingLeft,isPressingRight;
+    PlayerAction parseKeyboard(int playerID);
     /* Buttons */
     QGraphicsWidget *quitButton;
     QGraphicsWidget *startButton;

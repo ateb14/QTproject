@@ -1,12 +1,32 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-
+;
 #include "object.h"
 
+typedef long long PlayerAction;
+
+enum{
+    /* movement */
+    UP = 1,
+    LEFT = 1<<1,
+    DOWN = 1<<2,
+    RIGHT = 1<<3,
+    /* shoot */
+    UPSHOOT = 1<<4,
+    LEFTSHOOT = 1<<5,
+    DOWNSHOOT = 1<<6,
+    RIGHTSHOOT = 1<<7,
+    /* Speed Factors */
+    CONTROLSLOW = 1<<8,
+    /* Special */
+    SKILL = 1<<9,
+    ITEM = 1<<10,
+};
+
 struct ActionSet{
-    long long actions;
-    bool contains(int action);
-    ActionSet(long long actions_);
+    PlayerAction actions;
+    bool contains(PlayerAction action);
+    ActionSet(PlayerAction actions_);
 };
 
 class GamePlayer:public GameObject

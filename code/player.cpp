@@ -4,8 +4,11 @@ const int PLAYERHEALTH = 100;
 const int SPEED = 5;
 const double PLAYERMASS = 1145141919810;
 
-bool ActionSet::contains(int action){return false;} // TO DO
-ActionSet::ActionSet(long long actions_){actions = actions_;}
+bool ActionSet::contains(PlayerAction action){
+    if(actions & action) return true;
+    return false;
+}
+ActionSet::ActionSet(PlayerAction actions_){actions = actions_;}
 
 GamePlayer::GamePlayer(int x, int y, int r, const char *ImageSrc, QGraphicsScene *scene_)
 :GameObject(x, y, r, PLAYERMASS, ImageSrc, scene_){
