@@ -23,7 +23,7 @@ enum windowMode{
     OPTION
 };
 
-class Game:public QGraphicsScene{
+class Game: public QGraphicsScene{
     Q_OBJECT
 public:
     Game();
