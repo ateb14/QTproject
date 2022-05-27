@@ -164,8 +164,8 @@ void Game::updateGame()
         it = it2; // 遍历删除
     }
 
-    player1->playerAct(0);
-    player2->playerAct(0); // 0 is TO BE REPLACED by actions
+    player1->playerAct(parseKeyboard(1));
+    player2->playerAct(parseKeyboard(2));
     player1->updateInGame();
     player2->updateInGame();
 }
@@ -191,6 +191,23 @@ void Game::hideAIBoard(){
     AIBoardIsShow = false;
 }
 
+/* Parse Keyboard */
+PlayerAction Game::parseKeyboard(int playerID){
+    PlayerAction res = 0;
+    if(playerID==1){
+        if(isPressingW) res |= UP;
+        if(isPressingA) res |= LEFT;
+        if(isPressingS) res |= DOWN;
+        if(isPressingD) res |= RIGHT;
+    }
+    else if(playerID==2){
+        if(isPressingUp) res |= UP;
+        if(isPressingLeft) res |= LEFT;
+        if(isPressingDown) res |= DOWN;
+        if(isPressingRight) res |= RIGHT;
+    }
+    return res;
+}
 
 /* Useful Functions */
 std::string int2str(int integer){
@@ -201,42 +218,4 @@ std::string int2str(int integer){
     }
     reverse(res.begin(), res.end());
     return res;
-}
-
-int Game::getMoveHorizental(int playerID)
-{
-    if(playerID==1)
-    {
-        if(isPressingA and isPressingD) return 0;
-        if(isPressingA) return -1;
-        if(isPressingD) return 1;
-        return 0;
-    }
-    else if(playerID==2)
-    {
-        if(isPressingLeft and isPressingRight) return 0;
-        if(isPressingLeft) return -1;
-        if(isPressingRight) return 1;
-        return 0;
-    }
-    return 0;
-}
-
-int Game::getMoveVertical(int playerID)
-{
-    if(playerID==1)
-    {
-        if(isPressingW and isPressingS) return 0;
-        if(isPressingS) return -1;
-        if(isPressingW) return 1;
-        return 0;
-    }
-    else if(playerID==2)
-    {
-        if(isPressingUp and isPressingDown) return 0;
-        if(isPressingDown) return -1;
-        if(isPressingUp) return 1;
-        return 0;
-    }
-    return 0;
 }
