@@ -124,8 +124,8 @@ void Game::start(){
     connect(timer, &QTimer::timeout, this, &Game::updateGame);
 
     /* Player Init */
-    player1 = new GamePlayer(WIDTH/4, HEIGHT/2, 65, player1Src, this);
-    player2 = new GamePlayer(3*WIDTH/4, HEIGHT/2, 50, player2Src, this);
+    player1 = new GamePlayer(WIDTH/4, HEIGHT/2, 60, player1Src, this);
+    player2 = new GamePlayer(3*WIDTH/4, HEIGHT/2, 60, player2Src, this);
 
     this->globalTime = 0;
     this->timer->start(T);
@@ -149,8 +149,23 @@ void Game::updateGame()
     QString str = QString("<font color = white>Interval: ")+QString(int2str(globalTime).c_str())+QString("</font>");
     AIBoard->setHtml(str);
 
-    player1->moveInGame(getMoveHorizental(1), getMoveVertical(1));
-    player2->moveInGame(getMoveHorizental(2), getMoveVertical(2));
+    for(GameObject *ptr: this->gameObjects)
+    {
+        ptr->updateInGame();
+    }
+    for(list<GameObject *>::iterator it = gameObjects.begin();it!=gameObjects.end();)
+    {
+        if(!(*it)->isDead)
+        {
+            it++;
+            continue;
+        }
+        list<GameObject *>::iterator it2 = gameObjects.erase(it);
+        it = it2; // 遍历删除
+    }
+
+    player1->playerAct(0);
+    player2->playerAct(0); // 0 is TO BE REPLACED by actions
     player1->updateInGame();
     player2->updateInGame();
 }
