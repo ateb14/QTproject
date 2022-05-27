@@ -17,7 +17,6 @@ int main(int argc, char *argv[])
     QSplashScreen splash(start);
     splash.resize(start.size());
     splash.show();
-    Sleep(1000);
 
     /* Welcome */
     Game * gameWindow = new Game;
