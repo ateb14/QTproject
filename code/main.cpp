@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     Sleep(1000);
 
     /* Welcome */
-    game * gameWindow = new game;
+    Game * gameWindow = new Game;
 
     QGraphicsView *view = new QGraphicsView;
     view->resize(1290,810);
