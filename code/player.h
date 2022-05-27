@@ -2,29 +2,17 @@
 #define PLAYER_H
 
 #include "object.h"
-typedef int KEYBOARD;
-#define CONTAIN(x,status) bool(status & x)
-#define ADDSTATUS(x,status) status |= x
 
-enum keyboardSignal{
-    W = 1,
-    A = 1<<1,
-    S = 1<<2,
-    D = 1<<3,
-    UP = 1<<4,
-    DOWN = 1<<5,
-    LEFT = 1<<6,
-    RIGHT = 1<<7
-};
-
-class player:public object
+class GamePlayer:public GameObject
 {
 public:
-    player(int x, int y, int w, int h, const char *ImageSrc, QGraphicsScene *scene_);
+    GamePlayer(int x, int y, int w, int h, const char *ImageSrc, QGraphicsScene *scene_);
 private:
     int health;
-public slots:
-    void keyboardMove(KEYBOARD status);
+    int speed;
+    virtual void updateInGame();
+    void moveInGame(double x, double y);
+friend class Game;
 };
 
 #endif // !PLAYER_H

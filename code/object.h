@@ -5,12 +5,13 @@
 #include <QGraphicsScene>
 #include <cmath>
 
-class object:public QGraphicsPixmapItem
+class GameObject:public QGraphicsPixmapItem
 {
 public:
-    object(int x, int y, int w, int h, const char *ImageSrc, QGraphicsScene *scene_);
+    GameObject(int x, int y, int w, int h, const char *ImageSrc, QGraphicsScene *scene_);
 private:
     QGraphicsScene *scene;
+    virtual void updateInGame();
 
 };
 
