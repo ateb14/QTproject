@@ -5,6 +5,7 @@ const int WIDTH = 1280;
 const int HEIGHT = 800;
 const char player1Src[50] = ":/art/liuhan.png";
 const char player2Src[50] = ":/art/kuqi.png";
+const char ballSrc[50] = ":/art/kuqi.png";
 std::string int2str(int integer);
 
 Game::Game(){
@@ -126,6 +127,10 @@ void Game::start(){
     /* Player Init */
     player1 = new GamePlayer(WIDTH/4, HEIGHT/2, 60, player1Src, this);
     player2 = new GamePlayer(3*WIDTH/4, HEIGHT/2, 60, player2Src, this);
+    GameBall *ball = new GameBall(WIDTH/2, HEIGHT/2, 80, 1, ballSrc, this);
+    this->gameObjects.push_back(player1);
+    this->gameObjects.push_back(player2);
+    this->gameObjects.push_back(ball);
 
     this->globalTime = 0;
     this->timer->start(T);
@@ -149,6 +154,19 @@ void Game::updateGame()
     QString str = QString("<font color = white>Interval: ")+QString(int2str(globalTime).c_str())+QString("</font>");
     AIBoard->setHtml(str);
 
+
+    player1->playerAct(0);
+    player2->playerAct(0); // 0 is TO BE REPLACED by actions
+
+    // 物体之间碰撞
+    for(GameObject *ptr1: this->gameObjects)
+    {
+        for(GameObject *ptr2: this->gameObjects)
+        {
+
+        }
+    }
+
     for(GameObject *ptr: this->gameObjects)
     {
         ptr->updateInGame();
@@ -164,10 +182,6 @@ void Game::updateGame()
         it = it2; // 遍历删除
     }
 
-    player1->playerAct(parseKeyboard(1));
-    player2->playerAct(parseKeyboard(2));
-    player1->updateInGame();
-    player2->updateInGame();
 }
 
 void Game::quit(){
@@ -191,23 +205,6 @@ void Game::hideAIBoard(){
     AIBoardIsShow = false;
 }
 
-/* Parse Keyboard */
-PlayerAction Game::parseKeyboard(int playerID){
-    PlayerAction res = 0;
-    if(playerID==1){
-        if(isPressingW) res |= UP;
-        if(isPressingA) res |= LEFT;
-        if(isPressingS) res |= DOWN;
-        if(isPressingD) res |= RIGHT;
-    }
-    else if(playerID==2){
-        if(isPressingUp) res |= UP;
-        if(isPressingLeft) res |= LEFT;
-        if(isPressingDown) res |= DOWN;
-        if(isPressingRight) res |= RIGHT;
-    }
-    return res;
-}
 
 /* Useful Functions */
 std::string int2str(int integer){
@@ -218,4 +215,42 @@ std::string int2str(int integer){
     }
     reverse(res.begin(), res.end());
     return res;
+}
+
+int Game::getMoveHorizental(int playerID)
+{
+    if(playerID==1)
+    {
+        if(isPressingA and isPressingD) return 0;
+        if(isPressingA) return -1;
+        if(isPressingD) return 1;
+        return 0;
+    }
+    else if(playerID==2)
+    {
+        if(isPressingLeft and isPressingRight) return 0;
+        if(isPressingLeft) return -1;
+        if(isPressingRight) return 1;
+        return 0;
+    }
+    return 0;
+}
+
+int Game::getMoveVertical(int playerID)
+{
+    if(playerID==1)
+    {
+        if(isPressingW and isPressingS) return 0;
+        if(isPressingS) return -1;
+        if(isPressingW) return 1;
+        return 0;
+    }
+    else if(playerID==2)
+    {
+        if(isPressingUp and isPressingDown) return 0;
+        if(isPressingDown) return -1;
+        if(isPressingUp) return 1;
+        return 0;
+    }
+    return 0;
 }

@@ -14,6 +14,11 @@ public:
 protected:
     // attributes
     static const int GAME_DESPAWN_DIST = 100;
+    enum ObjectType
+    {
+        Player, Bullet, Ball, Item, Enemy
+    } type;
+
     QGraphicsScene *scene;
     int radius; // 半径，碰撞的时候认为是圆形
     double vx, vy; // 速度
@@ -25,9 +30,14 @@ protected:
     // methods
     virtual void updateInGame(); // 默认按照当前速度移动，然后判断是否应被清除
     inline void setVelocity(int vx_, int vy_); // 设置速度
-    void collides(GameObject *obj); // 检测是否与另一物体碰撞，若确实撞到了，则进行碰撞过程（计算碰撞后速度）
+    bool collideJudge(GameObject *obj); // 检测是否与另一物体碰撞
+    virtual void collides(GameObject *obj) = 0; // 碰撞行为（每一类物体对于不同的对方物体行为不同）
+    void bounce(GameObject *obj); // 完全弹性对心碰撞
+    virtual void eatenBy(GameObject *obj); // 被另一物体吃掉（子弹或道具需要重写此方法）
 
     friend class Game;
+    friend class GamePlayer;
+    friend class GameBall;
 };
 
 #endif // !OBJECT_H

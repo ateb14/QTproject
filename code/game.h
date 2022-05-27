@@ -12,6 +12,7 @@
 #include <QDebug>
 #include <object.h>
 #include <player.h>
+#include <ball.h>
 #include <windows.h>
 #include <list>
 
@@ -29,6 +30,7 @@ public:
     Game();
     friend class GameObject;
     friend class GamePlayer;
+    friend class GameBall;
 protected:
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
@@ -44,7 +46,6 @@ private:
     /* Keyboard Control Flags*/
     bool isPressingW,isPressingA,isPressingS,isPressingD;
     bool isPressingUp,isPressingDown,isPressingLeft,isPressingRight;
-    PlayerAction parseKeyboard(int playerID);
     /* Buttons */
     QGraphicsWidget *quitButton;
     QGraphicsWidget *startButton;

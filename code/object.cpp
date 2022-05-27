@@ -2,7 +2,7 @@
 
 GameObject::GameObject(int x, int y, int r, double m, const char *ImageSrc, QGraphicsScene *scene_)
     :QGraphicsPixmapItem(QPixmap(ImageSrc).scaled(QSize(r, r))){
-    setPos(x,y);
+    setPos(x-r, y-r); // setPos用的是左上角坐标，但是参数x和y是中心坐标，所以要减去偏移。
     scene = scene_;
     scene->addItem(this);
     isDead = false;
@@ -22,22 +22,25 @@ void GameObject::updateInGame()
                  )) isDead = true; // 越过边界太多的物体会被清除
     if(!isDead) update();
 }
-void GameObject::setVelocity(int vx_, int vy_){vx = vx_, vy = vy_;} // 设置物体速度
-void GameObject::collides(GameObject *obj) // 检测是否与另一物体碰撞，进行碰撞过程
+inline void GameObject::setVelocity(int vx_, int vy_){vx = vx_, vy = vy_;} // 设置物体速度
+bool GameObject::collideJudge(GameObject *obj) // 检测是否与另一物体碰撞
 {
     double dx = obj->centerX()-this->centerX();
     double dy = obj->centerY()-this->centerY();
     double dz = sqrt(dx*dx+dy*dy);
-    if(dz>=this->radius+obj->radius) return; // 没有碰上
-    // 以下是碰上了
+    if(dz>=this->radius+obj->radius) return false; // 没有碰上
+    else return true; // 碰上了
+}
+void GameObject::bounce(GameObject *obj) // 弹性碰撞
+{
     double vx1 = this->vx, vy1 = this->vy, vx2 = obj->vx, vy2 = obj->vy;
     double m1 = this->mass, m2 = obj->mass;
     this->setVelocity((m1-m2)/(m1+m2)*vx1+(2*m2)/(m1+m2)*vx2,
                       (m1-m2)/(m1+m2)*vy1+(2*m2)/(m1+m2)*vy2);
     obj->setVelocity((2*m1)/(m1+m2)*vx1+(m2-m1)/(m1+m2)*vx2,
                      (2*m1)/(m1+m2)*vy1+(m2-m1)/(m1+m2)*vy2);
-
 }
+void GameObject::eatenBy(GameObject *obj){} // 被另一物体吃掉（子弹或道具需要重写此方法）
 
 int GameObject::centerX(){return x()+radius;}
 int GameObject::centerY(){return y()+radius;}
