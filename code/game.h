@@ -23,7 +23,6 @@ enum windowMode{
     GAMING,
     MENU,
     SHOP,
-    OPTION
 };
 
 class Game: public QGraphicsScene{
@@ -36,8 +35,9 @@ public:
 protected:
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
-protected slots:
+public slots:
     void updateGame();
+    void endGame();
     void quit();
     void start();
     void pause();
@@ -50,8 +50,8 @@ private:
     bool isPressingUp,isPressingDown,isPressingLeft,isPressingRight;
     ActionSet parseKeyboard(int playerID);
     /* Buttons */
-    QGraphicsWidget *quitButton;
-    QGraphicsWidget *startButton;
+//    QGraphicsWidget *quitButton;
+//    QGraphicsWidget *startButton;
     /* Texts */
 
     /* clock */
@@ -68,6 +68,7 @@ private:
     /* objects */
     /* player */
     GamePlayer *player1, *player2;
+    /* other */
     std::list<GameObject *> gameObjects;
 
 };
