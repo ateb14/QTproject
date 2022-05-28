@@ -15,12 +15,8 @@ void GameBall::updateInGame()
     this->setVelocity(vx_new, vy_new);
     // 球会在边界反弹
     this->bounceWithBorder();
-    // 更新调试信息
-    this->debugInfo = QString::asprintf(
-                "Ball position: (%d, %d), \nball velocity: (%d, %d)",
-                this->centerX(), this->centerY(), this->vx, this->vy
-                );
 
+    std::cout << "Velocity of the ball: " << vx << ", " << vy << endl;
     GameObject::updateInGame();
 }
 

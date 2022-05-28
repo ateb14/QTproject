@@ -15,7 +15,6 @@
 #include <ball.h>
 #include <obstacle.h>
 #include <windows.h>
-#include <board.h>
 #include <list>
 #include <iostream>
 
@@ -41,7 +40,7 @@ public slots:
     void endGame();
     void quit();
     void start();
-    void pause(int ms=0);
+    void pause();
     void continueGame();
 private:
     /* Window Mode */
@@ -50,6 +49,9 @@ private:
     bool isPressingW,isPressingA,isPressingS,isPressingD;
     bool isPressingUp,isPressingDown,isPressingLeft,isPressingRight;
     ActionSet parseKeyboard(int playerID);
+    /* Buttons */
+//    QGraphicsWidget *quitButton;
+//    QGraphicsWidget *startButton;
     /* Texts */
 
     /* clock */
@@ -62,22 +64,12 @@ private:
     QGraphicsTextItem * AIBoard;
     void showAIBoard();
     void hideAIBoard();
-    /* Game Board */
-    GameBoard *board;
-    GameBoard *getBoard();
 
     /* objects */
     /* player */
     GamePlayer *player1, *player2;
     /* other */
     std::list<GameObject *> gameObjects;
-    GameBall *ballptr;
-
-    /* Update Checkers */
-    void collisionChecker();
-    void deadChecker();
-    void ballChecker();
-    void boardChecker();
 
 };
 

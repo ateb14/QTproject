@@ -35,14 +35,11 @@ public:
 private:
     // attributes
     int health;
-    double speed; // 最高速度（单位：像素/帧）
-    int shootingCD; // 当前设计CD（单位：帧）
-    int maxShootingCD; // 射击总CD（单位：帧）
+    double speed;
 
     // methods
     virtual void updateInGame();
     virtual void collides(GameObject *obj);
-    virtual void takeDamage(int damage);
 
 };
 

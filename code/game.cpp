@@ -1,19 +1,31 @@
 #include "game.h"
 
-// #define DEBUG
-
 const int T = 10;
 const int WIDTH = 1280;
 const int HEIGHT = 800;
-const char player1Src[] = ":/art/liuhan.png";
-const char player2Src[] = ":/art/kuqi.png";
-const char ballSrc[] = ":/art/football.png";
-const char postSrc[] = ":/art/post.png";
+const char player1Src[50] = ":/art/liuhan.png";
+const char player2Src[50] = ":/art/kuqi.png";
+const char ballSrc[50] = ":/art/football.png";
+const char postSrc[50] = ":/art/post.png";
 std::string int2str(int integer);
 
 Game::Game(){
     setSceneRect(0,0,WIDTH,HEIGHT);
     winMode = HOME;
+
+//    /* Buttons */
+//    /* Start */
+//    QPushButton *startBtn = new QPushButton("Start");
+//    connect(startBtn, &QPushButton::clicked, this, &Game::start);
+//    startButton = (QGraphicsWidget *)addWidget(startBtn);
+//    startButton->setPos((WIDTH-100)/2,300);
+//    startButton->resize(100,50);
+//    /* Exit */
+//    QPushButton *quitBtn = new QPushButton("Quit");
+//    connect(quitBtn, &QPushButton::clicked, this, &Game::quit);
+//    quitButton = (QGraphicsWidget *)addWidget(quitBtn);
+//    quitButton->setPos((WIDTH-100)/2,400);
+//    quitButton->resize(100,50);
 
     /* Keyboard Control Flags Initializing */
     isPressingA = false;
@@ -30,56 +42,78 @@ Game::Game(){
     addItem(AIBoard);
     AIBoard->setPos(0,0);
     AIBoard->hide();
-
-    board = new GameBoard();
 }
 
 /* keyboard reading */
 void Game::keyPressEvent(QKeyEvent *event){
     auto key = event->key();
-
-    switch(key){
-    case Qt::Key_W:isPressingW = true;break;
-    case Qt::Key_A:isPressingA = true;break;
-    case Qt::Key_S:isPressingS = true;break;
-    case Qt::Key_D:isPressingD = true;break;
-    case Qt::Key_Up:isPressingUp = true;break;
-    case Qt::Key_Left:isPressingLeft = true;break;
-    case Qt::Key_Down:isPressingDown = true;break;
-    case Qt::Key_Right:isPressingRight = true;break;
-    case Qt::Key_F1:{
-        if(AIBoardIsShow == false){
-            showAIBoard();
-        }
-        else{
-            hideAIBoard();
-        }
-        break;
+    if(key == Qt::Key_W){
+      isPressingW = true;
     }
-    case Qt::Key_Escape:{
+    else if(key == Qt::Key_A){
+      isPressingA = true;
+    }
+    else if(key == Qt::Key_S){
+      isPressingS = true;
+    }
+    else if(key == Qt::Key_D){
+      isPressingD = true;
+    }
+    else if(key == Qt::Key_Escape){
         if(winMode == GAMING){
             pause();
         }
         else if(winMode == MENU){
             continueGame();
         }
-        break;
     }
+    else if(key == Qt::Key_F1){
+        if(AIBoardIsShow == false){
+            showAIBoard();
+        }
+        else{
+            hideAIBoard();
+        }
+    }
+    else if(key == Qt::Key_Up){
+      isPressingUp = true;
+    }
+    else if(key == Qt::Key_Down){
+      isPressingDown = true;
+    }
+    else if(key == Qt::Key_Left){
+      isPressingLeft = true;
+    }
+    else if(key == Qt::Key_Right){
+      isPressingRight = true;
     }
 }
 
 void Game::keyReleaseEvent(QKeyEvent *event){
     auto key = event->key();
-
-    switch(key){
-    case Qt::Key_W:isPressingW = false;break;
-    case Qt::Key_A:isPressingA = false;break;
-    case Qt::Key_S:isPressingS = false;break;
-    case Qt::Key_D:isPressingD = false;break;
-    case Qt::Key_Up:isPressingUp = false;break;
-    case Qt::Key_Left:isPressingLeft = false;break;
-    case Qt::Key_Down:isPressingDown = false;break;
-    case Qt::Key_Right:isPressingRight = false;break;
+    if(key == Qt::Key_W){
+        isPressingW = false;
+    }
+    else if(key == Qt::Key_A){
+        isPressingA = false;
+    }
+    else if(key == Qt::Key_S){
+        isPressingS = false;
+    }
+    else if(key == Qt::Key_D){
+        isPressingD = false;
+    }
+    else if(key == Qt::Key_Up){
+      isPressingUp = false;
+    }
+    else if(key == Qt::Key_Down){
+      isPressingDown = false;
+    }
+    else if(key == Qt::Key_Left){
+      isPressingLeft = false;
+    }
+    else if(key == Qt::Key_Right){
+      isPressingRight = false;
     }
 }
 
@@ -120,7 +154,6 @@ void Game::start(){
     player2 = new GamePlayer(3*WIDTH/4, HEIGHT/2, 30, player2Src, this);
     /* ball Init */
     GameBall *ball = new GameBall(WIDTH/2, HEIGHT/2, 20, 1, ballSrc, this);
-    ballptr = ball;
     GameObstacle *post[4]; // 球门柱
     post[0] = new GameObstacle(70, HEIGHT/2-100, 10, postSrc, this);
     post[1] = new GameObstacle(70, HEIGHT/2+100, 10, postSrc, this);
@@ -141,17 +174,9 @@ void Game::endGame(){
     // implement this function
 }
 
-void Game::pause(int ms){
-    /* for menu */
-    if(ms <= 0){
-        this->timer->stop();
-        winMode = MENU;
-    }
-    /* for game */
-    else if(ms > 0){
-        this->timer->stop();
-        QTimer::singleShot(ms, this, &continueGame);
-    }
+void Game::pause(){
+    this->timer->stop();
+    winMode = MENU;
     // Todo:
     // Menu
 }
@@ -161,9 +186,21 @@ void Game::continueGame(){
     this->timer->start(T);
 }
 
-/* Update */
+void Game::updateGame()
+{
+    globalTime += 1;
+    // Todo
+    // call Function for players and ball->getDebugInfo() returns QString
+    QString str = QString("<font color = white>Interval: ")+QString(int2str(globalTime).c_str())+QString("</font>");
+    AIBoard->setHtml(str);
 
-void Game::collisionChecker(){
+    std::cout << "Time: " << this->globalTime << endl;
+
+
+    player1->playerAct(parseKeyboard(1));
+    player2->playerAct(parseKeyboard(2));
+
+    // 物体之间碰撞
     for(list<GameObject *>::iterator it1 = gameObjects.begin(); it1!=gameObjects.end(); it1++)
     {
         list<GameObject *>::iterator it1_ = it1;
@@ -172,16 +209,23 @@ void Game::collisionChecker(){
             GameObject *ptr1 = *it1, *ptr2 = *it2;
             if(ptr1->collideJudge(ptr2))
             {
-#ifdef DEBUG
                 std::cout << "Colliding: " << ptr1->type << ptr2->type << endl;
-#endif
                 ptr1->collides(ptr2);
             }
         }
     }
-}
+    /* add new Objects */
+    // call Function for all object->fetchGeneratedObject() returns vector<GameObject *>
 
-void Game::deadChecker(){
+    for(GameObject *ptr: this->gameObjects)
+    {
+        ptr->updateInGame();
+    }
+
+    /* ball position */
+    // win()
+
+    /* delete */
     for(list<GameObject *>::iterator it = gameObjects.begin(); it!=gameObjects.end(); )
     {
         if(!(*it)->isDead)
@@ -192,66 +236,7 @@ void Game::deadChecker(){
         list<GameObject *>::iterator it2 = gameObjects.erase(it);
         it = it2; // 遍历删除
     }
-}
 
-void Game::ballChecker(){
-    auto x = ballptr->centerX(), y = ballptr->centerY();
-    bool player1WinFlag = false, player2WinFlag = false;
-    /* player1 score */
-    if(x>=0 && x<70 && y>HEIGHT/2-100 && y<HEIGHT/2+100){
-        player1WinFlag = true;
-    }
-    /* player2 score */
-    else if(x>=WIDTH-70 && x<=WIDTH && y>HEIGHT/2-100 && y<HEIGHT/2+100){
-        player2WinFlag = true;
-    }
-    if(player1WinFlag || player2WinFlag){
-        pause(10);
-        Sleep(2000);
-        player1->setPos(WIDTH/4-player1->radius, HEIGHT/2-player1->radius);
-        player2->setPos(3*WIDTH/4-player2->radius, HEIGHT/2-player2->radius);
-        ballptr->setPos(WIDTH/2-ballptr->radius, HEIGHT/2-ballptr->radius);
-    }
-}
-
-void Game::boardChecker(){
-    // Todo
-    // call Function for players and ball->getDebugInfo() returns QString
-    QString str = QString("<font color = white>Interval: ")+QString(int2str(globalTime).c_str());
-    str += QString("<br>player1 x: ") + QString(int2str(player1->centerX()).c_str())+QString(" y:")+QString(int2str(player1->centerY()).c_str());
-    str += QString("<br>player2 x: ") + QString(int2str(player2->centerX()).c_str())+QString(" y:")+QString(int2str(player2->centerY()).c_str());
-    str += QString("<br>ball x: ") + QString(int2str(ballptr->centerX()).c_str())+QString(" y:")+QString(int2str(ballptr->centerY()).c_str());
-    str += QString("</font>");
-    AIBoard->setHtml(str);
-}
-
-void Game::updateGame()
-{
-    globalTime += 1;
-    // Todo
-    // call Function for players and ball->getDebugInfo() returns QString
-    boardChecker();
-
-    player1->playerAct(parseKeyboard(1));
-    player2->playerAct(parseKeyboard(2));
-
-    // 物体之间碰撞
-    collisionChecker();
-
-    /* add new Objects */
-    // call Function for all object->fetchGeneratedObject() returns vector<GameObject *>
-
-    /* Update Objects in the scene */
-    for(GameObject *ptr: this->gameObjects)
-    {
-        ptr->updateInGame();
-    }
-
-    /* ball position */
-    ballChecker();
-
-    /* delete */
-    deadChecker();
 }
 
 void Game::quit(){
@@ -273,10 +258,6 @@ void Game::showAIBoard(){
 void Game::hideAIBoard(){
     AIBoard->hide();
     AIBoardIsShow = false;
-}
-
-GameBoard *Game::getBoard(){
-    return board;
 }
 
 
