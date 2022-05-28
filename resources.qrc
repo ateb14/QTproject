@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>art/start.png</file>
+        <file>art/welcome.jpg</file>
+        <file>art/background.png</file>
+        <file>art/myplane.png</file>
+        <file>art/liuhan.png</file>
+        <file>art/kuqi.png</file>
+        <file>art/soccerField.png</file>
+        <file>art/football.png</file>
+        <file>art/post.png</file>
+        <file>art/quitgame.png</file>
+        <file>art/startgame.png</file>
+    </qresource>
+</RCC>
