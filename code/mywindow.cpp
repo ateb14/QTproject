@@ -5,10 +5,13 @@
 #include "mybtn.h"
 #include <QTimer>
 
+
+
 const int PATHLEN = 150;
 const char startPNG[PATHLEN] = ":/art/start.png";
 const char welcomePNG[PATHLEN] = ":/art/welcome.jpg";
 const char backgroundPNG[PATHLEN] = ":/art/soccerField.png";
+Game * gameWindow=NULL;
 
 myWindow::myWindow(QWidget *parent) : QWidget(parent)
 {
@@ -21,7 +24,7 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     splash.show();
 
     /* Welcome */
-    Game * gameWindow = new Game;
+    gameWindow = new Game;
 
     QGraphicsView *view = new QGraphicsView;
     view->resize(1290,810);
@@ -52,7 +55,9 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
         QTimer::singleShot(100,this,[=](){
             startBtn->hide();
             quitBtn->hide();
+
             gameWindow->start();
+
         });
     });
     startBtn->setParent(view);
@@ -68,7 +73,17 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     view2->setScene(gameWindow->getBoard());
     view2->move(0,810);
     view2->setParent(this);
-
+    view2->setFocusPolicy(Qt::NoFocus);
 
     setFixedSize(1290,1000);
 }
+
+void myWindow::keyPressEvent(QKeyEvent *event){
+    qDebug()<<event->key();
+    gameWindow->keyPressEvent(event);
+}
+
+void myWindow::keyReleaseEvent(QKeyEvent *event){
+    gameWindow->keyReleaseEvent(event);
+}
+

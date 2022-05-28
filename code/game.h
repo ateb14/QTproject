@@ -20,6 +20,7 @@
 #include <list>
 #include <iostream>
 
+
 enum windowMode{
     HOME = 0,
     GAMING,
@@ -34,7 +35,7 @@ public:
     friend class GameObject;
     friend class GamePlayer;
     friend class GameBall;
-protected:
+
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
 public slots:
