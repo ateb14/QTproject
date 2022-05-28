@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     bullet.cpp \
     board.cpp \
     mybtn.cpp \
-    mywindow.cpp
+    mywindow.cpp \
+    buff.cpp
 
 HEADERS  += \
     game.h \
@@ -33,7 +34,8 @@ HEADERS  += \
     bullet.h \
     board.h \
     mybtn.h \
-    mywindow.h
+    mywindow.h \
+    buff.h
 
 FORMS    +=
 
