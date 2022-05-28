@@ -1,11 +1,9 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-;
+
 #include "object.h"
 
-typedef long long PlayerAction;
-
-enum{
+enum PlayerAction{
     /* movement */
     UP = 1,
     LEFT = 1<<1,
@@ -22,27 +20,27 @@ enum{
     SKILL = 1<<9,
     ITEM = 1<<10,
 };
-
 struct ActionSet{
-    PlayerAction actions;
+    long long actions;
+    ActionSet();
     bool contains(PlayerAction action);
-    ActionSet(PlayerAction actions_);
+    void addAction(PlayerAction action);
 };
 
 class GamePlayer:public GameObject
 {
 public:
     GamePlayer(int x, int y, int r, const char *ImageSrc, QGraphicsScene *scene_);
+    void playerAct(ActionSet action); // 接受一个操作集，由这个函数来进行所有操作
 private:
     // attributes
     int health;
-    int speed;
+    double speed;
 
     // methods
-    void playerAct(ActionSet action); // 接受一个操作集，由这个函数来进行所有操作
     virtual void updateInGame();
+    virtual void collides(GameObject *obj);
 
-    friend class Game;
 };
 
 #endif // !PLAYER_H

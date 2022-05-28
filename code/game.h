@@ -12,8 +12,11 @@
 #include <QDebug>
 #include <object.h>
 #include <player.h>
+#include <ball.h>
+#include <obstacle.h>
 #include <windows.h>
 #include <list>
+#include <iostream>
 
 enum windowMode{
     HOME = 0,
@@ -29,6 +32,7 @@ public:
     Game();
     friend class GameObject;
     friend class GamePlayer;
+    friend class GameBall;
 protected:
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
@@ -44,7 +48,7 @@ private:
     /* Keyboard Control Flags*/
     bool isPressingW,isPressingA,isPressingS,isPressingD;
     bool isPressingUp,isPressingDown,isPressingLeft,isPressingRight;
-    PlayerAction parseKeyboard(int playerID);
+    ActionSet parseKeyboard(int playerID);
     /* Buttons */
     QGraphicsWidget *quitButton;
     QGraphicsWidget *startButton;
@@ -66,8 +70,6 @@ private:
     GamePlayer *player1, *player2;
     std::list<GameObject *> gameObjects;
 
-    int getMoveHorizental(int playerID);
-    int getMoveVertical(int playerID);
 };
 
 #endif // !GAME_H
