@@ -47,6 +47,14 @@ void Game::keyPressEvent(QKeyEvent *event){
     case Qt::Key_Left:isPressingLeft = true;break;
     case Qt::Key_Down:isPressingDown = true;break;
     case Qt::Key_Right:isPressingRight = true;break;
+    case Qt::Key_T:isPressingT = true;break;
+    case Qt::Key_F:isPressingF = true;break;
+    case Qt::Key_G:isPressingG = true;break;
+    case Qt::Key_H:isPressingH = true;break;
+    case Qt::Key_L:isPressingL = true;break;
+    case Qt::Key_Less:isPressingLess = true;break;
+    case Qt::Key_Greater:isPressingGreater = true;break;
+    case Qt::Key_Question:isPressingQuestion = true;break;
     case Qt::Key_F1:{
         if(AIBoardIsShow == false){
             showAIBoard();
@@ -91,6 +99,10 @@ ActionSet Game::parseKeyboard(int playerID){
         if(isPressingA) res.addAction(LEFT);
         if(isPressingS) res.addAction(DOWN);
         if(isPressingD) res.addAction(RIGHT);
+        if(isPressingT) res.addAction(UPSHOOT);
+        if(isPressingF) res.addAction(LEFTSHOOT);
+        if(isPressingG) res.addAction(DOWNSHOOT);
+        if(isPressingH) res.addAction(RIGHTSHOOT);
         // Todo
         // shooting parser
     }
@@ -99,6 +111,10 @@ ActionSet Game::parseKeyboard(int playerID){
         if(isPressingLeft) res.addAction(LEFT);
         if(isPressingDown) res.addAction(DOWN);
         if(isPressingRight) res.addAction(RIGHT);
+        if(isPressingL) res.addAction(UPSHOOT);
+        if(isPressingLess) res.addAction(LEFTSHOOT);
+        if(isPressingGreater) res.addAction(DOWNSHOOT);
+        if(isPressingQuestion) res.addAction(RIGHTSHOOT);
     }
     return res;
 }
