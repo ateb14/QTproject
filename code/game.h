@@ -83,6 +83,7 @@ private:
     void collisionCheck();
     void deadCheck();
     void goalCheck();
+    void newObjectCheck();
     void updateInfoBoard();
 
 };

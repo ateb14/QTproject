@@ -1,6 +1,6 @@
 #include "game.h"
 
-// #define DEBUG
+#define DEBUG
 
 const int T = 10;
 const int WIDTH = 1280;
@@ -63,7 +63,7 @@ void Game::keyPressEvent(QKeyEvent *event){
         case Qt::Key_L:isPressingL = true;break;
         case Qt::Key_Comma:isPressingComma = true;break;
         case Qt::Key_Period:isPressingPeriod = true;break;
-        case Qt::Key_division:isPressingDivision = true;break;
+        case Qt::Key_Slash:isPressingDivision = true;break;
         case Qt::Key_F1:{
             if(AIBoardIsShow == false){
                 showAIBoard();
@@ -104,7 +104,7 @@ void Game::keyReleaseEvent(QKeyEvent *event){
         case Qt::Key_L:isPressingL = false;break;
         case Qt::Key_Comma:isPressingComma = false;break;
         case Qt::Key_Period:isPressingPeriod = false;break;
-        case Qt::Key_division:isPressingDivision = false;break;
+        case Qt::Key_Slash:isPressingDivision = false;break;
     }
 }
 
@@ -282,6 +282,17 @@ void Game::updateInfoBoard(){
 
 }
 
+void Game::newObjectCheck(){
+    int len = gameObjects.size();
+    auto gameIt = gameObjects.begin();
+    for(int i=0;i<len;++i,++gameIt){
+        auto lst = (*gameIt)->getGeneratedObjects();
+        for(auto it = lst.begin();it!=lst.end();++it){
+            gameObjects.push_back(*it);
+        }
+    }
+}
+
 void Game::updateGame()
 {
     globalTime += 1;
@@ -297,6 +308,7 @@ void Game::updateGame()
 
     /* add new Objects */
     // call Function for all object->fetchGeneratedObject() returns vector<GameObject *>
+    newObjectCheck();
 
     /* Update Objects in the scene */
     for(GameObject *ptr: this->gameObjects)
@@ -312,13 +324,8 @@ void Game::updateGame()
 }
 
 void Game::quit(){
-    //Todo:
-    //For keeping the consistency of our style, we should update this widget in the future.
-    int res = QMessageBox::question(nullptr,"WARNING","Are you sure to exit？", QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
-    if(res == QMessageBox::Yes){
-        delete timer;
-        exit(0);
-    }
+    delete timer;
+    exit(0);
 }
 
 /* Information Board */

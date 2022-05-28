@@ -67,7 +67,6 @@ void GamePlayer::playerAct(ActionSet action)
         if(action.contains(PlayerAction::RIGHTSHOOT)) vx_++;
         if(action.contains(PlayerAction::UPSHOOT)) vy_--;
         if(action.contains(PlayerAction::DOWNSHOOT)) vy_++;
-        vx_ = 1; // Delete this
         double vz_ = sqrt(vx_*vx_+vy_*vy_);
         if(vz_>=1e-5)
         {
