@@ -7,5 +7,7 @@
         <file>art/liuhan.png</file>
         <file>art/kuqi.png</file>
         <file>art/soccerField.png</file>
+        <file>art/football.png</file>
+        <file>art/post.png</file>
     </qresource>
 </RCC>
