@@ -2,8 +2,8 @@
 
 const double INFINITE_MASS = 1919810.114514;
 
-GameObstacle::GameObstacle(int x, int y, int r, const char *ImageSrc, QGraphicsScene *scene_):
-    GameObject(x, y, r, INFINITE_MASS, ImageSrc, scene_)
+GameObstacle::GameObstacle(int x, int y, int r, const QPixmap &pixmap_, QGraphicsScene *scene_):
+    GameObject(x, y, r, INFINITE_MASS, pixmap_, scene_)
 {
     type = ObjectType::Obstacle;
 }
