@@ -49,7 +49,9 @@ private:
     windowMode winMode;
     /* Keyboard Control Flags*/
     bool isPressingW,isPressingA,isPressingS,isPressingD;
+    bool isPressingT,isPressingF,isPressingG,isPressingH;
     bool isPressingUp,isPressingDown,isPressingLeft,isPressingRight;
+    bool isPressingL,isPressingComma,isPressingPeriod,isPressingDivision;
     ActionSet parseKeyboard(int playerID);
     /* Texts */
 

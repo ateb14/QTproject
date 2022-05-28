@@ -24,6 +24,14 @@ Game::Game(){
     isPressingLeft = false;
     isPressingDown = false;
     isPressingRight = false;
+    isPressingT = false;
+    isPressingF = false;
+    isPressingG = false;
+    isPressingH = false;
+    isPressingL = false;
+    isPressingComma = false;
+    isPressingPeriod = false;
+    isPressingDivision = false;
 
     /* Information Board Initializing */
     AIBoard = new QGraphicsTextItem;
@@ -39,32 +47,40 @@ void Game::keyPressEvent(QKeyEvent *event){
     auto key = event->key();
 
     switch(key){
-    case Qt::Key_W:isPressingW = true;break;
-    case Qt::Key_A:isPressingA = true;break;
-    case Qt::Key_S:isPressingS = true;break;
-    case Qt::Key_D:isPressingD = true;break;
-    case Qt::Key_Up:isPressingUp = true;break;
-    case Qt::Key_Left:isPressingLeft = true;break;
-    case Qt::Key_Down:isPressingDown = true;break;
-    case Qt::Key_Right:isPressingRight = true;break;
-    case Qt::Key_F1:{
-        if(AIBoardIsShow == false){
-            showAIBoard();
+        case Qt::Key_W:isPressingW = true;break;
+        case Qt::Key_A:isPressingA = true;break;
+        case Qt::Key_S:isPressingS = true;break;
+        case Qt::Key_D:isPressingD = true;break;
+        case Qt::Key_Up:isPressingUp = true;break;
+        case Qt::Key_Left:isPressingLeft = true;break;
+        case Qt::Key_Down:isPressingDown = true;break;
+        case Qt::Key_Right:isPressingRight = true;break;
+        case Qt::Key_T:isPressingT = true;break;
+        case Qt::Key_F:isPressingF = true;break;
+        case Qt::Key_G:isPressingG = true;break;
+        case Qt::Key_H:isPressingH = true;break;
+        case Qt::Key_L:isPressingL = true;break;
+        case Qt::Key_Comma:isPressingComma = true;break;
+        case Qt::Key_Period:isPressingPeriod = true;break;
+        case Qt::Key_division:isPressingDivision = true;break;
+        case Qt::Key_F1:{
+            if(AIBoardIsShow == false){
+                showAIBoard();
+            }
+            else{
+                hideAIBoard();
+            }
+            break;
         }
-        else{
-            hideAIBoard();
+        case Qt::Key_Escape:{
+            if(winMode == GAMING){
+                pause();
+            }
+            else if(winMode == MENU){
+                continueGame();
+            }
+            break;
         }
-        break;
-    }
-    case Qt::Key_Escape:{
-        if(winMode == GAMING){
-            pause();
-        }
-        else if(winMode == MENU){
-            continueGame();
-        }
-        break;
-    }
     }
 }
 
@@ -72,14 +88,22 @@ void Game::keyReleaseEvent(QKeyEvent *event){
     auto key = event->key();
 
     switch(key){
-    case Qt::Key_W:isPressingW = false;break;
-    case Qt::Key_A:isPressingA = false;break;
-    case Qt::Key_S:isPressingS = false;break;
-    case Qt::Key_D:isPressingD = false;break;
-    case Qt::Key_Up:isPressingUp = false;break;
-    case Qt::Key_Left:isPressingLeft = false;break;
-    case Qt::Key_Down:isPressingDown = false;break;
-    case Qt::Key_Right:isPressingRight = false;break;
+        case Qt::Key_W:isPressingW = false;break;
+        case Qt::Key_A:isPressingA = false;break;
+        case Qt::Key_S:isPressingS = false;break;
+        case Qt::Key_D:isPressingD = false;break;
+        case Qt::Key_Up:isPressingUp = false;break;
+        case Qt::Key_Left:isPressingLeft = false;break;
+        case Qt::Key_Down:isPressingDown = false;break;
+        case Qt::Key_Right:isPressingRight = false;break;
+        case Qt::Key_T:isPressingT = false;break;
+        case Qt::Key_F:isPressingF = false;break;
+        case Qt::Key_G:isPressingG = false;break;
+        case Qt::Key_H:isPressingH = false;break;
+        case Qt::Key_L:isPressingL = false;break;
+        case Qt::Key_Comma:isPressingComma = false;break;
+        case Qt::Key_Period:isPressingPeriod = false;break;
+        case Qt::Key_division:isPressingDivision = false;break;
     }
 }
 
@@ -91,6 +115,10 @@ ActionSet Game::parseKeyboard(int playerID){
         if(isPressingA) res.addAction(LEFT);
         if(isPressingS) res.addAction(DOWN);
         if(isPressingD) res.addAction(RIGHT);
+        if(isPressingT) res.addAction(UPSHOOT);
+        if(isPressingF) res.addAction(LEFTSHOOT);
+        if(isPressingG) res.addAction(DOWNSHOOT);
+        if(isPressingH) res.addAction(RIGHTSHOOT);
         // Todo
         // shooting parser
     }
@@ -99,6 +127,10 @@ ActionSet Game::parseKeyboard(int playerID){
         if(isPressingLeft) res.addAction(LEFT);
         if(isPressingDown) res.addAction(DOWN);
         if(isPressingRight) res.addAction(RIGHT);
+        if(isPressingL) res.addAction(UPSHOOT);
+        if(isPressingComma) res.addAction(LEFTSHOOT);
+        if(isPressingPeriod) res.addAction(DOWNSHOOT);
+        if(isPressingDivision) res.addAction(RIGHTSHOOT);
     }
     return res;
 }
@@ -208,6 +240,9 @@ void Game::goalCheck(){
     if(player1WinFlag || player2WinFlag){
         pause(10);
         Sleep(2000);
+        player1->setVelocity(0,0);
+        player2->setVelocity(0,0);
+        ballptr->setVelocity(0,0);
         player1->setPos(WIDTH/4-player1->radius, HEIGHT/2-player1->radius);
         player2->setPos(3*WIDTH/4-player2->radius, HEIGHT/2-player2->radius);
         ballptr->setPos(WIDTH/2-ballptr->radius, HEIGHT/2-ballptr->radius);
