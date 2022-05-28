@@ -13,19 +13,19 @@ Game::Game(){
     setSceneRect(0,0,WIDTH,HEIGHT);
     winMode = HOME;
 
-    /* Buttons */
-    /* Start */
-    QPushButton *startBtn = new QPushButton("Start");
-    connect(startBtn, &QPushButton::clicked, this, &Game::start);
-    startButton = (QGraphicsWidget *)addWidget(startBtn);
-    startButton->setPos((WIDTH-100)/2,300);
-    startButton->resize(100,50);
-    /* Exit */
-    QPushButton *quitBtn = new QPushButton("Quit");
-    connect(quitBtn, &QPushButton::clicked, this, &Game::quit);
-    quitButton = (QGraphicsWidget *)addWidget(quitBtn);
-    quitButton->setPos((WIDTH-100)/2,400);
-    quitButton->resize(100,50);
+//    /* Buttons */
+//    /* Start */
+//    QPushButton *startBtn = new QPushButton("Start");
+//    connect(startBtn, &QPushButton::clicked, this, &Game::start);
+//    startButton = (QGraphicsWidget *)addWidget(startBtn);
+//    startButton->setPos((WIDTH-100)/2,300);
+//    startButton->resize(100,50);
+//    /* Exit */
+//    QPushButton *quitBtn = new QPushButton("Quit");
+//    connect(quitBtn, &QPushButton::clicked, this, &Game::quit);
+//    quitButton = (QGraphicsWidget *)addWidget(quitBtn);
+//    quitButton->setPos((WIDTH-100)/2,400);
+//    quitButton->resize(100,50);
 
     /* Keyboard Control Flags Initializing */
     isPressingA = false;
@@ -60,8 +60,12 @@ void Game::keyPressEvent(QKeyEvent *event){
       isPressingD = true;
     }
     else if(key == Qt::Key_Escape){
-        if(winMode == GAMING)
-            quit();
+        if(winMode == GAMING){
+            pause();
+        }
+        else if(winMode == MENU){
+            continueGame();
+        }
     }
     else if(key == Qt::Key_F1){
         if(AIBoardIsShow == false){
@@ -121,6 +125,8 @@ ActionSet Game::parseKeyboard(int playerID){
         if(isPressingA) res.addAction(LEFT);
         if(isPressingS) res.addAction(DOWN);
         if(isPressingD) res.addAction(RIGHT);
+        // Todo
+        // shooting parser
     }
     else if(playerID==2){
         if(isPressingUp) res.addAction(UP);
@@ -135,8 +141,8 @@ ActionSet Game::parseKeyboard(int playerID){
 
 void Game::start(){
     /* GAMING Mode On */
-    this->quitButton->hide();
-    this->startButton->hide();
+//    this->quitButton->hide();
+//    this->startButton->hide();
     this->winMode = GAMING;
 
     /* Initialize the clock */
@@ -146,6 +152,7 @@ void Game::start(){
     /* Player Init */
     player1 = new GamePlayer(WIDTH/4, HEIGHT/2, 30, player1Src, this);
     player2 = new GamePlayer(3*WIDTH/4, HEIGHT/2, 30, player2Src, this);
+    /* ball Init */
     GameBall *ball = new GameBall(WIDTH/2, HEIGHT/2, 20, 1, ballSrc, this);
     GameObstacle *post[4]; // 球门柱
     post[0] = new GameObstacle(70, HEIGHT/2-100, 10, postSrc, this);
@@ -162,21 +169,28 @@ void Game::start(){
     this->timer->start(T);
 }
 
+void Game::endGame(){
+    // Todo
+    // implement this function
+}
+
 void Game::pause(){
     this->timer->stop();
+    winMode = MENU;
+    // Todo:
+    // Menu
 }
 
 void Game::continueGame(){
+    winMode = GAMING;
     this->timer->start(T);
 }
 
 void Game::updateGame()
 {
     globalTime += 1;
-    if(globalTime < 0){
-        // TODO:
-        // Implement the Exception Function
-    }
+    // Todo
+    // call Function for players and ball->getDebugInfo() returns QString
     QString str = QString("<font color = white>Interval: ")+QString(int2str(globalTime).c_str())+QString("</font>");
     AIBoard->setHtml(str);
 
@@ -200,11 +214,18 @@ void Game::updateGame()
             }
         }
     }
+    /* add new Objects */
+    // call Function for all object->fetchGeneratedObject() returns vector<GameObject *>
 
     for(GameObject *ptr: this->gameObjects)
     {
         ptr->updateInGame();
     }
+
+    /* ball position */
+    // win()
+
+    /* delete */
     for(list<GameObject *>::iterator it = gameObjects.begin(); it!=gameObjects.end(); )
     {
         if(!(*it)->isDead)
