@@ -1,7 +1,7 @@
 #include "object.h"
 
-GameObject::GameObject(int x, int y, int r, double m, const char *ImageSrc, QGraphicsScene *scene_)
-    :QGraphicsPixmapItem(QPixmap(ImageSrc).scaled(QSize(2*r, 2*r))){
+GameObject::GameObject(int x, int y, int r, double m, const QPixmap &pixmap_, QGraphicsScene *scene_)
+    :QGraphicsPixmapItem(pixmap_.scaled(QSize(2*r, 2*r))){
     setPos(x-r, y-r); // setPos用的是左上角坐标，但是参数x和y是中心坐标，所以要减去偏移。
     scene = scene_;
     scene->addItem(this);

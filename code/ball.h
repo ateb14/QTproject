@@ -6,7 +6,7 @@
 class GameBall : public GameObject
 {
 public:
-    GameBall(int x, int y, int r, double m, const char *ImageSrc, QGraphicsScene *scene_);
+    GameBall(int x, int y, int r, double m, const QPixmap &pixmap_, QGraphicsScene *scene_);
 
 private:
     virtual void updateInGame();

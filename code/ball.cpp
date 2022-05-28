@@ -2,8 +2,8 @@
 
 const double BALL_VELOCITY_DECAY = 0.985;
 
-GameBall::GameBall(int x, int y, int r, double m, const char *ImageSrc, QGraphicsScene *scene_):
-    GameObject(x, y, r, m, ImageSrc, scene_)
+GameBall::GameBall(int x, int y, int r, double m, const QPixmap &pixmap, QGraphicsScene *scene_):
+    GameObject(x, y, r, m, pixmap, scene_)
 {
     type = ObjectType::Ball;
 }
