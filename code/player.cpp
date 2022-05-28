@@ -36,8 +36,13 @@ GamePlayer::GamePlayer(int x, int y, int r,
     speed = PLAYER_SPEED;
     shootingCD = 0;
     maxShootingCD = PLAYER_SHOOTING_CD;
+    buffSet = BuffSet();
     bulletPixmap = bulletPixmap_;
 }
+
+int GamePlayer::getHealth(){return this->health;}
+BuffSet GamePlayer::getBuffSet(){return this->buffSet;}
+void GamePlayer::addBuff(Buff buff){this->buffSet.addBuff(buff);}
 
 /* Keyboard Control */
 void GamePlayer::playerAct(ActionSet action)

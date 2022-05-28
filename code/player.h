@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include "object.h"
+#include "buff.h"
 
 enum PlayerAction{
     /* movement */
@@ -27,19 +28,25 @@ struct ActionSet{
     void addAction(PlayerAction action);
 };
 
-class GamePlayer:public GameObject
+class GamePlayer: public GameObject
 {
 public:
     GamePlayer(int x, int y, int r,
                const QPixmap &pixmap_, QPixmap *bulletPixmap_,
                QGraphicsScene *scene_);
     void playerAct(ActionSet action); // 接受一个操作集，由这个函数来进行所有操作
+    // proprety
+    int getHealth();
+    BuffSet getBuffSet();
+    void addBuff(Buff buff);
+
 private:
     // attributes
     int health;
     double speed; // 最高速度（单位：像素/帧）
     int shootingCD; // 当前设计CD（单位：帧）
     int maxShootingCD; // 射击总CD（单位：帧）
+    BuffSet buffSet;
     QPixmap *bulletPixmap; // 子弹的图案
 
     // methods
