@@ -208,6 +208,9 @@ void Game::ballChecker(){
     if(player1WinFlag || player2WinFlag){
         pause(10);
         Sleep(2000);
+        player1->setVelocity(0,0);
+        player2->setVelocity(0,0);
+        ballptr->setVelocity(0,0);
         player1->setPos(WIDTH/4-player1->radius, HEIGHT/2-player1->radius);
         player2->setPos(3*WIDTH/4-player2->radius, HEIGHT/2-player2->radius);
         ballptr->setPos(WIDTH/2-ballptr->radius, HEIGHT/2-ballptr->radius);
