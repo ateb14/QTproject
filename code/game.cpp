@@ -229,6 +229,8 @@ void Game::deadCheck(){
             it++;
             continue;
         }
+        (*it)->hide();
+        delete (*it);
         list<GameObject *>::iterator it2 = gameObjects.erase(it);
         it = it2; // 遍历删除
     }
