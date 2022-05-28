@@ -9,6 +9,7 @@ const char player1Src[] = ":/art/liuhan.png";
 const char player2Src[] = ":/art/kuqi.png";
 const char ballSrc[] = ":/art/football.png";
 const char postSrc[] = ":/art/post.png";
+const char bulletSrc[] = ":/art/football.png";
 std::string int2str(int integer);
 
 Game::Game(){
@@ -147,17 +148,24 @@ void Game::start(){
     this->timer = new QTimer;
     connect(timer, &QTimer::timeout, this, &Game::updateGame);
 
+    /* QPixmap init */
+    static QPixmap player1Pixmap = QPixmap(player1Src);
+    static QPixmap player2Pixmap = QPixmap(player2Src);
+    static QPixmap ballPixmap = QPixmap(ballSrc);
+    static QPixmap postPixmap = QPixmap(postSrc);
+    static QPixmap bulletPixmap = QPixmap(bulletSrc);
+
     /* Player Init */
-    player1 = new GamePlayer(WIDTH/4, HEIGHT/2, 30, player1Src, this);
-    player2 = new GamePlayer(3*WIDTH/4, HEIGHT/2, 30, player2Src, this);
+    player1 = new GamePlayer(WIDTH/4, HEIGHT/2, 30, player1Pixmap, &bulletPixmap, this);
+    player2 = new GamePlayer(3*WIDTH/4, HEIGHT/2, 30, player2Pixmap, &bulletPixmap, this);
     /* ball Init */
-    GameBall *ball = new GameBall(WIDTH/2, HEIGHT/2, 20, 1, ballSrc, this);
+    GameBall *ball = new GameBall(WIDTH/2, HEIGHT/2, 20, 1, ballPixmap, this);
     ballptr = ball;
     GameObstacle *post[4]; // 球门柱
-    post[0] = new GameObstacle(70, HEIGHT/2-100, 10, postSrc, this);
-    post[1] = new GameObstacle(70, HEIGHT/2+100, 10, postSrc, this);
-    post[2] = new GameObstacle(WIDTH-70, HEIGHT/2-100, 10, postSrc, this);
-    post[3] = new GameObstacle(WIDTH-70, HEIGHT/2+100, 10, postSrc, this);
+    post[0] = new GameObstacle(70, HEIGHT/2-100, 10, postPixmap, this);
+    post[1] = new GameObstacle(70, HEIGHT/2+100, 10, postPixmap, this);
+    post[2] = new GameObstacle(WIDTH-70, HEIGHT/2-100, 10, postPixmap, this);
+    post[3] = new GameObstacle(WIDTH-70, HEIGHT/2+100, 10, postPixmap, this);
 
     this->gameObjects.push_back(player1);
     this->gameObjects.push_back(player2);
