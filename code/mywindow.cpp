@@ -32,22 +32,24 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
 
     //quit button
 
-    QPushButton *quitBtn = new QPushButton("Quit");
-    quitBtn->setFixedSize(100,50);
+    myBtn *quitBtn = new myBtn(":/art/quitgame.png",this);
     quitBtn->move((gameWindow->width()-100)/2,400);
     QObject::connect(quitBtn, &QPushButton::clicked, [=](){
-        gameWindow->quit();
+        int res = QMessageBox::question(nullptr,"WARNING","Are you sure to exit？", QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
+        if(res == QMessageBox::Yes){
+
+            this->close();
+        }
+
     });
     quitBtn->setParent(view);
+
     //start button
     myBtn *startBtn=new myBtn("://art/startgame.png",this);
-
     startBtn->move((gameWindow->width()-100)/2,300);
-
-
     QObject::connect(startBtn, &myBtn::clicked, [=](){
         startBtn->move((gameWindow->width()-100)/2,300);
-        QTimer::singleShot(300,this,[=](){
+        QTimer::singleShot(100,this,[=](){
             startBtn->hide();
             quitBtn->hide();
             gameWindow->start();
@@ -63,7 +65,7 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     //第二个view
     QGraphicsView *view2 = new QGraphicsView;
     view2->resize(1290,190);
-    //view2->setScene(gameWindow->getBoard());
+    view2->setScene(gameWindow->getBoard());
     view2->move(0,810);
     view2->setParent(this);
 
