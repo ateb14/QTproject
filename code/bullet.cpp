@@ -24,6 +24,7 @@ void GameBullet::eatenBy(GameObject *obj)
 {
     if(obj==this->owner) return; // 子弹不能打主人
     obj->takeDamage(this->damage);
+    this->isDead = true;
 }
 
 void GameBullet::collides(GameObject *obj)
@@ -31,9 +32,7 @@ void GameBullet::collides(GameObject *obj)
     switch(obj->type)
     {
     case Player:
-        if(obj==this->owner) return; //子弹不能打主人
-        obj->collides(this); // 暂时认为子弹有击退效果
-        this->eatenBy(obj);
+        obj->collides(this);
         return;
     case Bullet:
         return;
