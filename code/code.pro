@@ -16,12 +16,16 @@ TEMPLATE = app
 SOURCES += main.cpp\
     game.cpp \
     object.cpp \
-    player.cpp
+    player.cpp \
+    ball.cpp \
+    obstacle.cpp
 
 HEADERS  += \
     game.h \
     object.h \
-    player.h
+    player.h \
+    ball.h \
+    obstacle.h
 
 FORMS    +=
 

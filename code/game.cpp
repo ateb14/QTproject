@@ -148,10 +148,10 @@ void Game::start(){
     player2 = new GamePlayer(3*WIDTH/4, HEIGHT/2, 30, player2Src, this);
     GameBall *ball = new GameBall(WIDTH/2, HEIGHT/2, 20, 1, ballSrc, this);
     GameObstacle *post[4]; // 球门柱
-    post[0] = new GameObstacle(70, HEIGHT/2-50, 10, postSrc, this);
-    post[1] = new GameObstacle(70, HEIGHT/2+50, 10, postSrc, this);
-    post[2] = new GameObstacle(WIDTH-70, HEIGHT/2-50, 10, postSrc, this);
-    post[3] = new GameObstacle(WIDTH-70, HEIGHT/2+50, 10, postSrc, this);
+    post[0] = new GameObstacle(70, HEIGHT/2-100, 10, postSrc, this);
+    post[1] = new GameObstacle(70, HEIGHT/2+100, 10, postSrc, this);
+    post[2] = new GameObstacle(WIDTH-70, HEIGHT/2-100, 10, postSrc, this);
+    post[3] = new GameObstacle(WIDTH-70, HEIGHT/2+100, 10, postSrc, this);
 
     this->gameObjects.push_back(player1);
     this->gameObjects.push_back(player2);
