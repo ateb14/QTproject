@@ -9,5 +9,7 @@
         <file>art/soccerField.png</file>
         <file>art/football.png</file>
         <file>art/post.png</file>
+        <file>art/quitgame.png</file>
+        <file>art/startgame.png</file>
     </qresource>
 </RCC>

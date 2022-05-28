@@ -19,8 +19,8 @@ SOURCES += main.cpp\
     player.cpp \
     ball.cpp \
     obstacle.cpp \
-    bullet.cpp \
-    board.cpp
+    mybtn.cpp \
+    mywindow.cpp
 
 HEADERS  += \
     game.h \
@@ -28,8 +28,8 @@ HEADERS  += \
     player.h \
     ball.h \
     obstacle.h \
-    bullet.h \
-    board.h
+    mybtn.h \
+    mywindow.h
 
 FORMS    +=
 
