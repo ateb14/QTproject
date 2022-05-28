@@ -18,14 +18,16 @@ SOURCES += main.cpp\
     object.cpp \
     player.cpp \
     ball.cpp \
-    obstacle.cpp
+    obstacle.cpp \
+    bullet.cpp
 
 HEADERS  += \
     game.h \
     object.h \
     player.h \
     ball.h \
-    obstacle.h
+    obstacle.h \
+    bullet.h
 
 FORMS    +=
 

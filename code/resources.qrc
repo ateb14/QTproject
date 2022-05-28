@@ -9,5 +9,9 @@
         <file>art/soccerField.png</file>
         <file>art/football.png</file>
         <file>art/post.png</file>
+        <file>art/bullet1.png</file>
+        <file>art/fish1.png</file>
+        <file>art/gun_right.png</file>
+        <file>art/gun1.png</file>
     </qresource>
 </RCC>

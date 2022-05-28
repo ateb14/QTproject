@@ -11,18 +11,19 @@ GameObject::GameObject(int x, int y, int r, double m, const char *ImageSrc, QGra
     setVelocity(0, 0);
 }
 
-/**
- * @brief GameObject::updateInGame 默认按照当前速度移动，然后判断是否应被清除，然后画在屏幕上
- */
+
 void GameObject::updateInGame()
 {
+    this->generatedObjects.clear(); // 清空生成的物体列表
     moveBy(vx, vy); // 按照当前速度移动
     if(isOutside(-GAME_DESPAWN_DIST, -GAME_DESPAWN_DIST,
                  scene->width()+GAME_DESPAWN_DIST, scene->height()+GAME_DESPAWN_DIST
                  )) isDead = true; // 越过边界太多的物体会被清除
-    if(!isDead) update();
+    if(!isDead) update(); // 绘制图像
 }
+
 inline void GameObject::setVelocity(double vx_, double vy_){vx = vx_, vy = vy_;} // 设置物体速度
+
 bool GameObject::collideJudge(GameObject *obj) // 检测是否与另一物体碰撞
 {
     double dx = obj->centerX()-this->centerX();
@@ -31,6 +32,7 @@ bool GameObject::collideJudge(GameObject *obj) // 检测是否与另一物体碰
     if(dz>=this->radius+obj->radius) return false; // 没有碰上
     else return true; // 碰上了
 }
+
 void GameObject::bounce(GameObject *obj) // 弹性碰撞
 {
     // 如果两物体重叠，先把它们移开
@@ -45,14 +47,17 @@ void GameObject::bounce(GameObject *obj) // 弹性碰撞
            dy1 = dz1/(m1+m2)*dy/dz, dy2 = dz2*dy/dz;
     this->moveBy(dx1, dy1);
     obj->moveBy(dx2, dy2);
+
     // 计算并设置碰撞后速度
     double vx1 = this->vx, vy1 = this->vy, vx2 = obj->vx, vy2 = obj->vy;
     this->setVelocity((m1-m2)/(m1+m2)*vx1+(2*m2)/(m1+m2)*vx2,
                       (m1-m2)/(m1+m2)*vy1+(2*m2)/(m1+m2)*vy2);
     obj->setVelocity((2*m1)/(m1+m2)*vx1+(m2-m1)/(m1+m2)*vx2,
                      (2*m1)/(m1+m2)*vy1+(m2-m1)/(m1+m2)*vy2);
-    std::cout << "Bounced! " << endl;
+
+    this->debugInfo += "Bounced! ";
 }
+
 void GameObject::bounceWithBorder()
 {
     double vx_new = this->vx, vy_new = this->vy;
@@ -65,6 +70,7 @@ void GameObject::bounceWithBorder()
 }
 
 void GameObject::eatenBy(GameObject *obj){} // 被另一物体吃掉（子弹或道具需要重写此方法）
+void GameObject::takeDamage(int damage){} // 承受伤害（只有玩家或敌人需要此方法）
 
 int GameObject::centerX(){return x()+radius;}
 int GameObject::centerY(){return y()+radius;}

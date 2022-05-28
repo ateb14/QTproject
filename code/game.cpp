@@ -3,10 +3,10 @@
 const int T = 10;
 const int WIDTH = 1280;
 const int HEIGHT = 800;
-const char player1Src[50] = ":/art/liuhan.png";
-const char player2Src[50] = ":/art/kuqi.png";
-const char ballSrc[50] = ":/art/football.png";
-const char postSrc[50] = ":/art/post.png";
+const char player1Src[] = ":/art/liuhan.png";
+const char player2Src[] = ":/art/kuqi.png";
+const char ballSrc[] = ":/art/football.png";
+const char postSrc[] = ":/art/post.png";
 std::string int2str(int integer);
 
 Game::Game(){
@@ -47,6 +47,7 @@ Game::Game(){
 /* keyboard reading */
 void Game::keyPressEvent(QKeyEvent *event){
     auto key = event->key();
+
     if(key == Qt::Key_W){
       isPressingW = true;
     }
@@ -193,9 +194,6 @@ void Game::updateGame()
     // call Function for players and ball->getDebugInfo() returns QString
     QString str = QString("<font color = white>Interval: ")+QString(int2str(globalTime).c_str())+QString("</font>");
     AIBoard->setHtml(str);
-
-    std::cout << "Time: " << this->globalTime << endl;
-
 
     player1->playerAct(parseKeyboard(1));
     player2->playerAct(parseKeyboard(2));
