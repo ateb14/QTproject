@@ -67,7 +67,9 @@ private:
     void hideAIBoard();
     /* Game Board */
     GameBoard *board;
+public:
     GameBoard *getBoard();
+private:
 
     /* objects */
     /* player */
