@@ -12,6 +12,8 @@ class GameObject: public QGraphicsPixmapItem
 {
 public:
     GameObject(int x, int y, int r, double m, const QPixmap &pixmap_, QGraphicsScene *scene_);
+    ~GameObject();
+
     bool isDead;
 protected:
     // attributes

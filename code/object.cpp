@@ -11,6 +11,11 @@ GameObject::GameObject(int x, int y, int r, double m, const QPixmap &pixmap_, QG
     setVelocity(0, 0);
 }
 
+GameObject::~GameObject()
+{
+    this->hide();
+}
+
 list<GameObject *> GameObject::getGeneratedObjects()
 {
     return this->generatedObjects;

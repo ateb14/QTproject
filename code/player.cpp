@@ -113,6 +113,7 @@ void GamePlayer::collides(GameObject *obj)
         this->bounce(obj);
         return;
     case Bullet:
+        this->bounce(obj);
         obj->eatenBy(this);
         return;
     case Ball:
