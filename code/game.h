@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QString>
 #include <QTimer>
+#include <QTime>
 #include <QDebug>
 #include <object.h>
 #include <player.h>
@@ -74,10 +75,10 @@ private:
     GameBall *ballptr;
 
     /* Update Checkers */
-    void collisionChecker();
-    void deadChecker();
-    void ballChecker();
-    void boardChecker();
+    void collisionCheck();
+    void deadCheck();
+    void goalCheck();
+    void updateInfoBoard();
 
 };
 

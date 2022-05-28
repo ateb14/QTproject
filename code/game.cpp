@@ -163,7 +163,7 @@ void Game::continueGame(){
 
 /* Update */
 
-void Game::collisionChecker(){
+void Game::collisionCheck(){
     for(list<GameObject *>::iterator it1 = gameObjects.begin(); it1!=gameObjects.end(); it1++)
     {
         list<GameObject *>::iterator it1_ = it1;
@@ -181,7 +181,7 @@ void Game::collisionChecker(){
     }
 }
 
-void Game::deadChecker(){
+void Game::deadCheck(){
     for(list<GameObject *>::iterator it = gameObjects.begin(); it!=gameObjects.end(); )
     {
         if(!(*it)->isDead)
@@ -194,7 +194,7 @@ void Game::deadChecker(){
     }
 }
 
-void Game::ballChecker(){
+void Game::goalCheck(){
     auto x = ballptr->centerX(), y = ballptr->centerY();
     bool player1WinFlag = false, player2WinFlag = false;
     /* player1 score */
@@ -214,15 +214,29 @@ void Game::ballChecker(){
     }
 }
 
-void Game::boardChecker(){
+void Game::updateInfoBoard(){
+    static QTime lastSecond = QTime::currentTime();
+    static int timeDelta = 100;
     // Todo
     // call Function for players and ball->getDebugInfo() returns QString
     QString str = QString("<font color = white>Interval: ")+QString(int2str(globalTime).c_str());
     str += QString("<br>player1 x: ") + QString(int2str(player1->centerX()).c_str())+QString(" y:")+QString(int2str(player1->centerY()).c_str());
     str += QString("<br>player2 x: ") + QString(int2str(player2->centerX()).c_str())+QString(" y:")+QString(int2str(player2->centerY()).c_str());
     str += QString("<br>ball x: ") + QString(int2str(ballptr->centerX()).c_str())+QString(" y:")+QString(int2str(ballptr->centerY()).c_str());
+
+    // 计算帧率
+    if(globalTime%100==0)
+    {
+        QTime nowTime = QTime::currentTime();
+        timeDelta = lastSecond.msecsTo(nowTime); // 计算一百帧的时间间隔（单位：毫秒）
+        lastSecond = nowTime;
+    }
+    str += QString::asprintf("<br>帧率: %f, 参考帧率: %f",
+                             1000.0*100.0/timeDelta, 1000.0/T);
+
     str += QString("</font>");
     AIBoard->setHtml(str);
+
 }
 
 void Game::updateGame()
@@ -230,13 +244,13 @@ void Game::updateGame()
     globalTime += 1;
     // Todo
     // call Function for players and ball->getDebugInfo() returns QString
-    boardChecker();
+    updateInfoBoard();
 
     player1->playerAct(parseKeyboard(1));
     player2->playerAct(parseKeyboard(2));
 
     // 物体之间碰撞
-    collisionChecker();
+    collisionCheck();
 
     /* add new Objects */
     // call Function for all object->fetchGeneratedObject() returns vector<GameObject *>
@@ -248,10 +262,10 @@ void Game::updateGame()
     }
 
     /* ball position */
-    ballChecker();
+    goalCheck();
 
     /* delete */
-    deadChecker();
+    deadCheck();
 }
 
 void Game::quit(){

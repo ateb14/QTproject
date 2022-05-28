@@ -65,17 +65,17 @@ void GamePlayer::playerAct(ActionSet action)
         if(action.contains(PlayerAction::UPSHOOT)) vy_--;
         if(action.contains(PlayerAction::DOWNSHOOT)) vy_++;
         double vz_ = sqrt(vx_*vx_+vy_*vy_);
-        if(vz_>=1e-5)
-        {
-            this->generatedObjects.push_back(
-                new GameBullet(
-                    this->centerX(), this->centerY(),
-                    vx_/vz_*BULLET_SPEED, vy_/vz_*BULLET_SPEED,
-                    BULLET_RADIUS, BULLET_MASS, BULLET_DAMAGE, BULLET_TIME_TO_DESPAWN,
-                    this, bulletSrc, this->scene
-                ));
-            this->shootingCD = this->maxShootingCD;
-        }
+//        if(vz_>=1e-5)
+//        {
+//            this->generatedObjects.push_back(
+//                new GameBullet(
+//                    this->centerX(), this->centerY(),
+//                    vx_/vz_*BULLET_SPEED, vy_/vz_*BULLET_SPEED,
+//                    BULLET_RADIUS, BULLET_MASS, BULLET_DAMAGE, BULLET_TIME_TO_DESPAWN,
+//                    this, bulletSrc, this->scene
+//                ));
+//            this->shootingCD = this->maxShootingCD;
+//        }
     }
     // To be done...
 
