@@ -5,7 +5,8 @@ const int WIDTH = 1280;
 const int HEIGHT = 800;
 const char player1Src[50] = ":/art/liuhan.png";
 const char player2Src[50] = ":/art/kuqi.png";
-const char ballSrc[50] = ":/art/kuqi.png";
+const char ballSrc[50] = ":/art/football.png";
+const char postSrc[50] = ":/art/post.png";
 std::string int2str(int integer);
 
 Game::Game(){
@@ -112,6 +113,24 @@ void Game::keyReleaseEvent(QKeyEvent *event){
     }
 }
 
+/* Parse Keyboard */
+ActionSet Game::parseKeyboard(int playerID){
+    ActionSet res;
+    if(playerID==1){
+        if(isPressingW) res.addAction(UP);
+        if(isPressingA) res.addAction(LEFT);
+        if(isPressingS) res.addAction(DOWN);
+        if(isPressingD) res.addAction(RIGHT);
+    }
+    else if(playerID==2){
+        if(isPressingUp) res.addAction(UP);
+        if(isPressingLeft) res.addAction(LEFT);
+        if(isPressingDown) res.addAction(DOWN);
+        if(isPressingRight) res.addAction(RIGHT);
+    }
+    return res;
+}
+
 /* GameWindowsAction */
 
 void Game::start(){
@@ -125,12 +144,19 @@ void Game::start(){
     connect(timer, &QTimer::timeout, this, &Game::updateGame);
 
     /* Player Init */
-    player1 = new GamePlayer(WIDTH/4, HEIGHT/2, 60, player1Src, this);
-    player2 = new GamePlayer(3*WIDTH/4, HEIGHT/2, 60, player2Src, this);
-    GameBall *ball = new GameBall(WIDTH/2, HEIGHT/2, 80, 1, ballSrc, this);
+    player1 = new GamePlayer(WIDTH/4, HEIGHT/2, 30, player1Src, this);
+    player2 = new GamePlayer(3*WIDTH/4, HEIGHT/2, 30, player2Src, this);
+    GameBall *ball = new GameBall(WIDTH/2, HEIGHT/2, 20, 1, ballSrc, this);
+    GameObstacle *post[4]; // 球门柱
+    post[0] = new GameObstacle(70, HEIGHT/2-50, 10, postSrc, this);
+    post[1] = new GameObstacle(70, HEIGHT/2+50, 10, postSrc, this);
+    post[2] = new GameObstacle(WIDTH-70, HEIGHT/2-50, 10, postSrc, this);
+    post[3] = new GameObstacle(WIDTH-70, HEIGHT/2+50, 10, postSrc, this);
+
     this->gameObjects.push_back(player1);
     this->gameObjects.push_back(player2);
     this->gameObjects.push_back(ball);
+    for(int i = 0;i<4;i++) this->gameObjects.push_back(post[i]);
 
     this->globalTime = 0;
     this->timer->start(T);
@@ -154,16 +180,24 @@ void Game::updateGame()
     QString str = QString("<font color = white>Interval: ")+QString(int2str(globalTime).c_str())+QString("</font>");
     AIBoard->setHtml(str);
 
+    std::cout << "Time: " << this->globalTime << endl;
 
-    player1->playerAct(0);
-    player2->playerAct(0); // 0 is TO BE REPLACED by actions
+
+    player1->playerAct(parseKeyboard(1));
+    player2->playerAct(parseKeyboard(2));
 
     // 物体之间碰撞
-    for(GameObject *ptr1: this->gameObjects)
+    for(list<GameObject *>::iterator it1 = gameObjects.begin(); it1!=gameObjects.end(); it1++)
     {
-        for(GameObject *ptr2: this->gameObjects)
+        list<GameObject *>::iterator it1_ = it1;
+        for(list<GameObject *>::iterator it2 = ++it1_; it2!=gameObjects.end(); it2++)
         {
-
+            GameObject *ptr1 = *it1, *ptr2 = *it2;
+            if(ptr1->collideJudge(ptr2))
+            {
+                std::cout << "Colliding: " << ptr1->type << ptr2->type << endl;
+                ptr1->collides(ptr2);
+            }
         }
     }
 
@@ -171,7 +205,7 @@ void Game::updateGame()
     {
         ptr->updateInGame();
     }
-    for(list<GameObject *>::iterator it = gameObjects.begin();it!=gameObjects.end();)
+    for(list<GameObject *>::iterator it = gameObjects.begin(); it!=gameObjects.end(); )
     {
         if(!(*it)->isDead)
         {
@@ -217,40 +251,3 @@ std::string int2str(int integer){
     return res;
 }
 
-int Game::getMoveHorizental(int playerID)
-{
-    if(playerID==1)
-    {
-        if(isPressingA and isPressingD) return 0;
-        if(isPressingA) return -1;
-        if(isPressingD) return 1;
-        return 0;
-    }
-    else if(playerID==2)
-    {
-        if(isPressingLeft and isPressingRight) return 0;
-        if(isPressingLeft) return -1;
-        if(isPressingRight) return 1;
-        return 0;
-    }
-    return 0;
-}
-
-int Game::getMoveVertical(int playerID)
-{
-    if(playerID==1)
-    {
-        if(isPressingW and isPressingS) return 0;
-        if(isPressingS) return -1;
-        if(isPressingW) return 1;
-        return 0;
-    }
-    else if(playerID==2)
-    {
-        if(isPressingUp and isPressingDown) return 0;
-        if(isPressingDown) return -1;
-        if(isPressingUp) return 1;
-        return 0;
-    }
-    return 0;
-}

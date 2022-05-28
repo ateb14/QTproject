@@ -1,6 +1,6 @@
 #include "ball.h"
 
-const double BALL_VELOCITY_DECAY = 0.995;
+const double BALL_VELOCITY_DECAY = 0.985;
 
 GameBall::GameBall(int x, int y, int r, double m, const char *ImageSrc, QGraphicsScene *scene_):
     GameObject(x, y, r, m, ImageSrc, scene_)
@@ -10,8 +10,13 @@ GameBall::GameBall(int x, int y, int r, double m, const char *ImageSrc, QGraphic
 
 void GameBall::updateInGame()
 {
-    this->setVelocity(this->vx*BALL_VELOCITY_DECAY, this->vy*BALL_VELOCITY_DECAY);
     // 球的速度会衰减
+    double vx_new = this->vx*BALL_VELOCITY_DECAY, vy_new = this->vy*BALL_VELOCITY_DECAY;
+    this->setVelocity(vx_new, vy_new);
+    // 球会在边界反弹
+    this->bounceWithBorder();
+
+    std::cout << "Velocity of the ball: " << vx << ", " << vy << endl;
     GameObject::updateInGame();
 }
 
@@ -32,6 +37,9 @@ void GameBall::collides(GameObject *obj)
     case Item:
         return;
     case Enemy:
+        this->bounce(obj);
+        return;
+    case Obstacle:
         this->bounce(obj);
         return;
     }

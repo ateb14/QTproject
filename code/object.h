@@ -4,6 +4,7 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
 #include <cmath>
+#include <iostream>
 using namespace std;
 
 class GameObject: public QGraphicsPixmapItem
@@ -16,7 +17,7 @@ protected:
     static const int GAME_DESPAWN_DIST = 100;
     enum ObjectType
     {
-        Player, Bullet, Ball, Item, Enemy
+        Player, Bullet, Ball, Item, Enemy, Obstacle
     } type;
 
     QGraphicsScene *scene;
@@ -29,15 +30,17 @@ protected:
 
     // methods
     virtual void updateInGame(); // 默认按照当前速度移动，然后判断是否应被清除
-    inline void setVelocity(int vx_, int vy_); // 设置速度
+    inline void setVelocity(double vx_, double vy_); // 设置速度
     bool collideJudge(GameObject *obj); // 检测是否与另一物体碰撞
     virtual void collides(GameObject *obj) = 0; // 碰撞行为（每一类物体对于不同的对方物体行为不同）
     void bounce(GameObject *obj); // 完全弹性对心碰撞
+    void bounceWithBorder(); // 碰到边界反弹（可选）
     virtual void eatenBy(GameObject *obj); // 被另一物体吃掉（子弹或道具需要重写此方法）
 
     friend class Game;
     friend class GamePlayer;
     friend class GameBall;
+    friend class GameObstacle;
 };
 
 #endif // !OBJECT_H
