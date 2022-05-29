@@ -3,7 +3,7 @@
 GameBullet::GameBullet(int x, int y, double vx_, double vy_,
                        int r, double m, int damage_, int timeToDespawn_,
                        GameObject *owner_,
-                       const QPixmap &pixmap, QGraphicsScene *scene_):
+                       const QPixmap *pixmap, QGraphicsScene *scene_):
     GameObject(x, y, r, m, pixmap, scene_)
 {
     this->setVelocity(vx_, vy_);

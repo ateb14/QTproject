@@ -1,6 +1,10 @@
 #include "game.h"
+#include "config.h"
 
 #define DEBUG
+
+const QPixmap *player1Pixmap, *player2Pixmap,
+              *ballPixmap, *postPixmap, *bulletPixmap;
 
 int Game::winFreeTime = -1;
 std::string int2str(int integer);
@@ -157,16 +161,18 @@ void Game::start(){
     this->timer = new QTimer;
     connect(timer, &QTimer::timeout, this, &Game::updateGame);
 
-    /* QPixmap init */
-    static QPixmap player1Pixmap = QPixmap(player1Src);
-    static QPixmap player2Pixmap = QPixmap(player2Src);
-    static QPixmap ballPixmap = QPixmap(ballSrc);
-    static QPixmap postPixmap = QPixmap(postSrc);
-    static QPixmap bulletPixmap = QPixmap(bulletSrc);
+
+    /* 资源初始化 */
+    player1Pixmap = new QPixmap(player1Src);
+    player2Pixmap = new QPixmap(player2Src);
+    ballPixmap = new QPixmap(ballSrc);
+    postPixmap = new QPixmap(postSrc);
+    bulletPixmap = new QPixmap(bulletSrc);
+
 
     /* Player Init */
-    player1 = new GamePlayer(WIDTH/4, HEIGHT/2, 30, player1Pixmap, &bulletPixmap, this);
-    player2 = new GamePlayer(3*WIDTH/4, HEIGHT/2, 30, player2Pixmap, &bulletPixmap, this);
+    player1 = new GamePlayer(WIDTH/4, HEIGHT/2, 30, player1Pixmap, this);
+    player2 = new GamePlayer(3*WIDTH/4, HEIGHT/2, 30, player2Pixmap, this);
     /* ball Init */
     GameBall *ball = new GameBall(WIDTH/2, HEIGHT/2, 20, 1, ballPixmap, this);
     ballptr = ball;
@@ -294,7 +300,7 @@ void Game::updateInfoBoard(){
         timeDelta = lastSecond.msecsTo(nowTime); // 计算一百帧的时间间隔（单位：毫秒）
         lastSecond = nowTime;
     }
-    str += QString::asprintf("<br>fps: %f",
+    str += QString::asprintf("<br>fps: %f, standatd fps: %f",
                              1000.0*100.0/timeDelta, 1000.0/T);
 
     str += QString("<br>")+player1->debugInfo;

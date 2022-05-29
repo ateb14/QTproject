@@ -1,7 +1,7 @@
 #include "ball.h"
 #include "config.h"
 
-GameBall::GameBall(int x, int y, int r, double m, const QPixmap &pixmap, QGraphicsScene *scene_):
+GameBall::GameBall(int x, int y, int r, double m, const QPixmap *pixmap, QGraphicsScene *scene_):
     GameObject(x, y, r, m, pixmap, scene_)
 {
     type = ObjectType::Ball;
