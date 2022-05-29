@@ -2,21 +2,6 @@
 #include "bullet.h"
 #include "config.h"
 
-const int PLAYER_HEALTH = 100;
-const double PLAYER_SPEED = 3.0;
-const double PLAYER_MASS = 2.0;
-const double PLAYER_VELOCITY_DECAY = 0.97;
-const double TIME_TO_REACH_MAX_SPEED = 20;
-const double PLAYER_ACCELERATION = PLAYER_SPEED/TIME_TO_REACH_MAX_SPEED;
-const int PLAYER_SHOOTING_CD = 1*100;
-
-const double BULLET_SPEED = 7.0;
-const double BULLET_MASS = 0.5;
-const int BULLET_RADIUS = 10;
-const int BULLET_DAMAGE = 10;
-const int BULLET_TIME_TO_DESPAWN = 3*100;
-
-const char bulletSrc[] = ":/art/bullet1.png";
 
 ActionSet::ActionSet(){actions = 0;} // 空操作集合
 bool ActionSet::contains(PlayerAction action){ // 集合中是否含某操作
