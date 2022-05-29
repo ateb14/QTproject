@@ -7,6 +7,8 @@
 #include <QTimer>
 #include <QPainter>
 #include<QGraphicsEffect>
+#include "newgamesetting.h"
+#include "pressanykeywindow.h"
 
 Game * gameWindow=NULL;
 QGraphicsView *view=NULL;
@@ -16,6 +18,8 @@ myBtn *startBtn=NULL;
 QGraphicsBlurEffect* ef=NULL;
 QGraphicsBlurEffect* ef2=NULL;
 pausewindow *pauseWindow =NULL;
+newGameSetting *newgameWindow=NULL;
+pressanykeywindow *pakWindow=NULL;
 
 void continueGame(){
     pauseWindow->hide();
@@ -37,6 +41,20 @@ void backtoMain(){
     view2->hide();
     startBtn->show();
     quitBtn->show();
+}
+
+void tonewgameWindow(){
+    startBtn->hide();
+    quitBtn->hide();
+    newgameWindow->show();
+}
+
+void startgame(){
+
+    view2->show();
+    view->show();
+    newgameWindow->hide();
+    gameWindow->start();
 }
 
 myWindow::myWindow(QWidget *parent) : QWidget(parent)
@@ -78,7 +96,7 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
 
     quitBtn = new myBtn(":/art/quitgame.png",this);
     quitBtn->move((gameWindow->width()-100)/2,400);
-    QObject::connect(quitBtn, &QPushButton::clicked, [=](){
+    connect(quitBtn, &QPushButton::clicked, [=](){
         int res = QMessageBox::question(nullptr,"WARNING","Are you sure to exit？", QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
         if(res == QMessageBox::Yes){
 
@@ -91,18 +109,14 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     //start button
     startBtn=new myBtn("://art/startgame.png",this);
     startBtn->move((gameWindow->width()-100)/2,300);
-    QObject::connect(startBtn, &myBtn::clicked, [=](){
-        startBtn->move((gameWindow->width()-100)/2,300);
-        QTimer::singleShot(100,this,[=](){
-            startBtn->hide();
-            quitBtn->hide();
 
-            view2->show();
-            view->show();
-            gameWindow->start();
+    connect(startBtn, &myBtn::clicked, [=](){
+            startBtn->move((gameWindow->width()-100)/2,300);
+            QTimer::singleShot(100,this,[=](){
+                tonewgameWindow();
 
+            });
         });
-    });
     startBtn->setParent(this);
     setFixedSize(1290,1000);
 
@@ -115,7 +129,7 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     pauseWindow->hide();
 
     //设置esc的connect
-    QObject::connect(gameWindow,&Game::gameispause,[=](){
+    connect(gameWindow,&Game::gameispause,[=](){
         ef->setBlurRadius(20);
         ef->setBlurHints(QGraphicsBlurEffect::AnimationHint);
         ef2->setBlurRadius(20);
@@ -132,6 +146,22 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     connect(pauseWindow,&pausewindow::close,[=](){this->close();});
     //返回主窗口
     connect(pauseWindow,&pausewindow::back,&backtoMain);
+
+    //新游戏设置
+    newgameWindow=new newGameSetting();
+    newgameWindow->setFixedSize(this->size());
+    newgameWindow->move(0,0);
+    newgameWindow->setParent(this);
+    newgameWindow->hide();
+    connect(newgameWindow,&newGameSetting::startgame,&startgame);
+
+    //按任意键继续
+    pakWindow=new pressanykeywindow();
+    pakWindow->setFixedSize(this->size());
+    pakWindow->move(0,0);
+    pakWindow->setParent(this);
+    pakWindow->setFocus();
+
 }
 
 
@@ -141,6 +171,7 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
 
 void myWindow::keyPressEvent(QKeyEvent *event){
 //    qDebug()<<event->key();
+
     gameWindow->keyPressEvent(event);
 }
 

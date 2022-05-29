@@ -19,5 +19,6 @@
         <file>art/back.png</file>
         <file>art/continue.png</file>
         <file>art/exit.png</file>
+        <file>art/pressanykey.png</file>
     </qresource>
 </RCC>
