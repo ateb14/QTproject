@@ -3,18 +3,6 @@
 #define DEBUG
 
 int Game::winFreeTime = -1;
-const int T = 10;
-const int WIDTH = 1280;
-const int HEIGHT = 800;
-const char player1Src[] = ":/art/liuhan.png";
-const char player2Src[] = ":/art/kuqi.png";
-const char ballSrc[] = ":/art/football.png";
-const char postSrc[] = ":/art/post.png";
-const char bulletSrc[] = ":/art/football.png";
-const char cheers1Src[] = "qrc:///music/cheers1.mp3";
-const char cheers2Src[] = "qrc:///music/cheers2.mp3";
-/* エレキ・デ・チョコボ 植松伸夫 */
-const char backgroundMusic1Src[] = "./music/bg1.mp3";
 std::string int2str(int integer);
 
 Game::Game(){

@@ -16,6 +16,7 @@
 #include <object.h>
 #include <player.h>
 #include <ball.h>
+#include <config.h>
 #include <obstacle.h>
 #include <windows.h>
 #include <board.h>

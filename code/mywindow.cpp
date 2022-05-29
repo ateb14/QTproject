@@ -7,10 +7,6 @@
 #include <QPainter>
 
 
-const int PATHLEN = 150;
-const char startPNG[PATHLEN] = ":/art/start.png";
-const char welcomePNG[PATHLEN] = ":/art/welcome.jpg";
-const char backgroundPNG[PATHLEN] = ":/art/soccerField.png";
 Game * gameWindow=NULL;
 QGraphicsView *view=NULL;
 QGraphicsView *view2 =NULL;

@@ -58,10 +58,11 @@ const char bulletSrc[] = ":/art/football.png";
 
 // 音频
 
+/* エレキ・デ・チョコボ 植松伸夫 */
 const char backgroundMusic1Src[] = "./music/bg1.mp3";
+
 const char cheers1Src[] = "qrc:///music/cheers1.mp3";
 const char cheers2Src[] = "qrc:///music/cheers2.mp3";
-/* エレキ・デ・チョコボ 植松伸夫 */
 
 
 #endif // CONFIG_H
