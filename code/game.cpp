@@ -281,7 +281,7 @@ void Game::goalCheck(){
     }
     else if(Game::winFreeTime == 0){
         winFreeTime = -1;
-        cheersPlayer->setVolume(0);
+        cheersPlayer->stop();
         player1->setVelocity(0,0);
         player2->setVelocity(0,0);
         ballptr->setVelocity(0,0);
