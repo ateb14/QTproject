@@ -1,6 +1,5 @@
 #include "obstacle.h"
-
-const double INFINITE_MASS = 1919810.114514;
+#include "config.h"
 
 GameObstacle::GameObstacle(int x, int y, int r, const QPixmap &pixmap_, QGraphicsScene *scene_):
     GameObject(x, y, r, INFINITE_MASS, pixmap_, scene_)

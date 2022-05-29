@@ -1,4 +1,5 @@
 #include "ball.h"
+#include "config.h"
 
 const double BALL_VELOCITY_DECAY = 0.985;
 

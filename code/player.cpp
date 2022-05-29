@@ -1,5 +1,6 @@
 #include "player.h"
 #include "bullet.h"
+#include "config.h"
 
 const int PLAYER_HEALTH = 100;
 const double PLAYER_SPEED = 3.0;

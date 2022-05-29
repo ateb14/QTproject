@@ -4,13 +4,9 @@
 #include <QGraphicsView>
 #include "mybtn.h"
 #include <QTimer>
+#include "config.h"
 
 
-
-const int PATHLEN = 150;
-const char startPNG[PATHLEN] = ":/art/start.png";
-const char welcomePNG[PATHLEN] = ":/art/welcome.jpg";
-const char backgroundPNG[PATHLEN] = ":/art/soccerField.png";
 Game * gameWindow=NULL;
 
 myWindow::myWindow(QWidget *parent) : QWidget(parent)
