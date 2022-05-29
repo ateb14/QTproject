@@ -10,7 +10,7 @@ public:
     explicit myWindow(QWidget *parent = 0);
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
-
+    void paintEvent(QPaintEvent *);
 signals:
 
 public slots:

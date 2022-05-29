@@ -4,10 +4,18 @@
 #include <QGraphicsView>
 #include "mybtn.h"
 #include <QTimer>
-#include "config.h"
+#include <QPainter>
 
 
+const int PATHLEN = 150;
+const char startPNG[PATHLEN] = ":/art/start.png";
+const char welcomePNG[PATHLEN] = ":/art/welcome.jpg";
+const char backgroundPNG[PATHLEN] = ":/art/soccerField.png";
 Game * gameWindow=NULL;
+QGraphicsView *view=NULL;
+QGraphicsView *view2 =NULL;
+myBtn *quitBtn=NULL;
+myBtn *startBtn=NULL;
 
 myWindow::myWindow(QWidget *parent) : QWidget(parent)
 {
@@ -22,16 +30,30 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     /* Welcome */
     gameWindow = new Game;
 
-    QGraphicsView *view = new QGraphicsView;
+    view = new QGraphicsView;
     view->resize(1290,810);
     view->setScene(gameWindow);
     //view->setWindowTitle("Game");
     view->setBackgroundBrush(QBrush(QPixmap(backgroundPNG)));
     splash.finish(view);
+    view->move(-11,-45);
+    view->setParent(this);
+//    view->show();
+    //第二个view
+    view2 = new QGraphicsView;
+    view2->resize(1290,190);
+    view2->setScene(gameWindow->getBoard());
+    view2->move(0,810);
+    view2->setParent(this);
+    view2->setFocusPolicy(Qt::NoFocus);
+    //先不显示
+    view->hide();
+    view2->hide();
+
 
     //quit button
 
-    myBtn *quitBtn = new myBtn(":/art/quitgame.png",this);
+    quitBtn = new myBtn(":/art/quitgame.png",this);
     quitBtn->move((gameWindow->width()-100)/2,400);
     QObject::connect(quitBtn, &QPushButton::clicked, [=](){
         int res = QMessageBox::question(nullptr,"WARNING","Are you sure to exit？", QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
@@ -41,10 +63,10 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
         }
 
     });
-    quitBtn->setParent(view);
+    quitBtn->setParent(this);
 
     //start button
-    myBtn *startBtn=new myBtn("://art/startgame.png",this);
+    startBtn=new myBtn("://art/startgame.png",this);
     startBtn->move((gameWindow->width()-100)/2,300);
     QObject::connect(startBtn, &myBtn::clicked, [=](){
         startBtn->move((gameWindow->width()-100)/2,300);
@@ -52,30 +74,29 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
             startBtn->hide();
             quitBtn->hide();
 
+            view2->show();
+            view->show();
             gameWindow->start();
 
         });
     });
-    startBtn->setParent(view);
-
-
-    view->move(-11,-45);
-    view->setParent(this);
-//    view->show();
-
-    //第二个view
-    QGraphicsView *view2 = new QGraphicsView;
-    view2->resize(1290,190);
-    view2->setScene(gameWindow->getBoard());
-    view2->move(0,810);
-    view2->setParent(this);
-    view2->setFocusPolicy(Qt::NoFocus);
-
+    startBtn->setParent(this);
     setFixedSize(1290,1000);
+
+    //设置esc的connect
+    QObject::connect(gameWindow,&Game::gameispause,[=](){
+        QMessageBox::information(this,"注意","游戏被暂停了");
+    });
+
 }
 
+
+
+
+
+
 void myWindow::keyPressEvent(QKeyEvent *event){
-    qDebug()<<event->key();
+//    qDebug()<<event->key();
     gameWindow->keyPressEvent(event);
 }
 
@@ -83,3 +104,12 @@ void myWindow::keyReleaseEvent(QKeyEvent *event){
     gameWindow->keyReleaseEvent(event);
 }
 
+
+void myWindow::paintEvent(QPaintEvent *){
+    QPainter painter(this);
+    QPixmap pix;
+    pix.load("://art/background.jpg");
+    painter.drawPixmap(0,0,this->width(),this->height(),pix);
+
+
+}

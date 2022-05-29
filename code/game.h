@@ -94,6 +94,8 @@ private:
     void goalCheck();
     void newObjectCheck();
     void updateInfoBoard();
+signals:
+    void gameispause();
 
 };
 
