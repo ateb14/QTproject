@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     board.cpp \
     mybtn.cpp \
     mywindow.cpp \
-    buff.cpp
+    buff.cpp \
+    pausewindow.cpp
 
 HEADERS  += \
     game.h \
@@ -36,7 +37,8 @@ HEADERS  += \
     mybtn.h \
     mywindow.h \
     buff.h \
-    config.h
+    config.h \
+    pausewindow.h
 
 FORMS    +=
 
