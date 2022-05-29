@@ -1,6 +1,7 @@
 #include "pausewindow.h"
 #include <QPainter>
 #include "mybtn.h"
+#include<QTimer>
 
 myBtn *backBtn=NULL;
 myBtn *continueBtn = NULL;
@@ -15,6 +16,27 @@ pausewindow::pausewindow(QWidget *parent) : QWidget(parent)
     backBtn->move(645-backBtn->width()/2,100);
     continueBtn->move(645-continueBtn->width()/2,400);
     exitBtn->move(645-exitBtn->width()/2,700);
+
+    connect(continueBtn,&myBtn::clicked,[=](){
+        QTimer::singleShot(100,this,[=](){
+
+             emit gamecontinue();
+        });
+
+    });
+
+    connect(exitBtn,&myBtn::clicked,[=](){
+        QTimer::singleShot(100,this,[=](){
+             emit close();
+        });
+    });
+
+    connect(backBtn,&myBtn::clicked,[=](){
+        QTimer::singleShot(100,this,[=](){
+             emit back();
+        });
+
+    });
 
 }
 

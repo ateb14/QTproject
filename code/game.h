@@ -97,7 +97,7 @@ private:
     void updateInfoBoard();
 signals:
     void gameispause();
-
+    void gamecontinue();
 };
 
 #endif // !GAME_H

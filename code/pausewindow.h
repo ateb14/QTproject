@@ -14,7 +14,7 @@ public:
 signals:
     void close();
     void gamecontinue();
-    void bake();
+    void back();
 public slots:
 };
 

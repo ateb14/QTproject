@@ -92,6 +92,7 @@ void Game::keyPressEvent(QKeyEvent *event){
             }
             else if(winMode == MENU){
                 continueGame();
+                emit gamecontinue();
             }
             break;
         }
