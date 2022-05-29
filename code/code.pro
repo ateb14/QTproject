@@ -24,7 +24,9 @@ SOURCES += main.cpp\
     mybtn.cpp \
     mywindow.cpp \
     buff.cpp \
-    pausewindow.cpp
+    pausewindow.cpp \
+    newgamesetting.cpp \
+    pressanykeywindow.cpp
 
 HEADERS  += \
     game.h \
@@ -38,7 +40,9 @@ HEADERS  += \
     mywindow.h \
     buff.h \
     config.h \
-    pausewindow.h
+    pausewindow.h \
+    newgamesetting.h \
+    pressanykeywindow.h
 
 FORMS    +=
 
