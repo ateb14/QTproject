@@ -37,7 +37,7 @@ protected:
 
     // methods
     virtual void updateInGame(); // 默认按照当前速度移动，然后判断是否应被清除
-    inline void setVelocity(double vx_, double vy_); // 设置速度
+    void setVelocity(double vx_, double vy_); // 设置速度
     bool collideJudge(GameObject *obj); // 检测是否与另一物体碰撞
     virtual void collides(GameObject *obj) = 0; // 碰撞行为（每一类物体对于不同的对方物体行为不同）
     void bounce(GameObject *obj); // 完全弹性对心碰撞

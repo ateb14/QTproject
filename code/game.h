@@ -11,6 +11,8 @@
 #include <QTimer>
 #include <QTime>
 #include <QDebug>
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
 #include <object.h>
 #include <player.h>
 #include <ball.h>
@@ -68,6 +70,13 @@ private:
     void hideAIBoard();
     /* Game Board */
     GameBoard *board;
+    /* win check */
+    static int winFreeTime;
+    /* music player*/
+    QMediaPlayer *cheersPlayer;
+    QMediaPlayer *backgroundPlayer;
+    QMediaPlaylist *cheersPlaylist;
+    QMediaPlaylist *backgroundPlaylist;
 public:
     GameBoard *getBoard();
 private:

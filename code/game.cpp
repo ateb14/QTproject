@@ -2,6 +2,7 @@
 
 #define DEBUG
 
+int Game::winFreeTime = -1;
 const int T = 10;
 const int WIDTH = 1280;
 const int HEIGHT = 800;
@@ -10,11 +11,29 @@ const char player2Src[] = ":/art/kuqi.png";
 const char ballSrc[] = ":/art/football.png";
 const char postSrc[] = ":/art/post.png";
 const char bulletSrc[] = ":/art/football.png";
+const char cheers1Src[] = "qrc:///music/cheers1.mp3";
+const char cheers2Src[] = "qrc:///music/cheers2.mp3";
+/* エレキ・デ・チョコボ 植松伸夫 */
+const char backgroundMusic1Src[] = "./music/bg1.mp3";
 std::string int2str(int integer);
 
 Game::Game(){
     setSceneRect(0,0,WIDTH,HEIGHT);
     winMode = HOME;
+    /* Music Player Init */
+    cheersPlaylist = new QMediaPlaylist;
+    cheersPlaylist->addMedia(QUrl(cheers1Src));
+    cheersPlaylist->addMedia(QUrl(cheers2Src));
+    cheersPlaylist->setPlaybackMode(QMediaPlaylist::Random);
+    cheersPlayer = new QMediaPlayer;
+    cheersPlayer->setPlaylist(cheersPlaylist);
+
+    backgroundPlaylist = new QMediaPlaylist;
+    backgroundPlaylist->addMedia(QUrl::fromLocalFile(backgroundMusic1Src));
+    backgroundPlaylist->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
+    backgroundPlayer = new QMediaPlayer;
+    backgroundPlayer->setVolume(70);
+    backgroundPlayer->setPlaylist(backgroundPlaylist);
 
     /* Keyboard Control Flags Initializing */
     isPressingA = false;
@@ -41,6 +60,7 @@ Game::Game(){
     AIBoard->hide();
 
     board = new GameBoard();
+    /* GameBoard Init */
 }
 
 /* keyboard reading */
@@ -174,11 +194,14 @@ void Game::start(){
 
     this->globalTime = 0;
     this->timer->start(T);
+    /* Music! */
+    backgroundPlayer->play();
 }
 
 void Game::endGame(){
     // Todo
     // implement this function
+    backgroundPlayer->stop();
 }
 
 void Game::pause(int ms){
@@ -236,19 +259,29 @@ void Game::deadCheck(){
 }
 
 void Game::goalCheck(){
-    auto x = ballptr->centerX(), y = ballptr->centerY();
-    bool player1WinFlag = false, player2WinFlag = false;
-    /* player1 score */
-    if(x>=0 && x<70 && y>HEIGHT/2-100 && y<HEIGHT/2+100){
-        player1WinFlag = true;
+    if(Game::winFreeTime < 0){
+        auto x = ballptr->centerX(), y = ballptr->centerY();
+        bool player1WinFlag = false, player2WinFlag = false;
+        /* player1 score */
+        if(x>=0 && x<70 && y>HEIGHT/2-100 && y<HEIGHT/2+100){
+            player1WinFlag = true;
+        }
+        /* player2 score */
+        else if(x>=WIDTH-70 && x<=WIDTH && y>HEIGHT/2-100 && y<HEIGHT/2+100){
+            player2WinFlag = true;
+        }
+        if(player1WinFlag || player2WinFlag){
+            winFreeTime = 600;
+            cheersPlayer->setVolume(100);
+            cheersPlayer->play();
+        }
     }
-    /* player2 score */
-    else if(x>=WIDTH-70 && x<=WIDTH && y>HEIGHT/2-100 && y<HEIGHT/2+100){
-        player2WinFlag = true;
+    else if(Game::winFreeTime>0){
+        winFreeTime -= 1;
     }
-    if(player1WinFlag || player2WinFlag){
-        pause(10);
-        Sleep(2000);
+    else if(Game::winFreeTime == 0){
+        winFreeTime = -1;
+        cheersPlayer->stop();
         player1->setVelocity(0,0);
         player2->setVelocity(0,0);
         ballptr->setVelocity(0,0);
@@ -264,9 +297,6 @@ void Game::updateInfoBoard(){
     // Todo
     // call Function for players and ball->getDebugInfo() returns QString
     QString str = QString("<font color = white>Interval: ")+QString(int2str(globalTime).c_str());
-    str += QString("<br>player1 x: ") + QString(int2str(player1->centerX()).c_str())+QString(" y:")+QString(int2str(player1->centerY()).c_str());
-    str += QString("<br>player2 x: ") + QString(int2str(player2->centerX()).c_str())+QString(" y:")+QString(int2str(player2->centerY()).c_str());
-    str += QString("<br>ball x: ") + QString(int2str(ballptr->centerX()).c_str())+QString(" y:")+QString(int2str(ballptr->centerY()).c_str());
 
     // 计算帧率
     if(globalTime%100==0)
@@ -275,8 +305,12 @@ void Game::updateInfoBoard(){
         timeDelta = lastSecond.msecsTo(nowTime); // 计算一百帧的时间间隔（单位：毫秒）
         lastSecond = nowTime;
     }
-    str += QString::asprintf("<br>帧率: %f, 参考帧率: %f",
+    str += QString::asprintf("<br>fps: %f",
                              1000.0*100.0/timeDelta, 1000.0/T);
+
+    str += QString("<br>")+player1->debugInfo;
+    str += QString("<br>")+player2->debugInfo;
+    str += QString("<br>")+ballptr->debugInfo;
 
     str += QString("</font>");
     AIBoard->setHtml(str);
