@@ -15,6 +15,29 @@ myBtn *quitBtn=NULL;
 myBtn *startBtn=NULL;
 QGraphicsBlurEffect* ef=NULL;
 QGraphicsBlurEffect* ef2=NULL;
+pausewindow *pauseWindow =NULL;
+
+void continueGame(){
+    pauseWindow->hide();
+    gameWindow->continueGame();
+    ef->setBlurRadius(0);
+    ef->setBlurHints(QGraphicsBlurEffect::AnimationHint);
+    ef2->setBlurRadius(0);
+    ef2->setBlurHints(QGraphicsBlurEffect::AnimationHint);
+}
+
+void backtoMain(){
+    pauseWindow->hide();
+    gameWindow->endGame();
+    ef->setBlurRadius(0);
+    ef->setBlurHints(QGraphicsBlurEffect::AnimationHint);
+    ef2->setBlurRadius(0);
+    ef2->setBlurHints(QGraphicsBlurEffect::AnimationHint);
+    view->hide();
+    view2->hide();
+    startBtn->show();
+    quitBtn->show();
+}
 
 myWindow::myWindow(QWidget *parent) : QWidget(parent)
 {
@@ -85,7 +108,7 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
 
 
     //暂停时的界面
-    pausewindow *pauseWindow=new pausewindow;
+    pauseWindow=new pausewindow;
     pauseWindow->setFixedSize(this->size());
     pauseWindow->move(0,0);
     pauseWindow->setParent(this);
@@ -100,9 +123,15 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
         view->setGraphicsEffect(ef);
         view2->setGraphicsEffect(ef2);
         pauseWindow->show();
-
     });
 
+    //游戏继续
+    connect(pauseWindow,&pausewindow::gamecontinue,&continueGame);
+    connect(gameWindow,&Game::gamecontinue,&continueGame);
+    //游戏退出
+    connect(pauseWindow,&pausewindow::close,[=](){this->close();});
+    //返回主窗口
+    connect(pauseWindow,&pausewindow::back,&backtoMain);
 }
 
 
