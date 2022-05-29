@@ -22,6 +22,8 @@
 #include <board.h>
 #include <list>
 #include <iostream>
+#include <fstream>
+#include <vector>
 
 
 enum windowMode{
@@ -29,6 +31,11 @@ enum windowMode{
     GAMING,
     MENU,
     SHOP,
+};
+
+struct gameInfo{
+    long long interval;
+    ActionSet action1, action2;
 };
 
 class Game: public QGraphicsScene{
@@ -51,6 +58,10 @@ public slots:
 private:
     /* Window Mode */
     windowMode winMode;
+    /* Review Mode */
+    static bool reviewMode;
+    std::vector<gameInfo> gameInfos;
+    long long infoReader;
     /* Keyboard Control Flags*/
     bool isPressingW,isPressingA,isPressingS,isPressingD;
     bool isPressingT,isPressingF,isPressingG,isPressingH;

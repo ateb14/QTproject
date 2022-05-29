@@ -1,12 +1,13 @@
 #include "game.h"
 #include "config.h"
 
-#define DEBUG
+// #define DEBUG
 
 const QPixmap *player1Pixmap, *player2Pixmap,
               *ballPixmap, *postPixmap, *bulletPixmap;
 
 int Game::winFreeTime = -1;
+bool Game::reviewMode = false;
 std::string int2str(int integer);
 
 Game::Game(){
@@ -154,8 +155,6 @@ ActionSet Game::parseKeyboard(int playerID){
 
 void Game::start(){
     /* GAMING Mode On */
-//    this->quitButton->hide();
-//    this->startButton->hide();
     this->winMode = GAMING;
 
     /* Initialize the clock */
@@ -192,12 +191,48 @@ void Game::start(){
     this->timer->start(T);
     /* Music! */
     backgroundPlayer->play();
+
+    /* Review Mode */
+    if(Game::reviewMode == true){
+        ifstream inFile("./record.dat",ios::in|ios::binary);
+        if(!inFile){
+            //Todo
+            //throw Exception
+        }
+        else{
+            gameInfo info;
+            while(inFile.read((char *) & info, sizeof(info))){
+                gameInfos.push_back(info);
+#ifdef DEBUG
+                std::cout << info.interval << " " << info.action1.actions << " " << info.action2.actions << std::endl;
+#endif
+            }
+            inFile.close();
+            infoReader = 0;
+        }
+    }
 }
 
 void Game::endGame(){
-    // Todo
-    // implement this function
     backgroundPlayer->stop();
+    cheersPlayer->stop();
+    delete this->timer;
+    for(GameObject * it:this->gameObjects){
+        delete it;
+    }
+    /* Record Record */
+    if(Game::reviewMode == false){
+        ofstream outFile("./record.dat",ios::out|ios::binary);
+        int len = gameInfos.size();
+        for(int i=0;i<len;++i){
+#ifdef DEBUG
+                std::cout << gameInfos[i].interval << " " << gameInfos[i].action1.actions << " " << gameInfos[i].action2.actions << std::endl;
+#endif
+            outFile.write((char *)&gameInfos[i], sizeof(gameInfos[i]));
+        }
+        outFile.close();
+        gameObjects.clear();
+    }
 }
 
 void Game::pause(int ms){
@@ -211,8 +246,6 @@ void Game::pause(int ms){
         this->timer->stop();
         QTimer::singleShot(ms, this, &continueGame);
     }
-    // Todo:
-    // Menu
 }
 
 void Game::continueGame(){
@@ -326,14 +359,43 @@ void Game::newObjectCheck(){
 
 void Game::updateGame()
 {
+
     globalTime += 1;
     // Todo
     // call Function for players and ball->getDebugInfo() returns QString
     updateInfoBoard();
 
-    player1->playerAct(parseKeyboard(1));
-    player2->playerAct(parseKeyboard(2));
-
+    /* Record Mode */
+    if(Game::reviewMode == false){
+        gameInfo curInfo;
+        curInfo.interval = globalTime;
+        curInfo.action1 = parseKeyboard(1);
+        curInfo.action2 = parseKeyboard(2);
+        if(curInfo.action1.actions != 0 || curInfo.action2.actions !=0){
+#ifdef DEBUG
+            std::cout << curInfo.interval << " " << curInfo.action1.actions << " " << curInfo.action2.actions << std::endl;
+#endif
+            gameInfos.push_back(curInfo);
+        }
+        player1->playerAct(curInfo.action1);
+        player2->playerAct(curInfo.action2);
+    }
+    /* Review Mode */
+    else if(Game::reviewMode == true){
+        if(infoReader >= gameInfos.size()){
+            exit(0);
+        }
+        if(gameInfos[infoReader].interval == Game::globalTime){
+            player1->playerAct(gameInfos[infoReader].action1);
+            player2->playerAct(gameInfos[infoReader].action2);
+            infoReader += 1;
+        }
+        else{
+            /* Empty Input */
+            player1->playerAct(ActionSet());
+            player2->playerAct(ActionSet());
+        }
+    }
     // 物体之间碰撞
     collisionCheck();
 
