@@ -297,9 +297,6 @@ void Game::updateInfoBoard(){
     // Todo
     // call Function for players and ball->getDebugInfo() returns QString
     QString str = QString("<font color = white>Interval: ")+QString(int2str(globalTime).c_str());
-    str += QString("<br>player1 x: ") + QString(int2str(player1->centerX()).c_str())+QString(" y:")+QString(int2str(player1->centerY()).c_str());
-    str += QString("<br>player2 x: ") + QString(int2str(player2->centerX()).c_str())+QString(" y:")+QString(int2str(player2->centerY()).c_str());
-    str += QString("<br>ball x: ") + QString(int2str(ballptr->centerX()).c_str())+QString(" y:")+QString(int2str(ballptr->centerY()).c_str());
 
     // 计算帧率
     if(globalTime%100==0)
@@ -308,10 +305,12 @@ void Game::updateInfoBoard(){
         timeDelta = lastSecond.msecsTo(nowTime); // 计算一百帧的时间间隔（单位：毫秒）
         lastSecond = nowTime;
     }
-    str += QString::asprintf("<br>帧率: %f, 参考帧率: %f",
+    str += QString::asprintf("<br>fps: %f",
                              1000.0*100.0/timeDelta, 1000.0/T);
 
-    //str += QString("<br>")+player1->debugInfo;
+    str += QString("<br>")+player1->debugInfo;
+    str += QString("<br>")+player2->debugInfo;
+    str += QString("<br>")+ballptr->debugInfo;
 
     str += QString("</font>");
     AIBoard->setHtml(str);

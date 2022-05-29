@@ -17,7 +17,7 @@ void GameBall::updateInGame()
     this->bounceWithBorder();
     // 更新调试信息
     this->debugInfo = QString::asprintf(
-                "Ball position: (%d, %d), \nball velocity: (%d, %d)",
+                "Ball position: (%d, %d), \nball velocity: (%f, %f)",
                 this->centerX(), this->centerY(), this->vx, this->vy
                 );
 
