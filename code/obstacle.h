@@ -6,7 +6,7 @@
 class GameObstacle : public GameObject
 {
 public:
-    GameObstacle(int x, int y, int r, const QPixmap &pixmap_, QGraphicsScene *scene_);
+    GameObstacle(int x, int y, int r, const QPixmap *pixmap_, QGraphicsScene *scene_);
 
 private:
     virtual void updateInGame();

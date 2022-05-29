@@ -1,6 +1,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include <QGraphicsItem>
+
 /**
   * 这个文件里定义了所有游戏的的全局变量。
   * 包括若干部分：
@@ -59,10 +61,13 @@ const char bulletSrc[] = ":/art/football.png";
 // 音频
 
 /* エレキ・デ・チョコボ 植松伸夫 */
-const char backgroundMusic1Src[] = "./music/bg1.mp3";
+const char backgroundMusic1Src[] = "qrc:///music/bg1.mp3";
 
 const char cheers1Src[] = "qrc:///music/cheers1.mp3";
 const char cheers2Src[] = "qrc:///music/cheers2.mp3";
 
+// 资源对象
+extern const QPixmap *player1Pixmap, *player2Pixmap,
+                     *ballPixmap, *postPixmap, *bulletPixmap;
 
 #endif // CONFIG_H

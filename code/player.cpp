@@ -5,8 +5,7 @@
 
 ActionSet::ActionSet(){actions = 0;} // 空操作集合
 bool ActionSet::contains(PlayerAction action){ // 集合中是否含某操作
-    if(actions & action) return true;
-    return false;
+    return actions&action;
 }
 void ActionSet::addAction(PlayerAction action) //向集合中添加操作
 {
@@ -14,7 +13,7 @@ void ActionSet::addAction(PlayerAction action) //向集合中添加操作
 }
 
 GamePlayer::GamePlayer(int x, int y, int r,
-                       const QPixmap &pixmap_, QPixmap *bulletPixmap_,
+                       const QPixmap *pixmap_,
                        QGraphicsScene *scene_)
 :GameObject(x, y, r, PLAYER_MASS, pixmap_, scene_){
     type = ObjectType::Player;
@@ -23,7 +22,6 @@ GamePlayer::GamePlayer(int x, int y, int r,
     shootingCD = 0;
     maxShootingCD = PLAYER_SHOOTING_CD;
     buffSet = BuffSet();
-    bulletPixmap = bulletPixmap_;
 }
 
 int GamePlayer::getHealth(){return this->health;}
@@ -66,7 +64,7 @@ void GamePlayer::playerAct(ActionSet action)
                     this->centerX(), this->centerY(),
                     vx_/vz_*BULLET_SPEED, vy_/vz_*BULLET_SPEED,
                     BULLET_RADIUS, BULLET_MASS, BULLET_DAMAGE, BULLET_TIME_TO_DESPAWN,
-                    this, *(this->bulletPixmap), this->scene
+                    this, bulletPixmap, this->scene
                 ));
             this->shootingCD = this->maxShootingCD;
         }
