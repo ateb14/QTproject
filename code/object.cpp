@@ -31,7 +31,7 @@ void GameObject::updateInGame()
     if(!isDead) update(); // 绘制图像
 }
 
-inline void GameObject::setVelocity(double vx_, double vy_){vx = vx_, vy = vy_;} // 设置物体速度
+void GameObject::setVelocity(double vx_, double vy_){vx = vx_, vy = vy_;} // 设置物体速度
 
 bool GameObject::collideJudge(GameObject *obj) // 检测是否与另一物体碰撞
 {
@@ -76,6 +76,10 @@ void GameObject::bounceWithBorder()
     if(y-this->radius<=0) vy_new = max(vy_new, -vy_new);
     if(y+this->radius>=scene->height()) vy_new = min(vy_new, -vy_new);
     this->setVelocity(vx_new, vy_new);
+}
+
+QString GameObject::getDebugInfo(){
+    return this->debugInfo;
 }
 
 void GameObject::eatenBy(GameObject *obj){} // 被另一物体吃掉（子弹或道具需要重写此方法）

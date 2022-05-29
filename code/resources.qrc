@@ -11,5 +11,8 @@
         <file>art/post.png</file>
         <file>art/quitgame.png</file>
         <file>art/startgame.png</file>
+        <file>music/cheers1.mp3</file>
+        <file>music/cheers2.mp3</file>
+        <file>music/bg1.mp3</file>
     </qresource>
 </RCC>

@@ -102,7 +102,7 @@ void GamePlayer::updateInGame()
     this->bounceWithBorder();
 
     // 更新调试信息
-    this->debugInfo += QString::asprintf(
+    this->debugInfo = QString::asprintf(
                 "Player position: (%d, %d), \nplayer velocity: (%f, %f)",
                 this->centerX(), this->centerY(), this->vx, this->vy
                 );
