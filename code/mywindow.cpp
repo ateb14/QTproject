@@ -3,20 +3,24 @@
 #include <QSplashScreen>
 #include <QGraphicsView>
 #include "mybtn.h"
+#include "pausewindow.h"
 #include <QTimer>
 #include <QPainter>
-
+#include<QGraphicsEffect>
 
 Game * gameWindow=NULL;
 QGraphicsView *view=NULL;
 QGraphicsView *view2 =NULL;
 myBtn *quitBtn=NULL;
 myBtn *startBtn=NULL;
+QGraphicsBlurEffect* ef=NULL;
+QGraphicsBlurEffect* ef2=NULL;
 
 myWindow::myWindow(QWidget *parent) : QWidget(parent)
 {
     setWindowTitle("Game");
-
+    ef = new QGraphicsBlurEffect;
+    ef2 = new QGraphicsBlurEffect;
     /* Start */
     QPixmap start(startPNG);
     QSplashScreen splash(start);
@@ -79,9 +83,24 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     startBtn->setParent(this);
     setFixedSize(1290,1000);
 
+
+    //暂停时的界面
+    pausewindow *pauseWindow=new pausewindow;
+    pauseWindow->setFixedSize(this->size());
+    pauseWindow->move(0,0);
+    pauseWindow->setParent(this);
+    pauseWindow->hide();
+
     //设置esc的connect
     QObject::connect(gameWindow,&Game::gameispause,[=](){
-        QMessageBox::information(this,"注意","游戏被暂停了");
+        ef->setBlurRadius(20);
+        ef->setBlurHints(QGraphicsBlurEffect::AnimationHint);
+        ef2->setBlurRadius(20);
+        ef2->setBlurHints(QGraphicsBlurEffect::AnimationHint);
+        view->setGraphicsEffect(ef);
+        view2->setGraphicsEffect(ef2);
+        pauseWindow->show();
+
     });
 
 }
