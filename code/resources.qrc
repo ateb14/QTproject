@@ -14,5 +14,6 @@
         <file>music/cheers1.mp3</file>
         <file>music/cheers2.mp3</file>
         <file>music/bg1.mp3</file>
+        <file>art/background.jpg</file>
     </qresource>
 </RCC>
