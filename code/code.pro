@@ -35,7 +35,8 @@ HEADERS  += \
     board.h \
     mybtn.h \
     mywindow.h \
-    buff.h
+    buff.h \
+    config.h
 
 FORMS    +=
 
