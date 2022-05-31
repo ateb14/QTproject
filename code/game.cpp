@@ -195,7 +195,7 @@ void Game::start(bool reviewMode){
 
     /* Review Mode */
     infoReader = 0;
-    if(Game::reviewMode == true && gameInfos.empty()){
+    if(Game::reviewMode == true){
         ifstream inFile("./record.dat",ios::in|ios::binary);
         if(!inFile){
             //Todo
@@ -385,6 +385,8 @@ void Game::updateGame()
     /* Review Mode */
     else if(Game::reviewMode == true){
         if(infoReader >= gameInfos.size()){
+            pause();
+            gameInfos.clear();
             emit gameispause();
         }
         else{
