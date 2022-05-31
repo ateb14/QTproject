@@ -10,6 +10,7 @@
 #include "newgamesetting.h"
 #include "pressanykeywindow.h"
 #include "mylabel.h"
+#include <QPropertyAnimation>
 
 Game * gameWindow=NULL;
 QGraphicsView *view=NULL;
@@ -28,6 +29,92 @@ myLabel *exitboard;
 myLabel *duola;
 myLabel *red;
 myLabel *gametitle;
+QTimer *duolatimer;
+
+//哆啦A梦上下移动效果
+void dolamoving(){
+    static int dy=1;
+
+    duolatimer = new QTimer(duola);
+    QWidget::connect(duolatimer,&QTimer::timeout,[=](){
+        duola->move(duola->x(),duola->y()+dy);
+        if(duola->y()==680) dy=-1;
+        else if (duola->y()==665) dy=1;
+    });
+    duolatimer->start(10);
+}
+
+
+//控件进入画面的动画
+void allmovein(){
+    QPropertyAnimation *ani1 = new QPropertyAnimation(startboard,"geometry");
+    ani1->setDuration(300);
+    ani1->setStartValue(QRect(450,1001,startboard->width(),startboard->height()));
+    ani1->setEndValue(QRect(450,750,startboard->width(),startboard->height()));
+
+    QPropertyAnimation *ani2 = new QPropertyAnimation(cinemaboard,"geometry");
+    ani2->setDuration(300);
+    ani2->setStartValue(QRect(700,1001,cinemaboard->width(),cinemaboard->height()));
+    ani2->setEndValue(QRect(700,750,cinemaboard->width(),cinemaboard->height()));
+
+    QPropertyAnimation *ani3 = new QPropertyAnimation(exitboard,"geometry");
+    ani3->setDuration(300);
+    ani3->setStartValue(QRect(950,1001,exitboard->width(),exitboard->height()));
+    ani3->setEndValue(QRect(950,750,exitboard->width(),exitboard->height()));
+
+    QPropertyAnimation *ani4 = new QPropertyAnimation(startBtn,"geometry");
+    ani4->setDuration(400);
+    ani4->setStartValue(QRect(480,1001,startBtn->width(),startBtn->height()));
+    ani4->setEndValue(QRect(480,802,startBtn->width(),startBtn->height()));
+    ani4->setEasingCurve(QEasingCurve::OutBounce);
+
+    QPropertyAnimation *ani5 = new QPropertyAnimation(cinemaBtn,"geometry");
+    ani5->setDuration(400);
+    ani5->setStartValue(QRect(724,1001,cinemaBtn->width(),cinemaBtn->height()));
+    ani5->setEndValue(QRect(724,797,cinemaBtn->width(),cinemaBtn->height()));
+    ani5->setEasingCurve(QEasingCurve::OutBounce);
+
+    QPropertyAnimation *ani6 = new QPropertyAnimation(quitBtn,"geometry");
+    ani6->setDuration(400);
+    ani6->setStartValue(QRect(983,1001,quitBtn->width(),quitBtn->height()));
+    ani6->setEndValue(QRect(983,804,quitBtn->width(),quitBtn->height()));
+    ani6->setEasingCurve(QEasingCurve::OutBounce);
+
+    QPropertyAnimation *ani7 = new QPropertyAnimation(red,"geometry");
+    ani7->setDuration(300);
+    ani7->setStartValue(QRect(78,0-red->height(),red->width(),red->height()));
+    ani7->setEndValue(QRect(78,150,red->width(),red->height()));
+
+    QPropertyAnimation *ani8 = new QPropertyAnimation(gametitle,"geometry");
+    ani8->setDuration(400);
+    ani8->setStartValue(QRect(335,0-gametitle->height(),gametitle->width(),gametitle->height()));
+    ani8->setEndValue(QRect(335,36,gametitle->width(),gametitle->height()));
+    ani8->setEasingCurve(QEasingCurve::OutBounce);
+
+    QPropertyAnimation *ani9 = new QPropertyAnimation(duola,"geometry");
+    ani9->setDuration(800);
+    ani9->setStartValue(QRect(12,1001,duola->width(),duola->height()));
+    ani9->setEndValue(QRect(12,665,duola->width(),duola->height()));
+    ani9->setEasingCurve(QEasingCurve::OutBounce);
+
+    ani1->start();
+    ani2->start();
+    ani3->start();
+    ani4->start();
+    ani5->start();
+    ani6->start();
+    ani7->start();
+    ani8->start();
+    ani9->start();
+    QTimer::singleShot(800,duola,[=](){
+        dolamoving();
+    });
+
+
+
+}
+
+
 
 
 void continueGame(){
@@ -50,11 +137,25 @@ void backtoMain(){
     view2->hide();
     startBtn->show();
     quitBtn->show();
+    cinemaBtn->show();
+    startboard->show();
+    cinemaboard->show();
+    exitboard->show();
+    duola->show();
+    red->show();
+    gametitle->show();
 }
 
 void tonewgameWindow(){
     startBtn->hide();
     quitBtn->hide();
+    cinemaBtn->hide();
+    startboard->hide();
+    cinemaboard->hide();
+    exitboard->hide();
+    duola->hide();
+    red->hide();
+    gametitle->hide();
     newgameWindow->show();
 }
 
@@ -70,17 +171,17 @@ void startgame(){
 myWindow::myWindow(QWidget *parent) : QWidget(parent)
 {
     duola = new myLabel("://art/Doraemon_with_PKU.png",this);
-    duola->move(12,665);
+    duola->move(12,1001);
     startboard=new myLabel(":/art/button_board.png",this);
-    startboard->move(450,750);
+    startboard->move(450,1001);
     cinemaboard=new myLabel(":/art/button_board.png",this);
-    cinemaboard->move(700,750);
+    cinemaboard->move(700,1001);
     exitboard=new myLabel(":/art/button_board.png",this);
-    exitboard->move(950,750);
+    exitboard->move(950,1001);
     red=new myLabel(":/art/red.png",this);
-    red->move(78,150);
+    red->move(78,0-red->height());
     gametitle=new myLabel(":/art/title.png",this);
-    gametitle->move(335,36);
+    gametitle->move(335,0-gametitle->height());
 
 
 
@@ -123,7 +224,7 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     //quit button
 
     quitBtn = new myBtn("://art/Exit_Btn.png",this);
-    quitBtn->move(983,804);
+    quitBtn->move(983,1001);
     connect(quitBtn, &myBtn::btnClicked, [=](){
         int res = QMessageBox::question(nullptr,"WARNING","Are you sure to exit？", QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
         if(res == QMessageBox::Yes){
@@ -135,11 +236,11 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
 
     //cinemabutton
     cinemaBtn = new myBtn(":/art/Cinema_Btn.png",this);
-    cinemaBtn->move(724,797);
+    cinemaBtn->move(724,1001);
 
     //start button
     startBtn=new myBtn(":/art/Start_Btn.png",this);
-    startBtn->move(480,802);
+    startBtn->move(480,1001);
     connect(startBtn, &myBtn::btnClicked,&tonewgameWindow);
     startBtn->setParent(this);
 
@@ -195,6 +296,7 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     pakWindow->setFocus();
     connect(pakWindow,&pressanykeywindow::isclosed,[=](){
         pakWindow->close();
+        allmovein();
         setFocus();
     });
 
