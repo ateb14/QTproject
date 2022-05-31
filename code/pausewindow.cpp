@@ -17,25 +17,16 @@ pausewindow::pausewindow(QWidget *parent) : QWidget(parent)
     continueBtn->move(645-continueBtn->width()/2,400);
     exitBtn->move(645-exitBtn->width()/2,700);
 
-    connect(continueBtn,&myBtn::clicked,[=](){
-        QTimer::singleShot(100,this,[=](){
-
-             emit gamecontinue();
-        });
-
+    connect(continueBtn,&myBtn::btnClicked,[=](){
+        emit gamecontinue();
     });
 
-    connect(exitBtn,&myBtn::clicked,[=](){
-        QTimer::singleShot(100,this,[=](){
-             emit close();
-        });
+    connect(exitBtn,&myBtn::btnClicked,[=](){
+        emit close();
     });
 
-    connect(backBtn,&myBtn::clicked,[=](){
-        QTimer::singleShot(100,this,[=](){
-             emit back();
-        });
-
+    connect(backBtn,&myBtn::btnClicked,[=](){
+        emit back();
     });
 
 }

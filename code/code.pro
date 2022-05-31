@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     buff.cpp \
     pausewindow.cpp \
     newgamesetting.cpp \
-    pressanykeywindow.cpp
+    pressanykeywindow.cpp \
+    mylabel.cpp
 
 HEADERS  += \
     game.h \
@@ -42,7 +43,8 @@ HEADERS  += \
     config.h \
     pausewindow.h \
     newgamesetting.h \
-    pressanykeywindow.h
+    pressanykeywindow.h \
+    mylabel.h
 
 FORMS    +=
 
