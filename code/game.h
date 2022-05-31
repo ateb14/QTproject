@@ -52,7 +52,7 @@ public slots:
     void updateGame();
     void endGame();
     void quit();
-    void start();
+    void start(bool reviewMode = false);
     void pause(int ms=0);
     void continueGame();
 private:

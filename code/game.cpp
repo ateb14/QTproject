@@ -153,7 +153,8 @@ ActionSet Game::parseKeyboard(int playerID){
 
 /* GameWindowsAction */
 
-void Game::start(){
+void Game::start(bool reviewMode){
+    Game::reviewMode = reviewMode;
     /* GAMING Mode On */
     this->winMode = GAMING;
 
