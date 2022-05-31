@@ -30,18 +30,35 @@ myLabel *duola;
 myLabel *red;
 myLabel *gametitle;
 QTimer *duolatimer;
+QPropertyAnimation *duolaani;
 
-//哆啦A梦上下移动效果
-void dolamoving(){
+
+//哆啦A梦弹出
+void duolajump(){
+    duolaani = new QPropertyAnimation(duola,"geometry");
+    duolaani->setDuration(800);
+    duolaani->setStartValue(QRect(12,1001,duola->width(),duola->height()));
+    duolaani->setEndValue(QRect(12,665,duola->width(),duola->height()));
+    duolaani->setEasingCurve(QEasingCurve::OutBounce);
+    duolaani->start();
+}
+
+
+//哆啦A梦上下移动
+void duolamoving(){
+
     static int dy=1;
-
-    duolatimer = new QTimer(duola);
-    QWidget::connect(duolatimer,&QTimer::timeout,[=](){
-        duola->move(duola->x(),duola->y()+dy);
-        if(duola->y()==680) dy=-1;
-        else if (duola->y()==665) dy=1;
+    QTimer::singleShot(800,duola,[=](){
+        duolatimer = new QTimer(duola);
+        QWidget::connect(duolatimer,&QTimer::timeout,[=](){
+            duola->move(duola->x(),duola->y()+dy);
+            if(duola->y()>=675) dy=-1;
+            else if (duola->y()<=665) dy=1;
+        });
+        duolatimer->start(90);
     });
-    duolatimer->start(10);
+
+
 }
 
 
@@ -91,11 +108,6 @@ void allmovein(){
     ani8->setEndValue(QRect(335,36,gametitle->width(),gametitle->height()));
     ani8->setEasingCurve(QEasingCurve::OutBounce);
 
-    QPropertyAnimation *ani9 = new QPropertyAnimation(duola,"geometry");
-    ani9->setDuration(800);
-    ani9->setStartValue(QRect(12,1001,duola->width(),duola->height()));
-    ani9->setEndValue(QRect(12,665,duola->width(),duola->height()));
-    ani9->setEasingCurve(QEasingCurve::OutBounce);
 
     ani1->start();
     ani2->start();
@@ -105,10 +117,9 @@ void allmovein(){
     ani6->start();
     ani7->start();
     ani8->start();
-    ani9->start();
-    QTimer::singleShot(800,duola,[=](){
-        dolamoving();
-    });
+    duolajump();
+    duolamoving();
+
 
 
 
@@ -118,7 +129,9 @@ void allmovein(){
 
 
 void continueGame(){
-    pauseWindow->hide();
+    duola->hide();
+    duola->move(12,1001);
+    pauseWindow->hide();    
     gameWindow->continueGame();
     ef->setBlurRadius(0);
     ef->setBlurHints(QGraphicsBlurEffect::AnimationHint);
@@ -140,10 +153,10 @@ void backtoMain(){
     cinemaBtn->show();
     startboard->show();
     cinemaboard->show();
-    exitboard->show();
-    duola->show();
+    exitboard->show();    
     red->show();
     gametitle->show();
+    duolatimer->start();
 }
 
 void tonewgameWindow(){
@@ -154,6 +167,8 @@ void tonewgameWindow(){
     cinemaboard->hide();
     exitboard->hide();
     duola->hide();
+    duolatimer->stop();
+    duola->move(12,1001);
     red->hide();
     gametitle->hide();
     newgameWindow->show();
@@ -170,8 +185,7 @@ void startgame(){
 
 myWindow::myWindow(QWidget *parent) : QWidget(parent)
 {
-    duola = new myLabel("://art/Doraemon_with_PKU.png",this);
-    duola->move(12,1001);
+
     startboard=new myLabel(":/art/button_board.png",this);
     startboard->move(450,1001);
     cinemaboard=new myLabel(":/art/button_board.png",this);
@@ -256,15 +270,24 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     pauseWindow->setParent(this);
     pauseWindow->hide();
 
+
+
+
+
+
     //设置esc的connect
     connect(gameWindow,&Game::gameispause,[=](){
+
+        pauseWindow->show();
+        duola->show();
+        duolajump();
         ef->setBlurRadius(20);
         ef->setBlurHints(QGraphicsBlurEffect::AnimationHint);
         ef2->setBlurRadius(20);
         ef2->setBlurHints(QGraphicsBlurEffect::AnimationHint);
         view->setGraphicsEffect(ef);
         view2->setGraphicsEffect(ef2);
-        pauseWindow->show();
+
     });
 
     //游戏继续
@@ -287,6 +310,11 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     newgameWindow->setParent(this);
     newgameWindow->hide();
     connect(newgameWindow,&newGameSetting::startgame,&startgame);
+
+    //哆啦A梦
+    duola = new myLabel("://art/Doraemon_with_PKU.png",this);
+    duola->move(12,1001);
+    duola->setFocusPolicy(Qt::NoFocus);
 
     //按任意键继续
     pakWindow=new pressanykeywindow();
