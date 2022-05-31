@@ -16,9 +16,6 @@
         <file>music/bg1.mp3</file>
         <file>art/background.jpg</file>
         <file>art/test.png</file>
-        <file>art/back.png</file>
-        <file>art/continue.png</file>
-        <file>art/exit.png</file>
         <file>art/pressanykey.png</file>
         <file>music/mousepress.wav</file>
         <file>music/mouserelease.wav</file>
@@ -30,5 +27,9 @@
         <file>art/Exit_Btn.png</file>
         <file>art/title.png</file>
         <file>art/Doraemon_with_PKU.png</file>
+        <file>art/back.png</file>
+        <file>art/continue.png</file>
+        <file>art/exit.png</file>
+        <file>art/tmppage.png</file>
     </qresource>
 </RCC>

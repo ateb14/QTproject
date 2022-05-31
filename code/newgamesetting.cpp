@@ -18,6 +18,6 @@ newGameSetting::newGameSetting(QWidget *parent) : QWidget(parent)
 void newGameSetting::paintEvent(QPaintEvent *){
     QPainter painter(this);
     QPixmap pix;
-    pix.load(":/art/welcome.jpg");
+    pix.load("://art/tmppage.png");
     painter.drawPixmap(0,0,this->width(),this->height(),pix);
 }
