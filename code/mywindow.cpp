@@ -175,11 +175,30 @@ void tonewgameWindow(){
 }
 
 void startgame(){
-
     view2->show();
     view->show();
     newgameWindow->hide();
     gameWindow->start();
+}
+
+void startreview(){
+    view2->show();
+    view->show();
+    startBtn->hide();
+    quitBtn->hide();
+    cinemaBtn->hide();
+    startboard->hide();
+    cinemaboard->hide();
+    exitboard->hide();
+    duola->hide();
+    duolatimer->stop();
+    duola->move(12,1001);
+    red->hide();
+    gametitle->hide();
+    gameWindow->start(true);
+
+
+
 }
 
 
@@ -196,10 +215,6 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     red->move(78,0-red->height());
     gametitle=new myLabel(":/art/title.png",this);
     gametitle->move(335,0-gametitle->height());
-
-
-
-
 
 
     setWindowTitle("Game");
@@ -245,18 +260,17 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
             this->close();
         }
     });
-    quitBtn->setParent(this);
 
 
     //cinemabutton
     cinemaBtn = new myBtn(":/art/Cinema_Btn.png",this);
     cinemaBtn->move(724,1001);
+    connect(cinemaBtn, &myBtn::btnClicked,&startreview);
 
     //start button
     startBtn=new myBtn(":/art/Start_Btn.png",this);
     startBtn->move(480,1001);
     connect(startBtn, &myBtn::btnClicked,&tonewgameWindow);
-    startBtn->setParent(this);
 
 
     //主窗口界面大小
@@ -279,14 +293,19 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     connect(gameWindow,&Game::gameispause,[=](){
 
         pauseWindow->show();
-        duola->show();
-        duolajump();
+
         ef->setBlurRadius(20);
         ef->setBlurHints(QGraphicsBlurEffect::AnimationHint);
         ef2->setBlurRadius(20);
         ef2->setBlurHints(QGraphicsBlurEffect::AnimationHint);
         view->setGraphicsEffect(ef);
         view2->setGraphicsEffect(ef2);
+
+        //qDebug()<<"出现";
+
+        duola->raise();
+        duola->show();
+        duolajump();
 
     });
 
