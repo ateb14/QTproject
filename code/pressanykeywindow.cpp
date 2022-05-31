@@ -14,5 +14,5 @@ void pressanykeywindow::paintEvent(QPaintEvent *){
 }
 
 void pressanykeywindow::keyPressEvent(QKeyEvent *event){
-    close();
+    emit isclosed();
 }

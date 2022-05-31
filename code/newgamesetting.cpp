@@ -10,12 +10,8 @@ newGameSetting::newGameSetting(QWidget *parent) : QWidget(parent)
     start=new myBtn("://art/startgame.png",this);
     start->move((1290-100)/2,800);
 
-    connect(start,&myBtn::clicked,[=](){
-        QTimer::singleShot(100,this,[=](){
-
+    connect(start,&myBtn::btnClicked,[=](){
              emit startgame();
-        });
-
     });
 }
 

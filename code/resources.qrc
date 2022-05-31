@@ -20,5 +20,15 @@
         <file>art/continue.png</file>
         <file>art/exit.png</file>
         <file>art/pressanykey.png</file>
+        <file>music/mousepress.wav</file>
+        <file>music/mouserelease.wav</file>
+        <file>art/main_backgroud.jpg</file>
+        <file>art/red.png</file>
+        <file>art/button_board.png</file>
+        <file>art/Start_Btn.png</file>
+        <file>art/Cinema_Btn.png</file>
+        <file>art/Exit_Btn.png</file>
+        <file>art/title.png</file>
+        <file>art/Doraemon_with_PKU.png</file>
     </qresource>
 </RCC>

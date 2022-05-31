@@ -12,12 +12,12 @@ public:
     myBtn(QString Img,QWidget *parent);
     QString ImgPath;
     //特效
-    void zoom1();
-    void zoom2();
+    void press();
+    void release();
     void mousePressEvent(QMouseEvent *ev);
     void mouseReleaseEvent(QMouseEvent *ev);
 signals:
-
+    void btnClicked();
 public slots:
 };
 

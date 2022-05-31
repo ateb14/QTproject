@@ -11,7 +11,7 @@ public:
     void paintEvent(QPaintEvent *);
     void keyPressEvent(QKeyEvent *event);
 signals:
-
+    void isclosed();
 public slots:
 };
 
