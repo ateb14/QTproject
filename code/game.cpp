@@ -7,7 +7,7 @@ const QPixmap *player1Pixmap, *player2Pixmap,
               *ballPixmap, *postPixmap, *bulletPixmap;
 
 int Game::winFreeTime = -1;
-bool Game::reviewMode = false;
+bool Game::reviewMode = true;
 std::string int2str(int integer);
 
 Game::Game(){
@@ -193,7 +193,8 @@ void Game::start(){
     backgroundPlayer->play();
 
     /* Review Mode */
-    if(Game::reviewMode == true){
+    infoReader = 0;
+    if(Game::reviewMode == true && gameInfos.empty()){
         ifstream inFile("./record.dat",ios::in|ios::binary);
         if(!inFile){
             //Todo
@@ -208,7 +209,6 @@ void Game::start(){
 #endif
             }
             inFile.close();
-            infoReader = 0;
         }
     }
 }
@@ -220,6 +220,7 @@ void Game::endGame(){
     for(GameObject * it:this->gameObjects){
         delete it;
     }
+    gameObjects.clear();
     /* Record Record */
     if(Game::reviewMode == false){
         ofstream outFile("./record.dat",ios::out|ios::binary);
@@ -231,7 +232,7 @@ void Game::endGame(){
             outFile.write((char *)&gameInfos[i], sizeof(gameInfos[i]));
         }
         outFile.close();
-        gameObjects.clear();
+        gameInfos.clear();
     }
 }
 
@@ -383,17 +384,19 @@ void Game::updateGame()
     /* Review Mode */
     else if(Game::reviewMode == true){
         if(infoReader >= gameInfos.size()){
-            exit(0);
-        }
-        if(gameInfos[infoReader].interval == Game::globalTime){
-            player1->playerAct(gameInfos[infoReader].action1);
-            player2->playerAct(gameInfos[infoReader].action2);
-            infoReader += 1;
+            emit gameispause();
         }
         else{
-            /* Empty Input */
-            player1->playerAct(ActionSet());
-            player2->playerAct(ActionSet());
+                if(gameInfos[infoReader].interval == Game::globalTime){
+                player1->playerAct(gameInfos[infoReader].action1);
+                player2->playerAct(gameInfos[infoReader].action2);
+                infoReader += 1;
+            }
+            else{
+                /* Empty Input */
+                player1->playerAct(ActionSet());
+                player2->playerAct(ActionSet());
+            }
         }
     }
     // 物体之间碰撞
