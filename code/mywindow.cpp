@@ -120,9 +120,6 @@ void allmovein(){
     duolajump();
     duolamoving();
 
-
-
-
 }
 
 
@@ -196,9 +193,6 @@ void startreview(){
     red->hide();
     gametitle->hide();
     gameWindow->start(true);
-
-
-
 }
 
 
@@ -234,8 +228,9 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     view->setScene(gameWindow);
     //view->setWindowTitle("Game");
     view->setBackgroundBrush(QBrush(QPixmap(backgroundPNG)));
-    splash.finish(view);
-    view->move(-11,-45);
+//    splash.finish(view);
+//    view->move(-11,-45);
+    view->move(0,0);
     view->setParent(this);
 //    view->show();
     //第二个view
@@ -367,6 +362,4 @@ void myWindow::paintEvent(QPaintEvent *){
     QPixmap pix;
     pix.load("://art/main_backgroud.jpg");
     painter.drawPixmap(0,0,this->width(),this->height(),pix);
-
-
 }
