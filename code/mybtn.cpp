@@ -8,8 +8,6 @@
 //{
 
 //}
-int posx;
-int posy;
 QSound *presssound=new  QSound(":/music/mousepress.wav");
 QSound *releasesound=new  QSound(":/music/mouserelease.wav");
 //音效来自网络
@@ -30,14 +28,26 @@ myBtn::myBtn(QString Img,QWidget *parent){
     });
 }
 
+void myBtn::sety(int yy){
+    posy=yy;
+    posy_dy=yy+10;
+}
+
+void myBtn::changeImg(QString Img){
+    ImgPath=Img;
+    QPixmap pix;
+    pix.load(ImgPath);
+    setStyleSheet("QPushButton{border:0px;}");
+    setIcon(pix);
+    setIconSize(pix.size());
+}
+
 void myBtn::press(){
     presssound->play();
-    posx=x();
-    posy=y();
     QPropertyAnimation *ani = new QPropertyAnimation(this,"geometry");
-    ani->setDuration(200);
-    ani->setStartValue(QRect(this->x(),this->y(),this->width(),this->height()));
-    ani->setEndValue(QRect(this->x(),this->y()+10,this->width(),this->height()));
+    ani->setDuration(100);
+    ani->setStartValue(QRect(this->x(),posy,this->width(),this->height()));
+    ani->setEndValue(QRect(this->x(), posy_dy,this->width(),this->height()));
     ani->setEasingCurve(QEasingCurve::OutBounce);
     ani->start();
 
@@ -46,9 +56,9 @@ void myBtn::press(){
 void myBtn::release(){
     releasesound->play();
     QPropertyAnimation *ani = new QPropertyAnimation(this,"geometry");
-    ani->setDuration(200);
+    ani->setDuration(100);
     ani->setStartValue(QRect(this->x(),this->y(),this->width(),this->height()));
-    ani->setEndValue(QRect(posx,posy,this->width(),this->height()));
+    ani->setEndValue(QRect(this->x(),posy,this->width(),this->height()));
     ani->setEasingCurve(QEasingCurve::OutBounce);
     QTimer::singleShot(100,this,[=](){
         ani->start();

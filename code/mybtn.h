@@ -10,12 +10,16 @@ class myBtn : public QPushButton
 public:
 //    explicit myBtn(QWidget *parent = 0);
     myBtn(QString Img,QWidget *parent);
+    void changeImg(QString Img);
     QString ImgPath;
     //特效
     void press();
     void release();
     void mousePressEvent(QMouseEvent *ev);
     void mouseReleaseEvent(QMouseEvent *ev);
+    void sety(int yy);
+    int posy;
+    int posy_dy;
 signals:
     void btnClicked();
 public slots:

@@ -2,6 +2,7 @@
 #define NEWGAMESETTING_H
 
 #include <QWidget>
+#include "config.h"
 
 class newGameSetting : public QWidget
 {
@@ -9,9 +10,16 @@ class newGameSetting : public QWidget
 public:
     explicit newGameSetting(QWidget *parent = 0);
     void paintEvent(QPaintEvent *);
+    void movein();
+    void moveout();
+    PlayerType player1Type, player2Type;
+    GameFormat gameFormat;
+    PlayerSpeed playerSpeed;
+    bool enemyMode;
 
 signals:
     void startgame();
+    void backtomain();
 public slots:
 };
 
