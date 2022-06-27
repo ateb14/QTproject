@@ -53,7 +53,8 @@ const double PLAYER_MASS = 2.0;
 const double PLAYER_VELOCITY_DECAY = 0.97;
 const double TIME_TO_REACH_MAX_SPEED = 20;
 const double PLAYER_ACCELERATION = PLAYER_SPEED/TIME_TO_REACH_MAX_SPEED;
-const int PLAYER_SHOOTING_CD = 1*100;
+const int PLAYER_SHOOTING_CD = 1*1000/defaultT; // 1s
+const int PLAYER_SKILL_POINT_GAIN_CD = 0.1*1000/defaultT; // 10s回满
 
 const double BULLET_SPEED = 7.0;
 const double BULLET_MASS = 0.5;
@@ -72,7 +73,8 @@ const double BALL_VELOCITY_DECAY = 0.985;
 const double INFINITE_MASS = 1919810.114514;
 
 // 技能威力
-const double MAGNET_FORCE = BALL_MASS*5.0;
+const int BUFF_TIME = 5*1000/defaultT; // 5 seconds
+const double MAGNET_FORCE = BALL_MASS*40.0;
 
 
 // 以下是资源：

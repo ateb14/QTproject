@@ -49,6 +49,8 @@ private:
     double speed; // 最高速度（单位：像素/帧）
     int shootingCD; // 当前设计CD（单位：帧）
     int maxShootingCD; // 射击总CD（单位：帧）
+    int skillPointGainCD; // 回复技能点的CD（单位：帧）
+    int maxSkillPointGainCD; // 回复技能点的总CD（单位：帧）
     set<Buff *> buffSet; // 当前玩家带有的Buff的列表
     GamePlayer *opponent; // 对手
 
