@@ -192,10 +192,10 @@ void Game::start(bool reviewMode){
 
 
     /* Player Init */
-    player1 = new GamePlayer(WIDTH/4, HEIGHT/2, 30, player1Pixmap, this);
-    player2 = new GamePlayer(3*WIDTH/4, HEIGHT/2, 30, player2Pixmap, this);
+    player1 = new GamePlayer(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);
+    player2 = new GamePlayer(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, player1, &gameObjects);
     /* ball Init */
-    GameBall *ball = new GameBall(WIDTH/2, HEIGHT/2, 20, 1, ballPixmap, this);
+    GameBall *ball = new GameBall(WIDTH/2, HEIGHT/2, ballPixmap, this);
     ballptr = ball;
     GameObstacle *post[4]; // 球门柱
     post[0] = new GameObstacle(70, HEIGHT/2-100, 10, postPixmap, this);

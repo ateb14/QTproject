@@ -12,10 +12,13 @@ void ActionSet::addAction(PlayerAction action) //向集合中添加操作
     actions |= action;
 }
 
-GamePlayer::GamePlayer(int x, int y, int r,
+GamePlayer::GamePlayer(int x, int y,
                        const QPixmap *pixmap_,
-                       QGraphicsScene *scene_)
-: GameObject(x, y, r, PLAYER_MASS, pixmap_, scene_){
+                       QGraphicsScene *scene_,
+                       GamePlayer *opponent_,
+                       std::list<GameObject *> *gameObjects_):
+    GameObject(x, y, PLAYER_RADIUS, PLAYER_MASS, pixmap_, scene_)
+{
     type = ObjectType::Player;
     health = PLAYER_HEALTH;
     skillPoint = 0;
@@ -23,6 +26,8 @@ GamePlayer::GamePlayer(int x, int y, int r,
     shootingCD = 0;
     maxShootingCD = PLAYER_SHOOTING_CD;
     buffSet = {};
+    opponent = opponent_;
+    gameObjects = gameObjects_;
 }
 
 int GamePlayer::getHealth(){return this->health;}
@@ -88,11 +93,11 @@ void GamePlayer::playerAct(ActionSet action)
     }
 
     // Skill
-//    if(this->skillPoint>=PLAYER_SKILL_POINT_LIMIT
-//       and action.contains(PlayerAction::SKILL))
-//    {
-//        this->skill();
-//    }
+    if(this->skillPoint>=PLAYER_SKILL_POINT_LIMIT
+       and action.contains(PlayerAction::SKILL))
+    {
+        this->skill();
+    }
     // To be done...
 
 }
@@ -164,20 +169,35 @@ void GamePlayer::takeDamage(int damage)
     }
 }
 
+// 以下是磁铁buff的效果。
+void GamePlayer::magnet()
+{
+    for(GameObject *obj: *(this->gameObjects))
+    {
+        double dx = this->centerX()-obj->centerX(),
+               dy = this->centerY()-obj->centerY();
+        double dz = sqrt(dx*dx+dy*dy+1e-5);
+        double dvz = MAGNET_FORCE/this->mass;
+        double dvx = dvz*dx/dz, dvy = dvz*dy/dz;
+        obj->setVelocity(obj->vx+dvx, obj->vy+dvy);
+    }
+}
+
 // 以下是各个角色的技能。
-//void LovingMan::skill()
-//{
-//    // To be done...
-//}
-//void SantaClaus::skill()
-//{
-//    // To be done...
-//}
-//void AngryBrother::skill()
-//{
-//    // To be done...
-//}
-//void GuoShen::skill()
-//{
-//    // To be done...
-//}
+void LovingMan::skill()
+{
+    // To be done...
+    this->addBuff(new Buff);
+}
+void SantaClaus::skill()
+{
+    // To be done...
+}
+void AngryBrother::skill()
+{
+    // To be done...
+}
+void GuoShen::skill()
+{
+    // To be done...
+}
