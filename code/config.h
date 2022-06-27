@@ -40,14 +40,14 @@ typedef struct{
 }GameSettings;
 
 // 游戏本体（计时器、窗口等）参数
-
 const int defaultT = 10;
 const int WIDTH = 1280;
 const int HEIGHT = 800;
 
 // 玩家
-
+const int PLAYER_RADIUS = 30;
 const int PLAYER_HEALTH = 100;
+const int PLAYER_SKILL_POINT_LIMIT = 100;
 const double PLAYER_SPEED = 3.0;
 const double PLAYER_MASS = 2.0;
 const double PLAYER_VELOCITY_DECAY = 0.97;
@@ -62,16 +62,21 @@ const int BULLET_DAMAGE = 10;
 const int BULLET_TIME_TO_DESPAWN = 3*100;
 
 
-// 足球
 
+// 足球
+const int BALL_RADIUS = 20;
+const double BALL_MASS = 1.0;
 const double BALL_VELOCITY_DECAY = 0.985;
 
 // 障碍物
-
 const double INFINITE_MASS = 1919810.114514;
+
+// 技能威力
+const double MAGNET_FORCE = BALL_MASS*5.0;
 
 
 // 以下是资源：
+
 
 // 图片
 
