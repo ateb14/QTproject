@@ -31,5 +31,36 @@
         <file>art/continue.png</file>
         <file>art/exit.png</file>
         <file>art/tmppage.png</file>
+        <file>art/play.png</file>
+        <file>art/delete.png</file>
+        <file>art/cinema.png</file>
+        <file>art/xyy.png</file>
+        <file>art/syy.png</file>
+        <file>art/jixu.png</file>
+        <file>art/fanhui.png</file>
+        <file>art/choosecharacter.png</file>
+        <file>art/choosevideo.png</file>
+        <file>art/dark.png</file>
+        <file>art/gls.png</file>
+        <file>art/angry.png</file>
+        <file>art/santa.png</file>
+        <file>art/frozen.png</file>
+        <file>art/love.png</file>
+        <file>art/newgamesetting.png</file>
+        <file>art/guoshenname.png</file>
+        <file>art/angryname.png</file>
+        <file>art/santaname.png</file>
+        <file>art/lovename.png</file>
+        <file>art/yes.png</file>
+        <file>art/no.png</file>
+        <file>art/fast.png</file>
+        <file>art/slow.png</file>
+        <file>art/middle.png</file>
+        <file>art/32.png</file>
+        <file>art/53.png</file>
+        <file>art/loveintro.png</file>
+        <file>art/santaintro.png</file>
+        <file>art/angryintro.png</file>
+        <file>art/guoshenintro.png</file>
     </qresource>
 </RCC>

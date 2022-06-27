@@ -137,6 +137,7 @@ void continueGame(){
 }
 
 void backtoMain(){
+    newgameWindow->hide();
     pauseWindow->hide();
     gameWindow->endGame();
     ef->setBlurRadius(0);
@@ -156,25 +157,43 @@ void backtoMain(){
     duolatimer->start();
 }
 
+void backtoMainfromsetting(){
+    newgameWindow->hide();
+    startBtn->show();
+    quitBtn->show();
+    cinemaBtn->show();
+    startboard->show();
+    cinemaboard->show();
+    exitboard->show();
+    red->show();
+    gametitle->show();
+}
+
+
 void tonewgameWindow(){
     startBtn->hide();
     quitBtn->hide();
     cinemaBtn->hide();
     startboard->hide();
     cinemaboard->hide();
-    exitboard->hide();
-    duola->hide();
-    duolatimer->stop();
-    duola->move(12,1001);
+    exitboard->hide();    
     red->hide();
     gametitle->hide();
     newgameWindow->show();
+
+    newgameWindow->movein();
 }
 
 void startgame(){
+    duola->hide();
+    duolatimer->stop();
+    duola->move(12,1001);
     view2->show();
     view->show();
     newgameWindow->hide();
+    gameWindow->setGlobalVars(newgameWindow->player1Type,newgameWindow->player2Type,
+                              newgameWindow->gameFormat,newgameWindow->playerSpeed,
+                              newgameWindow->enemyMode);
     gameWindow->start();
 }
 
@@ -249,6 +268,7 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
 
     quitBtn = new myBtn("://art/Exit_Btn.png",this);
     quitBtn->move(983,1001);
+    quitBtn->sety(804);
     connect(quitBtn, &myBtn::btnClicked, [=](){
         int res = QMessageBox::question(nullptr,"WARNING","Are you sure to exit？", QMessageBox::Yes|QMessageBox::No, QMessageBox::NoButton);
         if(res == QMessageBox::Yes){
@@ -260,11 +280,13 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     //cinemabutton
     cinemaBtn = new myBtn(":/art/Cinema_Btn.png",this);
     cinemaBtn->move(724,1001);
+    cinemaBtn->sety(797);
     connect(cinemaBtn, &myBtn::btnClicked,&startreview);
 
     //start button
     startBtn=new myBtn(":/art/Start_Btn.png",this);
     startBtn->move(480,1001);
+    startBtn->sety(802);
     connect(startBtn, &myBtn::btnClicked,&tonewgameWindow);
 
 
@@ -324,6 +346,8 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     newgameWindow->setParent(this);
     newgameWindow->hide();
     connect(newgameWindow,&newGameSetting::startgame,&startgame);
+    connect(newgameWindow,&newGameSetting::backtomain,&backtoMainfromsetting);
+
 
     //哆啦A梦
     duola = new myLabel("://art/Doraemon_with_PKU.png",this);

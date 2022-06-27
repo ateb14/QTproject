@@ -14,8 +14,11 @@ pausewindow::pausewindow(QWidget *parent) : QWidget(parent)
     continueBtn=new myBtn(":/art/continue.png",this);
     exitBtn= new myBtn(":/art/exit.png",this);
     backBtn->move(645-backBtn->width()/2,250);
+    backBtn->sety(250);
     continueBtn->move(645-continueBtn->width()/2,450);
+    continueBtn->sety(450);
     exitBtn->move(645-exitBtn->width()/2,650);
+    exitBtn->sety(650);
 
     connect(continueBtn,&myBtn::btnClicked,[=](){
         emit gamecontinue();
