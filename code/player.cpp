@@ -26,7 +26,7 @@ GamePlayer::GamePlayer(int x, int y, int r,
 }
 
 int GamePlayer::getHealth(){return this->health;}
-void GamePlayer::addBuff(Buff buff){this->buffSet.push_back(buff);}
+void GamePlayer::addBuff(Buff *buff){this->buffSet.insert(buff);}
 
 /* Keyboard Control */
 void GamePlayer::playerAct(ActionSet action)
@@ -88,11 +88,11 @@ void GamePlayer::playerAct(ActionSet action)
     }
 
     // Skill
-    if(this->skillPoint>=PLAYER_SKILL_POINT_LIMIT
-       and action.contains(PlayerAction::SKILL))
-    {
-        this->skill();
-    }
+//    if(this->skillPoint>=PLAYER_SKILL_POINT_LIMIT
+//       and action.contains(PlayerAction::SKILL))
+//    {
+//        this->skill();
+//    }
     // To be done...
 
 }
@@ -165,19 +165,19 @@ void GamePlayer::takeDamage(int damage)
 }
 
 // 以下是各个角色的技能。
-void LovingMan::skill()
-{
-    // To be done...
-}
-void SantaClaus::skill()
-{
-    // To be done...
-}
-void AngryBrother::skill()
-{
-    // To be done...
-}
-void GuoShen::skill()
-{
-    // To be done...
-}
+//void LovingMan::skill()
+//{
+//    // To be done...
+//}
+//void SantaClaus::skill()
+//{
+//    // To be done...
+//}
+//void AngryBrother::skill()
+//{
+//    // To be done...
+//}
+//void GuoShen::skill()
+//{
+//    // To be done...
+//}

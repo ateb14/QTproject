@@ -38,7 +38,7 @@ public:
     void playerAct(ActionSet action); // 接受一个操作集，由这个函数来进行所有操作
     // proprety
     int getHealth();
-    void addBuff(Buff buff);
+    void addBuff(Buff *buff);
 
 private:
     // attributes
@@ -47,54 +47,54 @@ private:
     double speed; // 最高速度（单位：像素/帧）
     int shootingCD; // 当前设计CD（单位：帧）
     int maxShootingCD; // 射击总CD（单位：帧）
-    set<Buff> *buffSet; // 当前玩家带有的Buff的列表
+    set<Buff *> buffSet; // 当前玩家带有的Buff的列表
 
     // methods
-    virtual void skill() = 0;
+//    virtual void skill() = 0;
     virtual void updateInGame();
     virtual void collides(GameObject *obj);
     virtual void takeDamage(int damage);
 
 };
 
-class LovingMan: public GamePlayer
-{
-public:
-    LovingMan(int x, int y, int r,
-              const QPixmap *pixmap_,
-              QGraphicsScene *scene_): GamePlayer(x, y, r, *pixmap_, *scene_){}
-private:
-    virtual void skill();
-};
+//class LovingMan: public GamePlayer
+//{
+//public:
+//    LovingMan(int x, int y, int r,
+//              const QPixmap *pixmap_,
+//              QGraphicsScene *scene_): GamePlayer(x, y, r, *pixmap_, *scene_){}
+//private:
+//    virtual void skill();
+//};
 
-class SantaClaus: public GamePlayer
-{
-public:
-    SantaClaus(int x, int y, int r,
-               const QPixmap *pixmap_,
-               QGraphicsScene *scene_): GamePlayer(x, y, r, *pixmap_, *scene_){}
-private:
-    virtual void skill();
-};
+//class SantaClaus: public GamePlayer
+//{
+//public:
+//    SantaClaus(int x, int y, int r,
+//               const QPixmap *pixmap_,
+//               QGraphicsScene *scene_): GamePlayer(x, y, r, *pixmap_, *scene_){}
+//private:
+//    virtual void skill();
+//};
 
-class AngryBrother: public GamePlayer
-{
-public:
-    AngryBrother(int x, int y, int r,
-                 const QPixmap *pixmap_,
-                 QGraphicsScene *scene_): GamePlayer(x, y, r, *pixmap_, *scene_){}
-private:
-    virtual void skill();
-};
+//class AngryBrother: public GamePlayer
+//{
+//public:
+//    AngryBrother(int x, int y, int r,
+//                 const QPixmap *pixmap_,
+//                 QGraphicsScene *scene_): GamePlayer(x, y, r, *pixmap_, *scene_){}
+//private:
+//    virtual void skill();
+//};
 
-class GuoShen:  public GamePlayer
-{
-public:
-    GuoShen(int x, int y, int r,
-            const QPixmap *pixmap_,
-            QGraphicsScene *scene_): GamePlayer(x, y, r, *pixmap_, *scene_){}
-private:
-    virtual void skill();
-};
+//class GuoShen:  public GamePlayer
+//{
+//public:
+//    GuoShen(int x, int y, int r,
+//            const QPixmap *pixmap_,
+//            QGraphicsScene *scene_): GamePlayer(x, y, r, *pixmap_, *scene_){}
+//private:
+//    virtual void skill();
+//};
 
 #endif // !PLAYER_H
