@@ -187,7 +187,7 @@ void GamePlayer::magnet()
 void LovingMan::skill()
 {
     // To be done...
-    this->addBuff(new Buff);
+    //this->addBuff(new Buff);
 }
 void SantaClaus::skill()
 {

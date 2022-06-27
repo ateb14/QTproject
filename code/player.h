@@ -67,7 +67,7 @@ protected:
 class LovingMan: public GamePlayer
 {
 public:
-    LovingMan(int x, int y, int r,
+    LovingMan(int x, int y,
               const QPixmap *pixmap_,
               QGraphicsScene *scene_,
               GamePlayer *opponent_,
@@ -80,7 +80,7 @@ private:
 class SantaClaus: public GamePlayer
 {
 public:
-    SantaClaus(int x, int y, int r,
+    SantaClaus(int x, int y,
                const QPixmap *pixmap_,
                QGraphicsScene *scene_,
                GamePlayer *opponent_,
@@ -93,7 +93,7 @@ private:
 class AngryBrother: public GamePlayer
 {
 public:
-    AngryBrother(int x, int y, int r,
+    AngryBrother(int x, int y,
                  const QPixmap *pixmap_,
                  QGraphicsScene *scene_,
                  GamePlayer *opponent_,
@@ -106,7 +106,7 @@ private:
 class GuoShen:  public GamePlayer
 {
 public:
-    GuoShen(int x, int y, int r,
+    GuoShen(int x, int y,
             const QPixmap *pixmap_,
             QGraphicsScene *scene_,
             GamePlayer *opponent_,

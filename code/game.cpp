@@ -192,8 +192,18 @@ void Game::start(bool reviewMode){
 
 
     /* Player Init */
-    player1 = new GamePlayer(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);
-    player2 = new GamePlayer(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, player1, &gameObjects);
+    switch (gameSettings.player1Type){
+    case SANTA: player1 = new SantaClaus(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
+    case LOVEMAN: player1 = new LovingMan(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
+    case GUOSHEN: player1 = new GuoShen(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
+    case ANGRYBRO: player1 = new AngryBrother(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
+    }
+    switch (gameSettings.player2Type){
+    case SANTA: player2 = new SantaClaus(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
+    case LOVEMAN: player2 = new LovingMan(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
+    case GUOSHEN: player2 = new GuoShen(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
+    case ANGRYBRO: player2 = new AngryBrother(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
+    }
     /* ball Init */
     GameBall *ball = new GameBall(WIDTH/2, HEIGHT/2, ballPixmap, this);
     ballptr = ball;
