@@ -77,6 +77,8 @@ void Game::keyPressEvent(QKeyEvent *event){
         case Qt::Key_Comma:isPressingComma = true;break;
         case Qt::Key_Period:isPressingPeriod = true;break;
         case Qt::Key_Slash:isPressingDivision = true;break;
+        case Qt::Key_E:isPressingE = true;break;
+        case Qt::Key_Semicolon:isPressingSemi=true;break;
         case Qt::Key_F1:{
             if(AIBoardIsShow == false){
                 showAIBoard();
@@ -120,6 +122,8 @@ void Game::keyReleaseEvent(QKeyEvent *event){
         case Qt::Key_Comma:isPressingComma = false;break;
         case Qt::Key_Period:isPressingPeriod = false;break;
         case Qt::Key_Slash:isPressingDivision = false;break;
+        case Qt::Key_E:isPressingE = false;break;
+        case Qt::Key_Semicolon:isPressingSemi=false;break;
     }
 }
 
@@ -135,6 +139,7 @@ ActionSet Game::parseKeyboard(int playerID){
         if(isPressingF) res.addAction(LEFTSHOOT);
         if(isPressingG) res.addAction(DOWNSHOOT);
         if(isPressingH) res.addAction(RIGHTSHOOT);
+        if(isPressingE) res.addAction(SKILL);
         // Todo
         // shooting parser
     }
@@ -147,11 +152,25 @@ ActionSet Game::parseKeyboard(int playerID){
         if(isPressingComma) res.addAction(LEFTSHOOT);
         if(isPressingPeriod) res.addAction(DOWNSHOOT);
         if(isPressingDivision) res.addAction(RIGHTSHOOT);
+        if(isPressingSemi) res.addAction(SKILL);
     }
     return res;
 }
 
 /* GameWindowsAction */
+void Game::setGlobalVars(PlayerType player1Type_, PlayerType player2Type_, GameFormat gameFormat_, PlayerSpeed playerSpeed_, bool enemyMode){
+    gameSettings.player1Type = player1Type_;
+    gameSettings.player2Type = player2Type_;
+    gameSettings.gameFormat = gameFormat_;
+    gameSettings.playerSpeed = playerSpeed_;
+    gameSettings.enemyMode = enemyMode;
+}
+
+void Game::setTimerT(int T_){
+    this->timer->stop();
+    T = T_;
+    this->timer->start(T);
+}
 
 void Game::start(bool reviewMode){
     Game::reviewMode = reviewMode;
@@ -159,6 +178,7 @@ void Game::start(bool reviewMode){
     this->winMode = GAMING;
 
     /* Initialize the clock */
+    T = defaultT;
     this->timer = new QTimer;
     connect(timer, &QTimer::timeout, this, &Game::updateGame);
 
