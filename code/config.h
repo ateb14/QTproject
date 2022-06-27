@@ -9,12 +9,39 @@
   * 游戏参数（如玩家生命值、移动速度等）
   * 内存中的资源对象（图片、声音等），可引用
   */
+//枚举量
+typedef enum{
+    LOVEMAN=0,
+    SANTA,
+    GUOSHEN,
+    ANGRYBRO
+}PlayerType;
+
+typedef enum{
+    TWO_THREE=0,
+    THREE_FIVE
+}GameFormat;
+
+typedef enum{
+    LOW=0,
+    MIDDLE,
+    HIGH
+}PlayerSpeed;
+
 
 // 以下是游戏参数：
 
+//一局游戏的设置参数
+typedef struct{
+    PlayerType player1Type, player2Type;
+    GameFormat gameFormat;
+    PlayerSpeed playerSpeed;
+    bool enemyMode;
+}GameSettings;
+
 // 游戏本体（计时器、窗口等）参数
 
-const int T = 10;
+const int defaultT = 10;
 const int WIDTH = 1280;
 const int HEIGHT = 800;
 

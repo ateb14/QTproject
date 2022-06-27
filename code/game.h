@@ -67,11 +67,13 @@ private:
     bool isPressingT,isPressingF,isPressingG,isPressingH;
     bool isPressingUp,isPressingDown,isPressingLeft,isPressingRight;
     bool isPressingL,isPressingComma,isPressingPeriod,isPressingDivision;
+    bool isPressingE,isPressingSemi;
     ActionSet parseKeyboard(int playerID);
     /* Texts */
 
     /* clock */
     QTimer *timer;
+    int T;
     long long globalTime;
 
     /* Information Board */
@@ -89,8 +91,13 @@ private:
     QMediaPlayer *backgroundPlayer;
     QMediaPlaylist *cheersPlaylist;
     QMediaPlaylist *backgroundPlaylist;
+    /* game Setting */
+    GameSettings gameSettings;
 public:
     GameBoard *getBoard();
+    void setTimerT(int T_=10);
+    void setGlobalVars(PlayerType player1Type_=LOVEMAN, PlayerType player2Type_=LOVEMAN,
+                       GameFormat gameFormat_=TWO_THREE, PlayerSpeed playerSpeed_=MIDDLE,bool enemyMode=true);
 private:
 
     /* objects */
