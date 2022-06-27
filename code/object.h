@@ -50,6 +50,7 @@ protected:
     friend class GameBall;
     friend class GameBullet;
     friend class GameObstacle;
+    friend class LovingMan;
 };
 
 #endif // !OBJECT_H

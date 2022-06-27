@@ -21,10 +21,11 @@ GamePlayer::GamePlayer(int x, int y,
 {
     type = ObjectType::Player;
     health = PLAYER_HEALTH;
-    skillPoint = 0;
+    skillPoint = PLAYER_SKILL_POINT_LIMIT;
     speed = PLAYER_SPEED;
     shootingCD = 0;
     maxShootingCD = PLAYER_SHOOTING_CD;
+    skillPointGainCD = maxSkillPointGainCD = PLAYER_SKILL_POINT_GAIN_CD;
     buffSet = {};
     opponent = opponent_;
     gameObjects = gameObjects_;
@@ -97,6 +98,7 @@ void GamePlayer::playerAct(ActionSet action)
        and action.contains(PlayerAction::SKILL))
     {
         this->skill();
+        this->skillPoint = 0;
     }
     // To be done...
 
@@ -106,6 +108,7 @@ void GamePlayer::updateInGame()
 {
     // 遍历删除已经过时的Buff
     for (set<Buff *>::iterator it=this->buffSet.begin(); it!=this->buffSet.end();) {
+        (*it)->remainTime -= 1;
         if ((*it)->remainTime<=0) {
             delete *it;
             it = this->buffSet.erase(it);
@@ -114,8 +117,14 @@ void GamePlayer::updateInGame()
         }
     }
 
-    // CD减一
+    // CD减一，技能点数每秒回复10点
     this->shootingCD = max(this->shootingCD-1, 0);
+    this->skillPointGainCD -= 1;
+    if(this->skillPointGainCD<=0)
+    {
+        this->skillPoint = min(this->skillPoint+1, PLAYER_SKILL_POINT_LIMIT);
+        this->skillPointGainCD = this->maxSkillPointGainCD;
+    }
 
     // 人的速度会衰减
     double vx_new = this->vx*PLAYER_VELOCITY_DECAY, vy_new = this->vy*PLAYER_VELOCITY_DECAY;
@@ -124,10 +133,24 @@ void GamePlayer::updateInGame()
     // 人会在边界反弹
     this->bounceWithBorder();
 
+    // 人吸引游戏物体（有buff时）
+    // 判断Buff（SPEED, FREEZE, MAGNET, RAGE）
+    bool hasBuff[Buff::BuffType::BUFF_TYPE_CNT];
+    std::fill(hasBuff, hasBuff+Buff::BuffType::BUFF_TYPE_CNT, false);
+    for(Buff *buff: this->buffSet)
+    {
+        hasBuff[buff->type] = true;
+        buff->remainTime -= 1;
+    }
+    if(hasBuff[Buff::BuffType::MAGNET])
+    {
+        this->magnet(); // 佛祖保佑过过过
+    }
+
     // 更新调试信息
     this->debugInfo = QString::asprintf(
-                "Player position: (%d, %d), \nplayer velocity: (%f, %f)",
-                this->centerX(), this->centerY(), this->vx, this->vy
+                "Player position: (%d, %d), \nplayer velocity: (%f, %f), \nHP: %d/100, Skill: %d/100, \nBuff count: %d",
+                this->centerX(), this->centerY(), this->vx, this->vy, this->health, this->skillPoint, this->buffSet.size()
                 );
 
     GameObject::updateInGame();
@@ -177,7 +200,7 @@ void GamePlayer::magnet()
         double dx = this->centerX()-obj->centerX(),
                dy = this->centerY()-obj->centerY();
         double dz = sqrt(dx*dx+dy*dy+1e-5);
-        double dvz = MAGNET_FORCE/this->mass;
+        double dvz = MAGNET_FORCE/(dz*this->mass);
         double dvx = dvz*dx/dz, dvy = dvz*dy/dz;
         obj->setVelocity(obj->vx+dvx, obj->vy+dvy);
     }
@@ -187,7 +210,7 @@ void GamePlayer::magnet()
 void LovingMan::skill()
 {
     // To be done...
-    //this->addBuff(new Buff);
+    this->addBuff(new Buff(Buff::BuffType::MAGNET, BUFF_TIME));
 }
 void SantaClaus::skill()
 {
