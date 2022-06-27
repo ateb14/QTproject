@@ -1,21 +1,16 @@
-#ifndef GAMEBUFF_H
-#define GAMEBUFF_H
+#ifndef BUFF_H
+#define BUFF_H
 
-enum Buff{
-    SPEED_DOWN = 1<<0,
-    SPEED_UP = 1<<1,
-    SHOOT_SPEED_UP = 1<<2,
-    SHOOT_SPEED_DOWN = 1<<3
-};
 
-class BuffSet
+class Buff
 {
-private:
-    long long buffSet;
 public:
-    BuffSet();
-    void addBuff(Buff buff);
-    bool contains(Buff buff);
+    enum BuffType{
+        SPEED, FREEZE, MAGNET, RAGE, BUFF_TYPE_CNT
+    } type;
+    int remainTime;
+
+    Buff(BuffType type, int time);
 };
 
-#endif // GAMEBUFF_H
+#endif // BUFF_H
