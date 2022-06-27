@@ -1,16 +1,7 @@
 #include "buff.h"
 
-BuffSet::BuffSet()
+Buff::Buff(BuffType type, int time)
 {
-    this->buffSet = 0;
-}
-
-void BuffSet::addBuff(Buff buff)
-{
-    buffSet |= buff;
-}
-
-bool BuffSet::contains(Buff buff)
-{
-    return buffSet&buff;
+    this->type = type;
+    this->remainTime = time;
 }

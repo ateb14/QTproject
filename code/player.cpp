@@ -15,27 +15,41 @@ void ActionSet::addAction(PlayerAction action) //向集合中添加操作
 GamePlayer::GamePlayer(int x, int y, int r,
                        const QPixmap *pixmap_,
                        QGraphicsScene *scene_)
-:GameObject(x, y, r, PLAYER_MASS, pixmap_, scene_){
+: GameObject(x, y, r, PLAYER_MASS, pixmap_, scene_){
     type = ObjectType::Player;
     health = PLAYER_HEALTH;
+    skillPoint = 0;
     speed = PLAYER_SPEED;
     shootingCD = 0;
     maxShootingCD = PLAYER_SHOOTING_CD;
-    buffSet = BuffSet();
+    buffSet = {};
 }
 
 int GamePlayer::getHealth(){return this->health;}
-BuffSet GamePlayer::getBuffSet(){return this->buffSet;}
-void GamePlayer::addBuff(Buff buff){this->buffSet.addBuff(buff);}
+void GamePlayer::addBuff(Buff buff){this->buffSet.push_back(buff);}
 
 /* Keyboard Control */
 void GamePlayer::playerAct(ActionSet action)
 {
+    // 判断Buff（SPEED, FREEZE, MAGNET, RAGE）
+    bool hasBuff[Buff::BuffType::BUFF_TYPE_CNT];
+    std::fill(hasBuff, hasBuff+Buff::BuffType::BUFF_TYPE_CNT, false);
+    for(Buff *buff: this->buffSet)
+    {
+        hasBuff[buff->type] = true;
+        buff->remainTime -= 1;
+    }
+
     // Need to parse actions and do every action sequentially.
 
     // Walk
+    double speedLimit = this->speed;
+    if(hasBuff[Buff::BuffType::FREEZE]) speedLimit /= 2;
+    if(hasBuff[Buff::BuffType::SPEED]) speedLimit *= 1.5;
+    if(hasBuff[Buff::BuffType::RAGE]) speedLimit *= 1.5;
+
     double vx_new = this->vx, vy_new = this->vy;
-    double ax = 0, ay = 0;
+    double ax = 0, ay = 0; // 加速度（我们有完美符合运动学的物理引擎！！！）
     if(action.contains(PlayerAction::LEFT)) ax--;
     if(action.contains(PlayerAction::RIGHT)) ax++;
     if(action.contains(PlayerAction::UP)) ay--;
@@ -45,7 +59,10 @@ void GamePlayer::playerAct(ActionSet action)
     {
         vx_new += ax/az*PLAYER_ACCELERATION;
         vy_new += ay/az*PLAYER_ACCELERATION;
-        if(vx_new*vx_new+vy_new*vy_new<=speed*speed) this->setVelocity(vx_new, vy_new); // 不能超速
+        if(vx_new*vx_new+vy_new*vy_new<=speedLimit*speedLimit)
+        {
+            this->setVelocity(vx_new, vy_new); // 不能超速
+        }
     }
 
     // Shoot
@@ -69,12 +86,29 @@ void GamePlayer::playerAct(ActionSet action)
             this->shootingCD = this->maxShootingCD;
         }
     }
+
+    // Skill
+    if(this->skillPoint>=PLAYER_SKILL_POINT_LIMIT
+       and action.contains(PlayerAction::SKILL))
+    {
+        this->skill();
+    }
     // To be done...
 
 }
 
 void GamePlayer::updateInGame()
 {
+    // 遍历删除已经过时的Buff
+    for (set<Buff *>::iterator it=this->buffSet.begin(); it!=this->buffSet.end();) {
+        if ((*it)->remainTime<=0) {
+            delete *it;
+            it = this->buffSet.erase(it);
+        } else {
+            it++;
+        }
+    }
+
     // CD减一
     this->shootingCD = max(this->shootingCD-1, 0);
 
@@ -128,4 +162,22 @@ void GamePlayer::takeDamage(int damage)
         this->health = 0;
         this->debugInfo += QString::asprintf("Player died! \n");
     }
+}
+
+// 以下是各个角色的技能。
+void LovingMan::skill()
+{
+    // To be done...
+}
+void SantaClaus::skill()
+{
+    // To be done...
+}
+void AngryBrother::skill()
+{
+    // To be done...
+}
+void GuoShen::skill()
+{
+    // To be done...
 }
