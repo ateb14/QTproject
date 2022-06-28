@@ -11,11 +11,10 @@
 #include "pressanykeywindow.h"
 #include "mylabel.h"
 #include <QPropertyAnimation>
-#include <boardwindow.h>
 
 Game * gameWindow=NULL;
 QGraphicsView *view=NULL;
-boardWindow *view2 =NULL;
+QGraphicsView *view2 =NULL;
 myBtn *quitBtn=NULL;
 myBtn *startBtn=NULL;
 myBtn *cinemaBtn=NULL;
@@ -188,14 +187,13 @@ void startgame(){
     duola->hide();
     duolatimer->stop();
     duola->move(12,1001);
-    view2->init();
+    view2->show();
     view->show();
     newgameWindow->hide();
     gameWindow->setGlobalVars(newgameWindow->player1Type,newgameWindow->player2Type,
                               newgameWindow->gameFormat,newgameWindow->playerSpeed,
                               newgameWindow->enemyMode);
     gameWindow->start();
-    view2->show();
 }
 
 void startreview(){
@@ -250,13 +248,15 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     view->setBackgroundBrush(QBrush(QPixmap(backgroundPNG)));
 //    splash.finish(view);
 //    view->move(-11,-45);
-    view->move(0,190);
+    view->move(0,0);
     view->setParent(this);
 //    view->show();
     //第二个view
-    view2 = new boardWindow(this);
-    view2->setFixedSize(1290,1000);
-    view2->move(0,0);
+    view2 = new QGraphicsView;
+    view2->resize(1290,190);
+    view2->setScene(gameWindow->getBoard());
+    view2->move(0,810);
+    view2->setParent(this);
     view2->setFocusPolicy(Qt::NoFocus);
     //先不显示
     view->hide();
