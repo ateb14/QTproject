@@ -7,13 +7,13 @@
 myBtn *backBtn=NULL;
 myBtn *continueBtn = NULL;
 myBtn *exitBtn=NULL;
-myLabel *background;
+myLabel *pausebg;
 
 
 pausewindow::pausewindow(QWidget *parent) : QWidget(parent)
 {
-    background=new myLabel("://art/test.png",this);
-    background->move(0,0);
+    pausebg=new myLabel("://art/test.png",this);
+    pausebg->move(0,0);
     backBtn=new myBtn(":/art/back.png",this);
     continueBtn=new myBtn(":/art/continue.png",this);
     exitBtn= new myBtn(":/art/exit.png",this);
