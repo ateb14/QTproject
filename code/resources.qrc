@@ -96,5 +96,9 @@
         <file>art/power.png</file>
         <file>art/freezesmall.png</file>
         <file>art/freeze.png</file>
+        <file>art/gamepause.png</file>
+        <file>art/end.png</file>
+        <file>art/player2win.png</file>
+        <file>art/player1win.png</file>
     </qresource>
 </RCC>
