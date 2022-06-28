@@ -195,6 +195,8 @@ void Game::start(bool reviewMode){
     isPressingComma = false;
     isPressingPeriod = false;
     isPressingDivision = false;
+    isPressingE = false;
+    isPressingSemi = false;
 
     /* GameBoard Init */
     boardInfo.player1BigScore = 0;
