@@ -216,6 +216,7 @@ void startreview(){
 }
 
 void endingthegame(int winner){
+    pauseWindow->init();
     if(winner==1){
         pauseWindow->winmode1();
     }
@@ -344,6 +345,7 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     //设置esc的connect
     connect(gameWindow,&Game::gameispause,[=](){
 
+        pauseWindow->init();
         pauseWindow->pausemode();
         pauseWindow->show();
 
