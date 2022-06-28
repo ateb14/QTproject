@@ -1,9 +1,10 @@
 #include "bullet.h"
+#include "buff.h"
 
 GameBullet::GameBullet(int x, int y, double vx_, double vy_,
                        int r, double m, int damage_, int timeToDespawn_,
                        GameObject *owner_,
-                       const QPixmap *pixmap, QGraphicsScene *scene_):
+                       const QPixmap *pixmap, QGraphicsScene *scene_, BulletType bulletType_):
     GameObject(x, y, r, m, pixmap, scene_)
 {
     this->setVelocity(vx_, vy_);
@@ -11,6 +12,7 @@ GameBullet::GameBullet(int x, int y, double vx_, double vy_,
     timeToDespawn = timeToDespawn_;
     owner = owner_;
     type = ObjectType::Bullet;
+    bulletType = bulletType_;
 }
 
 void GameBullet::updateInGame()
@@ -37,6 +39,7 @@ void GameBullet::collides(GameObject *obj)
     case Bullet:
         return;
     case Ball:
+        if(this->bulletType==LAPTOP) return; // 郭神的电脑不能砸球
         this->bounce(obj);
         this->isDead = true;
         return;
