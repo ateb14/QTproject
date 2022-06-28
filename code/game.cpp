@@ -4,7 +4,7 @@
 // #define DEBUG
 
 const QPixmap *player1Pixmap, *player2Pixmap,
-              *ballPixmap, *postPixmap, *bulletPixmap[PLAYER_TYPES];
+              *ballPixmap, *postPixmap, *bulletPixmap[PLAYER_TYPES], *SSBulletPixmap[PLAYER_TYPES];
 
 int Game::winFreeTime = -1;
 bool Game::reviewMode = true;
@@ -140,16 +140,39 @@ ActionSet Game::parseKeyboard(int playerID){
 /* Generate Player */
 void Game::createPlayers(PlayerType type1, PlayerType type2){
     switch (type1){
-    case SANTA: player1Pixmap = new QPixmap(santaSrc);player1 = new SantaClaus(WIDTH/4, HEIGHT/2, player1Pixmap, this, &gameObjects);break;
-    case LOVEMAN: player1Pixmap = new QPixmap(loveSrc);player1 = new LovingMan(WIDTH/4, HEIGHT/2, player1Pixmap, this, &gameObjects);break;
-    case GUOSHEN: player1Pixmap = new QPixmap(glsSrc);player1 = new GuoShen(WIDTH/4, HEIGHT/2, player1Pixmap, this, &gameObjects);break;
-    case ANGRYBRO: player1Pixmap = new QPixmap(angrySrc);player1 = new AngryBrother(WIDTH/4, HEIGHT/2, player1Pixmap, this, &gameObjects);break;
+    case SANTA:
+        player1Pixmap = new QPixmap(santaSrc);
+        player1 = new SantaClaus(WIDTH/4, HEIGHT/2, player1Pixmap, this, &gameObjects);
+        break;
+    case LOVEMAN:
+        player1Pixmap = new QPixmap(loveSrc);
+        player1 = new LovingMan(WIDTH/4, HEIGHT/2, player1Pixmap, this, &gameObjects);break;
+    case GUOSHEN:
+        player1Pixmap = new QPixmap(glsSrc);
+        player1 = new GuoShen(WIDTH/4, HEIGHT/2, player1Pixmap, this, &gameObjects);
+        break;
+    case ANGRYBRO:
+        player1Pixmap = new QPixmap(angrySrc);
+        player1 = new AngryBrother(WIDTH/4, HEIGHT/2, player1Pixmap, this, &gameObjects);
+        break;
     }
     switch (type2){
-    case SANTA: player2Pixmap = new QPixmap(santaSrc);player2 = new SantaClaus(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, &gameObjects);break;
-    case LOVEMAN: player2Pixmap = new QPixmap(loveSrc);player2 = new LovingMan(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, &gameObjects);break;
-    case GUOSHEN: player2Pixmap = new QPixmap(glsSrc);player2 = new GuoShen(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, &gameObjects);break;
-    case ANGRYBRO: player2Pixmap = new QPixmap(angrySrc);player2 = new AngryBrother(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, &gameObjects);break;
+    case SANTA:
+        player2Pixmap = new QPixmap(santaSrc);
+        player2 = new SantaClaus(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, &gameObjects);
+        break;
+    case LOVEMAN:
+        player2Pixmap = new QPixmap(loveSrc);
+        player2 = new LovingMan(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, &gameObjects);
+        break;
+    case GUOSHEN:
+        player2Pixmap = new QPixmap(glsSrc);
+        player2 = new GuoShen(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, &gameObjects);
+        break;
+    case ANGRYBRO:
+        player2Pixmap = new QPixmap(angrySrc);
+        player2 = new AngryBrother(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, &gameObjects);
+        break;
     }
     player1->setOpponent(player2);
     player2->setOpponent(player1);
@@ -217,6 +240,8 @@ void Game::start(bool reviewMode){
     ballPixmap = new QPixmap(ballSrc);
     postPixmap = new QPixmap(postSrc);
     for(int i = 0;i<PLAYER_TYPES;i++) bulletPixmap[i] = new QPixmap(bulletSrc[i]);
+    for(int i = 0;i<PLAYER_TYPES;i++) SSBulletPixmap[i] = new QPixmap(SSBulletSrc[i]);
+
 
 
     /* Player Init */
@@ -426,6 +451,27 @@ void Game::newObjectCheck(){
     }
 }
 
+void Game::updateGameBoard(){
+    int health1 = player1->getHealth(), health2 = player2->getHealth();
+    int power1 = player1->getSkillPoint(), power2 = player2->getSkillPoint();
+    if(health1 != boardInfo.player1Health){
+        emit updatePlayer1Health(double(health1*1.0/PLAYER_HEALTH));
+        boardInfo.player1Health = health1;
+    }
+    if(health2 != boardInfo.player2Health){
+        emit updatePlayer2Health(double(health2*1.0/PLAYER_HEALTH));
+        boardInfo.player2Health = health2;
+    }
+    if(power1 != boardInfo.player1Power){
+        emit updatePlayer1Power(double(power1*1.0/PLAYER_SKILL_POINT_LIMIT));
+        boardInfo.player1Power = power1;
+    }
+    if(power2 != boardInfo.player2Power){
+        emit updatePlayer2Power(double(power2*1.0/PLAYER_SKILL_POINT_LIMIT));
+        boardInfo.player2Power = power2;
+    }
+}
+
 void Game::updateGame()
 {
     /* Winner Check */
@@ -502,6 +548,8 @@ void Game::updateGame()
     {
         ptr->updateInGame();
     }
+    /* Game Board */
+    updateGameBoard();
 
     /* ball position */
     goalCheck();
