@@ -60,9 +60,9 @@ void GamePlayer::playerAct(ActionSet action)
 
     // Walk
     double speedLimit = this->speed;
-    if(this->hasBuff[BuffType::FREEZE]) speedLimit /= 2;
-    if(this->hasBuff[BuffType::SPEED]) speedLimit *= 1.5;
-    if(this->hasBuff[BuffType::RAGE]) speedLimit *= 1.5;
+    double acceleration = PLAYER_ACCELERATION;
+    if(this->hasBuff[BuffType::FREEZE]) speedLimit /= 3, acceleration /= 3;
+    if(this->hasBuff[BuffType::SPEED]) speedLimit *= 2, acceleration *= 2;
 
     double vx_new = this->vx, vy_new = this->vy;
     double ax = 0, ay = 0; // 加速度（我们有完美符合运动学的物理引擎！！！）
@@ -73,8 +73,8 @@ void GamePlayer::playerAct(ActionSet action)
     double az = sqrt(ax*ax+ay*ay);
     if(az>=1e-5)
     {
-        vx_new += ax/az*PLAYER_ACCELERATION;
-        vy_new += ay/az*PLAYER_ACCELERATION;
+        vx_new += ax/az*acceleration;
+        vy_new += ay/az*acceleration;
         if(vx_new*vx_new+vy_new*vy_new<=speedLimit*speedLimit)
         {
             this->setVelocity(vx_new, vy_new); // 不能超速
@@ -147,8 +147,9 @@ void GamePlayer::updateInGame()
 
     // 更新调试信息
     this->debugInfo = QString::asprintf(
-                "Player position: (%d, %d), \nplayer velocity: (%f, %f), \nHP: %d/100, Skill: %d/100",
-                this->centerX(), this->centerY(), this->vx, this->vy, this->health, this->skillPoint
+                "Player position: (%d, %d), \nplayer velocity: (%f, %f), \nHP: %d/100, Skill: %d/100, Buff: SPEED %d, FREEZE %d, MAGNET %d, RAGE %d",
+                this->centerX(), this->centerY(), this->vx, this->vy, this->health, this->skillPoint,
+                hasBuff[BuffType::SPEED], hasBuff[BuffType::FREEZE], hasBuff[BuffType::MAGNET], hasBuff[BuffType::RAGE]
                 );
 
     GameObject::updateInGame();
@@ -162,11 +163,11 @@ void GamePlayer::collides(GameObject *obj)
         this->bounce(obj);
         return;
     case Bullet:
+        this->bounce(obj);
         if(((GameBullet *)obj)->bulletType==GameBullet::BulletType::ICEY)
         {
             this->addBuff(BuffType::FREEZE, BUFF_TIME);
         }
-        this->bounce(obj);
         obj->eatenBy(this);
         return;
     case Ball:
@@ -224,7 +225,8 @@ void SantaClaus::skill()
 {
     // To be done...
     // 发射三个冰块子弹
-    double dist = 40;
+    double dist = 60;
+    double radius_factor = 2;
     int dx = this->opponent->centerX()-this->centerX(),
         dy = this->opponent->centerY()-this->centerY();
     double dz = sqrt(dx*dx+dy*dy+1e-5);
@@ -232,8 +234,9 @@ void SantaClaus::skill()
         new GameBullet(
             this->centerX()+dist*dx/dz, this->centerY()+dist*dy/dz,
             dx/dz*BULLET_SPEED, dy/dz*BULLET_SPEED,
-            BULLET_RADIUS, BULLET_MASS, BULLET_DAMAGE, BULLET_TIME_TO_DESPAWN,
-            this, bulletPixmap[0], this->scene
+            BULLET_RADIUS*radius_factor, BULLET_MASS, BULLET_DAMAGE, BULLET_TIME_TO_DESPAWN,
+            this, SSBulletPixmap[this->playerType], this->scene,
+            GameBullet::BulletType::ICEY
         ));
     double angle = 15*3.1415926/180;
     double new_sin = sin(angle)*dx/dz+cos(angle)*dy/dz,
@@ -242,8 +245,9 @@ void SantaClaus::skill()
         new GameBullet(
             this->centerX()+dist*new_cos, this->centerY()+dist*new_sin,
             new_cos*BULLET_SPEED, new_sin*BULLET_SPEED,
-            BULLET_RADIUS, BULLET_MASS, BULLET_DAMAGE, BULLET_TIME_TO_DESPAWN,
-            this, bulletPixmap[0], this->scene
+            BULLET_RADIUS*radius_factor, BULLET_MASS, BULLET_DAMAGE, BULLET_TIME_TO_DESPAWN,
+            this, SSBulletPixmap[this->playerType], this->scene,
+            GameBullet::BulletType::ICEY
         ));
     angle = -angle;
     new_sin = sin(angle)*dx/dz+cos(angle)*dy/dz,
@@ -252,7 +256,7 @@ void SantaClaus::skill()
         new GameBullet(
             this->centerX()+dist*new_cos, this->centerY()+dist*new_sin,
             new_cos*BULLET_SPEED, new_sin*BULLET_SPEED,
-            BULLET_RADIUS, BULLET_MASS, BULLET_DAMAGE, BULLET_TIME_TO_DESPAWN,
+            BULLET_RADIUS*radius_factor, BULLET_MASS, BULLET_DAMAGE, BULLET_TIME_TO_DESPAWN,
             this, SSBulletPixmap[this->playerType], this->scene,
             GameBullet::BulletType::ICEY
         ));
@@ -266,7 +270,7 @@ void AngryBrother::skill()
 void GuoShen::skill()
 {
     // To be done...
-    double dist = 40;
+    double dist = 80;
     double vx[8] = {1, sqrt(2), 0, -sqrt(2), -1, -sqrt(2), 0, sqrt(2)},
             vy[8] = {0, sqrt(2), 1, sqrt(2), 0, -sqrt(2), -1, -sqrt(2)};
     double speed_factor = 3;
