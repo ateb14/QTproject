@@ -35,7 +35,6 @@ public:
     GamePlayer(int x, int y,
                const QPixmap *pixmap_,
                QGraphicsScene *scene_,
-               GamePlayer *opponent_,
                std::list<GameObject *> *gameObjects_);
     void playerAct(ActionSet action); // 接受一个操作集，由这个函数来进行所有操作
     void reset(int x, int y); // 重置玩家的所有状态
@@ -47,6 +46,7 @@ public:
     int getHealth();
     int getSkillPoint();
     int *getBuffSet();
+    void setOpponent(GamePlayer *opponent_);
     void addBuff(BuffType buffType, int time);
 
 private:
@@ -59,7 +59,6 @@ private:
     int skillPointGainCD; // 回复技能点的CD（单位：帧）
     int maxSkillPointGainCD; // 回复技能点的总CD（单位：帧）
     int hasBuff[BuffType::BUFF_TYPE_CNT]; // 当前玩家带有的Buff的列表
-    GamePlayer *opponent; // 对手
 
     // methods
     virtual void skill() = 0;
@@ -70,6 +69,7 @@ private:
 
 protected:
     std::list<GameObject *> *gameObjects;
+    GamePlayer *opponent; // 对手
 
 };
 
@@ -79,9 +79,8 @@ public:
     LovingMan(int x, int y,
               const QPixmap *pixmap_,
               QGraphicsScene *scene_,
-              GamePlayer *opponent_,
               std::list<GameObject *> *gameObjects_):
-        GamePlayer(x, y, pixmap_, scene_, opponent_, gameObjects_)
+        GamePlayer(x, y, pixmap_, scene_, gameObjects_)
         {playerType = LOVING_MAN;}
 private:
     virtual void skill();
@@ -93,9 +92,8 @@ public:
     SantaClaus(int x, int y,
                const QPixmap *pixmap_,
                QGraphicsScene *scene_,
-               GamePlayer *opponent_,
                std::list<GameObject *> *gameObjects_):
-        GamePlayer(x, y, pixmap_, scene_, opponent_, gameObjects_)
+        GamePlayer(x, y, pixmap_, scene_, gameObjects_)
     {playerType = SANTA_CLAUS;}
 private:
     virtual void skill();
@@ -107,9 +105,8 @@ public:
     AngryBrother(int x, int y,
                  const QPixmap *pixmap_,
                  QGraphicsScene *scene_,
-                 GamePlayer *opponent_,
                  std::list<GameObject *> *gameObjects_):
-        GamePlayer(x, y, pixmap_, scene_, opponent_, gameObjects_)
+        GamePlayer(x, y, pixmap_, scene_, gameObjects_)
     {playerType = ANGRY_BROTHER;}
 private:
     virtual void skill();
@@ -121,9 +118,8 @@ public:
     GuoShen(int x, int y,
             const QPixmap *pixmap_,
             QGraphicsScene *scene_,
-            GamePlayer *opponent_,
             std::list<GameObject *> *gameObjects_):
-        GamePlayer(x, y, pixmap_, scene_, opponent_, gameObjects_)
+        GamePlayer(x, y, pixmap_, scene_, gameObjects_)
     {playerType = GUO_SHEN;}
 private:
     virtual void skill();
