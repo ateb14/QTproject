@@ -100,8 +100,10 @@ private:
     QMediaPlayer *backgroundPlayer;
     QMediaPlaylist *cheersPlaylist;
     QMediaPlaylist *backgroundPlaylist;
-    /* game Setting */
+    /* Game Setting */
     GameSettings gameSettings;
+    /* Player Satus */
+    int player1DeadTime, player2DeadTime;
 public:
     GameBoard *getBoard();
     void playRecord(QString fileSrc);
@@ -121,6 +123,7 @@ private:
     void collisionCheck();
     void deadCheck();
     void goalCheck();
+    void healthCheck();
     void newObjectCheck();
     void updateInfoBoard();
     void updateGameBoard();

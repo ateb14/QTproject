@@ -56,6 +56,7 @@ const double TIME_TO_REACH_MAX_SPEED = 20;
 const double PLAYER_ACCELERATION = PLAYER_SPEED/TIME_TO_REACH_MAX_SPEED;
 const int PLAYER_SHOOTING_CD = 1*1000/defaultT; // 1s
 const int PLAYER_SKILL_POINT_GAIN_CD = 0.1*1000/defaultT; // 10s回满
+const int DeadTime = 300; // 3s复活
 
 const double BULLET_SPEED = 7.0;
 const double BULLET_MASS = 0.5;
