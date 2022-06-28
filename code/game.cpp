@@ -112,29 +112,29 @@ void Game::keyReleaseEvent(QKeyEvent *event){
 /* Parse Keyboard */
 ActionSet Game::parseKeyboard(int playerID){
     ActionSet res;
-    if(playerID==1){
+    if(playerID==1 && player1DeadTime < 0){
         if(isPressingW) res.addAction(UP);
         if(isPressingA) res.addAction(LEFT);
         if(isPressingS) res.addAction(DOWN);
         if(isPressingD) res.addAction(RIGHT);
-        if(isPressingT) res.addAction(UPSHOOT);
-        if(isPressingF) res.addAction(LEFTSHOOT);
-        if(isPressingG) res.addAction(DOWNSHOOT);
-        if(isPressingH) res.addAction(RIGHTSHOOT);
-        if(isPressingE) res.addAction(SKILL);
+        if(isPressingT && winFreeTime < 0) res.addAction(UPSHOOT);
+        if(isPressingF && winFreeTime < 0) res.addAction(LEFTSHOOT);
+        if(isPressingG && winFreeTime < 0) res.addAction(DOWNSHOOT);
+        if(isPressingH && winFreeTime < 0) res.addAction(RIGHTSHOOT);
+        if(isPressingE && winFreeTime < 0) res.addAction(SKILL);
         // Todo
         // shooting parser
     }
-    else if(playerID==2){
+    else if(playerID==2 && player2DeadTime < 0 && winFreeTime < 0){
         if(isPressingUp) res.addAction(UP);
         if(isPressingLeft) res.addAction(LEFT);
         if(isPressingDown) res.addAction(DOWN);
         if(isPressingRight) res.addAction(RIGHT);
-        if(isPressingL) res.addAction(UPSHOOT);
-        if(isPressingComma) res.addAction(LEFTSHOOT);
-        if(isPressingPeriod) res.addAction(DOWNSHOOT);
-        if(isPressingDivision) res.addAction(RIGHTSHOOT);
-        if(isPressingSemi) res.addAction(SKILL);
+        if(isPressingL && winFreeTime < 0) res.addAction(UPSHOOT);
+        if(isPressingComma && winFreeTime < 0) res.addAction(LEFTSHOOT);
+        if(isPressingPeriod && winFreeTime < 0) res.addAction(DOWNSHOOT);
+        if(isPressingDivision && winFreeTime < 0) res.addAction(RIGHTSHOOT);
+        if(isPressingSemi && winFreeTime < 0) res.addAction(SKILL);
     }
     return res;
 }
@@ -237,7 +237,7 @@ void Game::start(bool reviewMode){
     memset(boardInfo.player2Buff,false,BUFF_TYPE_CNT);
 
 
-    /* 资源初始化 */
+    /* Resources Init */
     ballPixmap = new QPixmap(ballSrc);
     postPixmap = new QPixmap(postSrc);
     for(int i = 0;i<PLAYER_TYPES;i++) bulletPixmap[i] = new QPixmap(bulletSrc[i]);
@@ -246,6 +246,8 @@ void Game::start(bool reviewMode){
 
 
     /* Player Init */
+    player1DeadTime = -1;
+    player2DeadTime = -1;
     createPlayers(gameSettings.player1Type, gameSettings.player2Type);
     /* ball Init */
     GameBall *ball = new GameBall(WIDTH/2, HEIGHT/2, ballPixmap, this);
@@ -416,6 +418,39 @@ void Game::goalCheck(){
     }
 }
 
+void Game::healthCheck(){
+    if(player1->getHealth() == 0){
+        if(player1DeadTime < 0){
+            player1DeadTime = DeadTime;
+            player1->setPos(-20,-20);
+            player1->hide();
+        }
+        else if(player1DeadTime > 0){
+            --player1DeadTime;
+        }
+        else if(player1DeadTime == 0){
+            player1->show();
+            player1->reset(WIDTH/4, HEIGHT/2);
+            player1DeadTime = -1;
+        }
+    }
+    if(player2->getHealth() == 0){
+        if(player2DeadTime < 0){
+            player2DeadTime = DeadTime;
+            player2->setPos(WIDTH+20,HEIGHT+20);
+            player2->hide();
+        }
+        else if(player2DeadTime > 0){
+            --player2DeadTime;
+        }
+        else if(player2DeadTime == 0){
+            player2->show();
+            player2->reset(3*WIDTH/4, HEIGHT/2);
+            player2DeadTime = -1;
+        }
+    }
+}
+
 void Game::updateInfoBoard(){
     static QTime lastSecond = QTime::currentTime();
     static int timeDelta = 100;
@@ -571,6 +606,9 @@ void Game::updateGame()
     }
     /* Game Board */
     updateGameBoard();
+
+    /* Health Check */
+    healthCheck();
 
     /* ball position */
     goalCheck();
