@@ -28,24 +28,6 @@ Game::Game(){
     backgroundPlayer->setVolume(70);
     backgroundPlayer->setPlaylist(backgroundPlaylist);
 
-    /* Keyboard Control Flags Initializing */
-    isPressingA = false;
-    isPressingD = false;
-    isPressingW = false;
-    isPressingS = false;
-    isPressingUp = false;
-    isPressingLeft = false;
-    isPressingDown = false;
-    isPressingRight = false;
-    isPressingT = false;
-    isPressingF = false;
-    isPressingG = false;
-    isPressingH = false;
-    isPressingL = false;
-    isPressingComma = false;
-    isPressingPeriod = false;
-    isPressingDivision = false;
-
     /* Information Board Initializing */
     AIBoard = new QGraphicsTextItem;
     addItem(AIBoard);
@@ -53,17 +35,6 @@ Game::Game(){
     AIBoard->hide();
 
     board = new GameBoard();
-    /* GameBoard Init */
-    boardInfo.player1BigScore = 0;
-    boardInfo.player1SmallScore = 0;
-    boardInfo.player2BigScore = 0;
-    boardInfo.player2SmallScore = 0;
-    boardInfo.player1Health = PLAYER_HEALTH;
-    boardInfo.player2Health = PLAYER_HEALTH;
-    boardInfo.player1Power = 0;
-    boardInfo.player2Power = 0;
-    memset(boardInfo.player1Buff,false,Buff::BUFF_TYPE_CNT);
-    memset(boardInfo.player2Buff,false,Buff::BUFF_TYPE_CNT);
 }
 
 /* keyboard reading */
@@ -206,6 +177,36 @@ void Game::start(bool reviewMode){
     T = defaultT;
     this->timer = new QTimer;
     connect(timer, &QTimer::timeout, this, &Game::updateGame);
+
+    /* Keyboard Control Flags Initializing */
+    isPressingA = false;
+    isPressingD = false;
+    isPressingW = false;
+    isPressingS = false;
+    isPressingUp = false;
+    isPressingLeft = false;
+    isPressingDown = false;
+    isPressingRight = false;
+    isPressingT = false;
+    isPressingF = false;
+    isPressingG = false;
+    isPressingH = false;
+    isPressingL = false;
+    isPressingComma = false;
+    isPressingPeriod = false;
+    isPressingDivision = false;
+
+    /* GameBoard Init */
+    boardInfo.player1BigScore = 0;
+    boardInfo.player1SmallScore = 0;
+    boardInfo.player2BigScore = 0;
+    boardInfo.player2SmallScore = 0;
+    boardInfo.player1Health = PLAYER_HEALTH;
+    boardInfo.player2Health = PLAYER_HEALTH;
+    boardInfo.player1Power = 0;
+    boardInfo.player2Power = 0;
+    memset(boardInfo.player1Buff,false,BUFF_TYPE_CNT);
+    memset(boardInfo.player2Buff,false,BUFF_TYPE_CNT);
 
 
     /* 资源初始化 */
@@ -377,12 +378,9 @@ void Game::goalCheck(){
             boardInfo.player2SmallScore = 0;
             emit refreshBoard(gameSettings.player1Type, gameSettings.player2Type);
         }
-
-        player1->setVelocity(0,0);
-        player2->setVelocity(0,0);
+        player1->reset(WIDTH/4, HEIGHT/2);
+        player2->reset(3*WIDTH/4, HEIGHT/2);
         ballptr->setVelocity(0,0);
-        player1->setPos(WIDTH/4-player1->radius, HEIGHT/2-player1->radius);
-        player2->setPos(3*WIDTH/4-player2->radius, HEIGHT/2-player2->radius);
         ballptr->setPos(WIDTH/2-ballptr->radius, HEIGHT/2-ballptr->radius);
     }
 }

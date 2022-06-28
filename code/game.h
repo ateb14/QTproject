@@ -43,7 +43,7 @@ struct BoardInfo{
     int player1SmallScore, player2SmallScore;
     int player1Health, player2Health;
     int player1Power, player2Power;
-    bool player1Buff[Buff::BUFF_TYPE_CNT], player2Buff[Buff::BUFF_TYPE_CNT];
+    bool player1Buff[BUFF_TYPE_CNT], player2Buff[BUFF_TYPE_CNT];
 };
 
 class Game: public QGraphicsScene{
