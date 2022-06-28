@@ -111,39 +111,79 @@ boardWindow::boardWindow(QWidget *parent) : QWidget(parent)
 }
 
 void boardWindow::init(){
-    score1=-1;score2=-1;
+    score1=0;score2=0;
     player1bigscore->changeImg(":/art/zero.png");
     player2bigscore->changeImg(":/art/zero.png");
+    health1=1;health2=1;
+    power1=0;power2=0;
+
+
+    anihealth1->setDuration(10);
+    anihealth2->setDuration(10);
+    anipower1->setDuration(10);
+    anipower2->setDuration(10);
+
+    anihealth1->setStartValue(QRect(203,68,player1health->width(),player1health->height()));
+    anihealth1->setEndValue(QRect(203,68,int(237*health1),player1health->height()));
+    anihealth1->start();
+
+
+    anihealth2->setStartValue(QRect(player2health->x(),69,player2health->width(),player2health->height()));
+    anihealth2->setEndValue(QRect(850+237-int(237*health2),69,int(237*health2),player2health->height()));
+    anihealth2->start();
+
+
+    anipower1->setStartValue(QRect(202,150,player1power->width(),player1power->height()));
+    anipower1->setEndValue(QRect(202,150,int(237*power1),player1power->height()));
+    anipower1->start();
+
+
+    anipower2->setStartValue(QRect(player2power->x(),151,player2power->width(),player2power->height()));
+    anipower2->setEndValue(QRect(849+237-int(237*power2),151,int(237*power2),player2power->height()));
+    anipower2->start();
+
+    anihealth1->setDuration(100);
+    anihealth2->setDuration(100);
+    anipower1->setDuration(100);
+    anipower2->setDuration(100);
 
 }
 
 void boardWindow::refresh(PlayerType p1,PlayerType p2){
     switch(p1){
-    case LOVEMAN:
+    case 0:
         player1name->changeImg(":/art/playerlove.png");
+        player1pic->changeImg(":/art/love.png");
         break;
-    case SANTA:
+    case 1:
         player1name->changeImg(":/art/playersanta.png");
+        player1pic->changeImg(":/art/santa.png");
         break;
-    case GUOSHEN:
+    case 2:
         player1name->changeImg(":/art/playerguoshen.png");
+        player1pic->changeImg(":/art/gls.png");
         break;
-    case ANGRYBRO:
+    case 3:
         player1name->changeImg(":/art/playerangry.png");
+        player1pic->changeImg(":/art/angry.png");
         break;
     }
     switch(p2){
-    case LOVEMAN:
+    case 0:
         player2name->changeImg(":/art/playerlove.png");
+        player2pic->changeImg(":/art/love.png");
         break;
-    case SANTA:
+    case 1:
         player2name->changeImg(":/art/playersanta.png");
+        player2pic->changeImg(":/art/santa.png");
         break;
-    case GUOSHEN:
+    case 2:
         player2name->changeImg(":/art/playerguoshen.png");
+        player2pic->changeImg(":/art/gls.png");
         break;
-    case ANGRYBRO:
+    case 3:
         player2name->changeImg(":/art/playerangry.png");
+        player2pic->changeImg(":/art/angry.png");
         break;
     }
     soccer1=-1;soccer2=-1;
