@@ -139,6 +139,7 @@ signals:
     void removePlayer1Buff(int buff);
     void removePlayer2Buff(int buff);
     void refreshBoard(PlayerType player1, PlayerType player2);
+    void gameOver(int winner);
 };
 
 #endif // !GAME_H

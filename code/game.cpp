@@ -346,15 +346,15 @@ void Game::goalCheck(){
         bool player1WinFlag = false, player2WinFlag = false;
         /* player1 score */
         if(x>=0 && x<70 && y>HEIGHT/2-100 && y<HEIGHT/2+100){
-            player1WinFlag = true;
-            boardInfo.player1SmallScore += 1;
-            emit updateSmallScore(1);
-        }
-        /* player2 score */
-        else if(x>=WIDTH-70 && x<=WIDTH && y>HEIGHT/2-100 && y<HEIGHT/2+100){
             player2WinFlag = true;
             boardInfo.player2SmallScore += 1;
             emit updateSmallScore(2);
+        }
+        /* player2 score */
+        else if(x>=WIDTH-70 && x<=WIDTH && y>HEIGHT/2-100 && y<HEIGHT/2+100){
+            player1WinFlag = true;
+            boardInfo.player1SmallScore += 1;
+            emit updateSmallScore(1);
         }
         if(player1WinFlag || player2WinFlag){
             winFreeTime = 600;
@@ -431,18 +431,22 @@ void Game::updateGame()
     /* Winner Check */
     if(gameSettings.gameFormat == TWO_THREE){
         if(boardInfo.player1BigScore == 2){
-
+            pause();
+            emit gameOver(1);
         }
         else if(boardInfo.player2BigScore == 2){
-
+            pause();
+            emit gameOver(2);
         }
     }
     else if(gameSettings.gameFormat == THREE_FIVE){
         if(boardInfo.player1BigScore == 3){
-
+            pause();
+            emit gameOver(1);
         }
         else if(boardInfo.player2BigScore == 3){
-
+            pause();
+            emit gameOver(2);
         }
     }
 
