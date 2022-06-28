@@ -4,7 +4,7 @@
 // #define DEBUG
 
 const QPixmap *player1Pixmap, *player2Pixmap,
-              *ballPixmap, *postPixmap, *bulletPixmap;
+              *ballPixmap, *postPixmap, *bulletPixmap[PLAYER_TYPES];
 
 int Game::winFreeTime = -1;
 bool Game::reviewMode = true;
@@ -28,6 +28,24 @@ Game::Game(){
     backgroundPlayer->setVolume(70);
     backgroundPlayer->setPlaylist(backgroundPlaylist);
 
+    /* Keyboard Control Flags Initializing */
+    isPressingA = false;
+    isPressingD = false;
+    isPressingW = false;
+    isPressingS = false;
+    isPressingUp = false;
+    isPressingLeft = false;
+    isPressingDown = false;
+    isPressingRight = false;
+    isPressingT = false;
+    isPressingF = false;
+    isPressingG = false;
+    isPressingH = false;
+    isPressingL = false;
+    isPressingComma = false;
+    isPressingPeriod = false;
+    isPressingDivision = false;
+
     /* Information Board Initializing */
     AIBoard = new QGraphicsTextItem;
     addItem(AIBoard);
@@ -35,6 +53,7 @@ Game::Game(){
     AIBoard->hide();
 
     board = new GameBoard();
+    /* GameBoard Init */
 }
 
 /* keyboard reading */
@@ -137,21 +156,7 @@ ActionSet Game::parseKeyboard(int playerID){
     }
     return res;
 }
-/* Generate Player */
-void Game::createPlayers(PlayerType type1, PlayerType type2){
-    switch (type1){
-    case SANTA: player1Pixmap = new QPixmap(santaSrc);player1 = new SantaClaus(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
-    case LOVEMAN: player1Pixmap = new QPixmap(loveSrc);player1 = new LovingMan(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
-    case GUOSHEN: player1Pixmap = new QPixmap(glsSrc);player1 = new GuoShen(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
-    case ANGRYBRO: player1Pixmap = new QPixmap(angrySrc);player1 = new AngryBrother(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
-    }
-    switch (type2){
-    case SANTA: player2Pixmap = new QPixmap(santaSrc);player2 = new SantaClaus(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, player2, &gameObjects);break;
-    case LOVEMAN: player2Pixmap = new QPixmap(loveSrc);player2 = new LovingMan(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, player2, &gameObjects);break;
-    case GUOSHEN: player2Pixmap = new QPixmap(glsSrc);player2 = new GuoShen(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, player2, &gameObjects);break;
-    case ANGRYBRO: player2Pixmap = new QPixmap(angrySrc);player2 = new AngryBrother(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, player2, &gameObjects);break;
-    }
-}
+
 /* GameWindowsAction */
 void Game::setGlobalVars(PlayerType player1Type_, PlayerType player2Type_, GameFormat gameFormat_, PlayerSpeed playerSpeed_, bool enemyMode){
     gameSettings.player1Type = player1Type_;
@@ -169,7 +174,6 @@ void Game::setTimerT(int T_){
 
 void Game::start(bool reviewMode){
     Game::reviewMode = reviewMode;
-    emit refreshBoard(gameSettings.player1Type, gameSettings.player2Type);
     /* GAMING Mode On */
     this->winMode = GAMING;
 
@@ -178,64 +182,41 @@ void Game::start(bool reviewMode){
     this->timer = new QTimer;
     connect(timer, &QTimer::timeout, this, &Game::updateGame);
 
-    /* Keyboard Control Flags Initializing */
-    isPressingA = false;
-    isPressingD = false;
-    isPressingW = false;
-    isPressingS = false;
-    isPressingUp = false;
-    isPressingLeft = false;
-    isPressingDown = false;
-    isPressingRight = false;
-    isPressingT = false;
-    isPressingF = false;
-    isPressingG = false;
-    isPressingH = false;
-    isPressingL = false;
-    isPressingComma = false;
-    isPressingPeriod = false;
-    isPressingDivision = false;
-    isPressingE = false;
-    isPressingSemi = false;
-
-    /* GameBoard Init */
-    boardInfo.player1BigScore = 0;
-    boardInfo.player1SmallScore = 0;
-    boardInfo.player2BigScore = 0;
-    boardInfo.player2SmallScore = 0;
-    boardInfo.player1Health = PLAYER_HEALTH;
-    boardInfo.player2Health = PLAYER_HEALTH;
-    boardInfo.player1Power = 0;
-    boardInfo.player2Power = 0;
-    memset(boardInfo.player1Buff,false,BUFF_TYPE_CNT);
-    memset(boardInfo.player2Buff,false,BUFF_TYPE_CNT);
-
 
     /* 资源初始化 */
+    player1Pixmap = new QPixmap(player1Src);
+    player2Pixmap = new QPixmap(player2Src);
     ballPixmap = new QPixmap(ballSrc);
     postPixmap = new QPixmap(postSrc);
-    bulletPixmap = new QPixmap(bulletSrc);
+    for(int i = 0;i<PLAYER_TYPES;i++) bulletPixmap[i] = new QPixmap(bulletSrc[i]);
 
 
     /* Player Init */
-    createPlayers(gameSettings.player1Type, gameSettings.player2Type);
+    switch (gameSettings.player1Type){
+    case SANTA: player1 = new SantaClaus(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
+    case LOVEMAN: player1 = new LovingMan(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
+    case GUOSHEN: player1 = new GuoShen(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
+    case ANGRYBRO: player1 = new AngryBrother(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
+    }
+    switch (gameSettings.player2Type){
+    case SANTA: player2 = new SantaClaus(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
+    case LOVEMAN: player2 = new LovingMan(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
+    case GUOSHEN: player2 = new GuoShen(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
+    case ANGRYBRO: player2 = new AngryBrother(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
+    }
     /* ball Init */
     GameBall *ball = new GameBall(WIDTH/2, HEIGHT/2, ballPixmap, this);
     ballptr = ball;
-    GameObstacle *post[8]; // 球门柱
+    GameObstacle *post[4]; // 球门柱
     post[0] = new GameObstacle(70, HEIGHT/2-100, 10, postPixmap, this);
     post[1] = new GameObstacle(70, HEIGHT/2+100, 10, postPixmap, this);
     post[2] = new GameObstacle(WIDTH-70, HEIGHT/2-100, 10, postPixmap, this);
     post[3] = new GameObstacle(WIDTH-70, HEIGHT/2+100, 10, postPixmap, this);
-    post[4] = new GameObstacle(35, HEIGHT/2-100, 10, postPixmap, this);
-    post[5] = new GameObstacle(35, HEIGHT/2+100, 10, postPixmap, this);
-    post[6] = new GameObstacle(WIDTH-35, HEIGHT/2-100, 10, postPixmap, this);
-    post[7] = new GameObstacle(WIDTH-35, HEIGHT/2+100, 10, postPixmap, this);
 
     this->gameObjects.push_back(player1);
     this->gameObjects.push_back(player2);
     this->gameObjects.push_back(ball);
-    for(int i = 0;i<8;i++) this->gameObjects.push_back(post[i]);
+    for(int i = 0;i<4;i++) this->gameObjects.push_back(post[i]);
 
     this->globalTime = 0;
     this->timer->start(T);
@@ -345,14 +326,10 @@ void Game::goalCheck(){
         /* player1 score */
         if(x>=0 && x<70 && y>HEIGHT/2-100 && y<HEIGHT/2+100){
             player1WinFlag = true;
-            boardInfo.player1SmallScore += 1;
-            emit updateSmallScore(1);
         }
         /* player2 score */
         else if(x>=WIDTH-70 && x<=WIDTH && y>HEIGHT/2-100 && y<HEIGHT/2+100){
             player2WinFlag = true;
-            boardInfo.player2SmallScore += 1;
-            emit updateSmallScore(2);
         }
         if(player1WinFlag || player2WinFlag){
             winFreeTime = 600;
@@ -366,23 +343,11 @@ void Game::goalCheck(){
     else if(Game::winFreeTime == 0){
         winFreeTime = -1;
         cheersPlayer->stop();
-
-        if(boardInfo.player1SmallScore == MAX_SMALL_SCORE || boardInfo.player2SmallScore == MAX_SMALL_SCORE){
-            if(boardInfo.player1SmallScore == MAX_SMALL_SCORE){
-                emit updateBigScore(1);
-                boardInfo.player1BigScore += 1;
-            }
-            else{
-                emit updateBigScore(2);
-                boardInfo.player2BigScore += 1;
-            }
-            boardInfo.player1SmallScore = 0;
-            boardInfo.player2SmallScore = 0;
-            emit refreshBoard(gameSettings.player1Type, gameSettings.player2Type);
-        }
-        player1->reset(WIDTH/4, HEIGHT/2);
-        player2->reset(3*WIDTH/4, HEIGHT/2);
+        player1->setVelocity(0,0);
+        player2->setVelocity(0,0);
         ballptr->setVelocity(0,0);
+        player1->setPos(WIDTH/4-player1->radius, HEIGHT/2-player1->radius);
+        player2->setPos(3*WIDTH/4-player2->radius, HEIGHT/2-player2->radius);
         ballptr->setPos(WIDTH/2-ballptr->radius, HEIGHT/2-ballptr->radius);
     }
 }
@@ -426,23 +391,6 @@ void Game::newObjectCheck(){
 
 void Game::updateGame()
 {
-    /* Winner Check */
-    if(gameSettings.gameFormat == TWO_THREE){
-        if(boardInfo.player1BigScore == 2){
-
-        }
-        else if(boardInfo.player2BigScore == 2){
-
-        }
-    }
-    else if(gameSettings.gameFormat == THREE_FIVE){
-        if(boardInfo.player1BigScore == 3){
-
-        }
-        else if(boardInfo.player2BigScore == 3){
-
-        }
-    }
 
     globalTime += 1;
     // Todo
