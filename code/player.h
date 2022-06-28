@@ -40,7 +40,7 @@ public:
     void reset(int x, int y); // 重置玩家的所有状态
     // proprety
     enum PlayerType{
-        LOVING_MAN, SANTA_CLAUS, ANGRY_BROTHER, GUO_SHEN
+        LOVING_MAN, SANTA_CLAUS, GUO_SHEN, ANGRY_BROTHER
     } playerType;
 
     int getHealth();

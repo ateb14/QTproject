@@ -1,4 +1,5 @@
 #include "ball.h"
+#include "bullet.h"
 #include "config.h"
 
 GameBall::GameBall(int x, int y, const QPixmap *pixmap, QGraphicsScene *scene_):
@@ -31,9 +32,15 @@ void GameBall::collides(GameObject *obj)
         obj->collides(this);
         return;
     case Bullet:
+    {
+        GameBullet *p = dynamic_cast<GameBullet *> (obj);
+        if(p->bulletType == GameBullet::BulletType::LAPTOP){
+            return;
+        }
         this->bounce(obj);
         obj->isDead = true;
         return;
+    }
     case Ball:
         this->bounce(obj);
         return;
