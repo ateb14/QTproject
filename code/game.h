@@ -104,6 +104,7 @@ private:
     GameSettings gameSettings;
 public:
     GameBoard *getBoard();
+    void playRecord(QString fileSrc);
     void setTimerT(int T_=10);
     void setGlobalVars(PlayerType player1Type_=LOVEMAN, PlayerType player2Type_=LOVEMAN,
                        GameFormat gameFormat_=TWO_THREE, PlayerSpeed playerSpeed_=MIDDLE,bool enemyMode=true);
