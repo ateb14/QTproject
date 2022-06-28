@@ -15,7 +15,6 @@
         <file>music/cheers2.mp3</file>
         <file>music/bg1.mp3</file>
         <file>art/background.jpg</file>
-        <file>art/test.png</file>
         <file>art/pressanykey.png</file>
         <file>music/mousepress.wav</file>
         <file>music/mouserelease.wav</file>
@@ -40,7 +39,6 @@
         <file>art/fanhui.png</file>
         <file>art/choosecharacter.png</file>
         <file>art/choosevideo.png</file>
-        <file>art/dark.png</file>
         <file>art/gls.png</file>
         <file>art/angry.png</file>
         <file>art/santa.png</file>
@@ -62,5 +60,8 @@
         <file>art/santaintro.png</file>
         <file>art/angryintro.png</file>
         <file>art/guoshenintro.png</file>
+        <file>art/dark.jpg</file>
+        <file>art/dark.png</file>
+        <file>art/test.png</file>
     </qresource>
 </RCC>

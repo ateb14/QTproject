@@ -1,15 +1,19 @@
 #include "pausewindow.h"
 #include <QPainter>
 #include "mybtn.h"
+#include "mylabel.h"
 #include<QTimer>
 
 myBtn *backBtn=NULL;
 myBtn *continueBtn = NULL;
 myBtn *exitBtn=NULL;
+myLabel *background;
 
 
 pausewindow::pausewindow(QWidget *parent) : QWidget(parent)
 {
+    background=new myLabel("://art/test.png",this);
+    background->move(0,0);
     backBtn=new myBtn(":/art/back.png",this);
     continueBtn=new myBtn(":/art/continue.png",this);
     exitBtn= new myBtn(":/art/exit.png",this);
@@ -34,9 +38,4 @@ pausewindow::pausewindow(QWidget *parent) : QWidget(parent)
 
 }
 
-void pausewindow::paintEvent(QPaintEvent *){
-    QPainter painter(this);
-    QPixmap pix;
-    pix.load("://art/test.png");
-    painter.drawPixmap(0,0,this->width(),this->height(),pix);
-}
+

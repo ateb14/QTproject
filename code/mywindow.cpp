@@ -180,7 +180,6 @@ void tonewgameWindow(){
     red->hide();
     gametitle->hide();
     newgameWindow->show();
-
     newgameWindow->movein();
 }
 

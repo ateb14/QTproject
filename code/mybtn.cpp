@@ -1,5 +1,4 @@
 #include "mybtn.h"
-#include <QPropertyAnimation>
 #include <QMouseEvent>
 #include <QSound>
 #include <QTimer>
@@ -10,6 +9,8 @@
 //}
 QSound *presssound=new  QSound(":/music/mousepress.wav");
 QSound *releasesound=new  QSound(":/music/mouserelease.wav");
+
+
 //音效来自网络
 
 myBtn::myBtn(QString Img,QWidget *parent){
@@ -21,6 +22,8 @@ myBtn::myBtn(QString Img,QWidget *parent){
     setIcon(pix);
     setIconSize(pix.size());
     setParent(parent);
+    ani1 = new QPropertyAnimation(this,"geometry");
+    ani2 = new QPropertyAnimation(this,"geometry");
     connect(this,&myBtn::clicked,[=](){
         QTimer::singleShot(100,this,[=](){
             emit btnClicked();
@@ -43,25 +46,23 @@ void myBtn::changeImg(QString Img){
 }
 
 void myBtn::press(){
-    presssound->play();
-    QPropertyAnimation *ani = new QPropertyAnimation(this,"geometry");
-    ani->setDuration(100);
-    ani->setStartValue(QRect(this->x(),posy,this->width(),this->height()));
-    ani->setEndValue(QRect(this->x(), posy_dy,this->width(),this->height()));
-    ani->setEasingCurve(QEasingCurve::OutBounce);
-    ani->start();
+    presssound->play();    
+    ani1->setDuration(100);
+    ani1->setStartValue(QRect(this->x(),posy,this->width(),this->height()));
+    ani1->setEndValue(QRect(this->x(), posy_dy,this->width(),this->height()));
+    ani1->setEasingCurve(QEasingCurve::OutBounce);
+    ani1->start();
 
 }
 
 void myBtn::release(){
-    releasesound->play();
-    QPropertyAnimation *ani = new QPropertyAnimation(this,"geometry");
-    ani->setDuration(100);
-    ani->setStartValue(QRect(this->x(),this->y(),this->width(),this->height()));
-    ani->setEndValue(QRect(this->x(),posy,this->width(),this->height()));
-    ani->setEasingCurve(QEasingCurve::OutBounce);
+    releasesound->play();   
+    ani2->setDuration(100);
+    ani2->setStartValue(QRect(this->x(),this->y(),this->width(),this->height()));
+    ani2->setEndValue(QRect(this->x(),posy,this->width(),this->height()));
+    ani2->setEasingCurve(QEasingCurve::OutBounce);
     QTimer::singleShot(100,this,[=](){
-        ani->start();
+        ani2->start();
     });
 
 
