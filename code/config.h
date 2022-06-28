@@ -82,7 +82,6 @@ const double MAGNET_FORCE = BALL_MASS*40.0;
 
 
 // 图片
-
 const char startPNG[] = ":/art/start.png";
 const char welcomePNG[] = ":/art/welcome.jpg";
 const char backgroundPNG[] = ":/art/soccerField.png";
@@ -91,7 +90,14 @@ const char player1Src[] = ":/art/liuhan.png";
 const char player2Src[] = ":/art/kuqi.png";
 const char ballSrc[] = ":/art/football.png";
 const char postSrc[] = ":/art/post.png";
-const char bulletSrc[] = ":/art/football.png";
+
+// 子弹贴图
+const int PLAYER_TYPES = 4;
+const char bulletSrc[PLAYER_TYPES][64] = {
+    ":/art/football.png", "", "", ""
+};
+
+// 玩家贴图
 const char angrySrc[] = ":/art/angry.png";
 const char loveSrc[] = ":/art/love.png";
 const char glsSrc[] = ":/art/gls.png";
@@ -107,6 +113,6 @@ const char cheers2Src[] = "qrc:///music/cheers2.mp3";
 
 // 资源对象
 extern const QPixmap *player1Pixmap, *player2Pixmap,
-                     *ballPixmap, *postPixmap, *bulletPixmap;
+                     *ballPixmap, *postPixmap, *bulletPixmap[PLAYER_TYPES];
 
 #endif // CONFIG_H
