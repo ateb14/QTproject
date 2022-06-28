@@ -12,6 +12,10 @@ myLabel::myLabel (QString Img,QWidget *parent){
     setParent(parent);
 }
 
+myLabel::myLabel (QWidget *parent){
+    setParent(parent);
+}
+
 void myLabel::changeImg(QString Img){
     QImage *image= new QImage(Img);
     setPixmap(QPixmap::fromImage(*image));

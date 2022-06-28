@@ -9,6 +9,7 @@ class myLabel : public QLabel
     Q_OBJECT
 public:
     myLabel (QString Img,QWidget *parent);
+    myLabel (QWidget *parent);
     void changeImg(QString Img);
 
 signals:
