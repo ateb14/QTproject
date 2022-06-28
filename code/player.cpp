@@ -219,7 +219,7 @@ void SantaClaus::skill()
 {
     // To be done...
     // 发射三个冰块子弹
-    double dist = 20;
+    double dist = 40;
     int dx = this->opponent->centerX()-this->centerX(),
         dy = this->opponent->centerY()-this->centerY();
     double dz = sqrt(dx*dx+dy*dy+1e-5);
@@ -230,7 +230,7 @@ void SantaClaus::skill()
             BULLET_RADIUS, BULLET_MASS, BULLET_DAMAGE, BULLET_TIME_TO_DESPAWN,
             this, bulletPixmap[0], this->scene
         ));
-    double angle = 15;
+    double angle = 15*3.1415926/180;
     double new_sin = sin(angle)*dx/dz+cos(angle)*dy/dz,
            new_cos = cos(angle)*dx/dz-sin(angle)*dy/dz; // 希望是对的
     this->generatedObjects.push_back(
@@ -240,7 +240,7 @@ void SantaClaus::skill()
             BULLET_RADIUS, BULLET_MASS, BULLET_DAMAGE, BULLET_TIME_TO_DESPAWN,
             this, bulletPixmap[0], this->scene
         ));
-    angle = -15;
+    angle = -angle;
     new_sin = sin(angle)*dx/dz+cos(angle)*dy/dz,
     new_cos = cos(angle)*dx/dz-sin(angle)*dy/dz; // 希望是对的
     this->generatedObjects.push_back(
