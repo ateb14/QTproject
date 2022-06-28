@@ -97,7 +97,7 @@ void GamePlayer::playerAct(ActionSet action)
                     this->centerX(), this->centerY(),
                     vx_/vz_*BULLET_SPEED, vy_/vz_*BULLET_SPEED,
                     BULLET_RADIUS, BULLET_MASS, BULLET_DAMAGE, BULLET_TIME_TO_DESPAWN,
-                    this, bulletPixmap, this->scene
+                    this, bulletPixmap[this->playerType], this->scene
                 ));
             this->shootingCD = this->maxShootingCD;
         }
@@ -195,6 +195,7 @@ void GamePlayer::magnet()
 {
     for(GameObject *obj: *(this->gameObjects))
     {
+        if(obj->type!=GameObject::ObjectType::Ball) continue;
         double dx = this->centerX()-obj->centerX(),
                dy = this->centerY()-obj->centerY();
         double dz = sqrt(dx*dx+dy*dy+1e-5);
@@ -211,12 +212,20 @@ void GamePlayer::magnet()
 // 以下是各个角色的技能。
 void LovingMan::skill()
 {
-    // To be done...
+    // 给自己上磁铁的Buff
     this->addBuff(BuffType::MAGNET, BUFF_TIME);
 }
 void SantaClaus::skill()
 {
     // To be done...
+    // 发射三个冰块子弹
+    this->generatedObjects.push_back(
+        new GameBullet(
+            this->centerX(), this->centerY(),
+            1*BULLET_SPEED, 1*BULLET_SPEED,
+            BULLET_RADIUS, BULLET_MASS, BULLET_DAMAGE, BULLET_TIME_TO_DESPAWN,
+            this, bulletPixmap[this->playerType], this->scene
+        ));
 }
 void AngryBrother::skill()
 {

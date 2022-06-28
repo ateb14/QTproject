@@ -40,6 +40,10 @@ public:
     void playerAct(ActionSet action); // 接受一个操作集，由这个函数来进行所有操作
     void reset(int x, int y); // 重置玩家的所有状态
     // proprety
+    enum PlayerType{
+        LOVING_MAN, SANTA_CLAUS, ANGRY_BROTHER, GUO_SHEN
+    } playerType;
+
     int getHealth();
     int getSkillPoint();
     int *getBuffSet();
@@ -58,7 +62,7 @@ private:
     GamePlayer *opponent; // 对手
 
     // methods
-    virtual void skill(){}
+    virtual void skill() = 0;
     virtual void updateInGame();
     virtual void collides(GameObject *obj);
     virtual void takeDamage(int damage);
@@ -77,7 +81,8 @@ public:
               QGraphicsScene *scene_,
               GamePlayer *opponent_,
               std::list<GameObject *> *gameObjects_):
-        GamePlayer(x, y, pixmap_, scene_, opponent_, gameObjects_){}
+        GamePlayer(x, y, pixmap_, scene_, opponent_, gameObjects_)
+        {playerType = LOVING_MAN;}
 private:
     virtual void skill();
 };
@@ -90,7 +95,8 @@ public:
                QGraphicsScene *scene_,
                GamePlayer *opponent_,
                std::list<GameObject *> *gameObjects_):
-        GamePlayer(x, y, pixmap_, scene_, opponent_, gameObjects_){}
+        GamePlayer(x, y, pixmap_, scene_, opponent_, gameObjects_)
+    {playerType = SANTA_CLAUS;}
 private:
     virtual void skill();
 };
@@ -103,7 +109,8 @@ public:
                  QGraphicsScene *scene_,
                  GamePlayer *opponent_,
                  std::list<GameObject *> *gameObjects_):
-        GamePlayer(x, y, pixmap_, scene_, opponent_, gameObjects_){}
+        GamePlayer(x, y, pixmap_, scene_, opponent_, gameObjects_)
+    {playerType = ANGRY_BROTHER;}
 private:
     virtual void skill();
 };
@@ -116,7 +123,8 @@ public:
             QGraphicsScene *scene_,
             GamePlayer *opponent_,
             std::list<GameObject *> *gameObjects_):
-        GamePlayer(x, y, pixmap_, scene_, opponent_, gameObjects_){}
+        GamePlayer(x, y, pixmap_, scene_, opponent_, gameObjects_)
+    {playerType = GUO_SHEN;}
 private:
     virtual void skill();
 };
