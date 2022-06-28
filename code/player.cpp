@@ -15,7 +15,6 @@ void ActionSet::addAction(PlayerAction action) //向集合中添加操作
 GamePlayer::GamePlayer(int x, int y,
                        const QPixmap *pixmap_,
                        QGraphicsScene *scene_,
-                       GamePlayer *opponent_,
                        std::list<GameObject *> *gameObjects_):
     GameObject(x, y, PLAYER_RADIUS, PLAYER_MASS, pixmap_, scene_)
 {
@@ -27,7 +26,7 @@ GamePlayer::GamePlayer(int x, int y,
     maxShootingCD = PLAYER_SHOOTING_CD;
     skillPointGainCD = maxSkillPointGainCD = PLAYER_SKILL_POINT_GAIN_CD;
     fill(hasBuff, hasBuff+BuffType::BUFF_TYPE_CNT, 0);
-    opponent = opponent_;
+    opponent = this;
     gameObjects = gameObjects_;
 }
 
@@ -48,6 +47,7 @@ void GamePlayer::reset(int x, int y)
 int GamePlayer::getHealth(){return this->health;}
 int GamePlayer::getSkillPoint(){return this->skillPoint;}
 int *GamePlayer::getBuffSet(){return this->hasBuff;}
+void GamePlayer::setOpponent(GamePlayer *opponent_){this->opponent = opponent_;}
 void GamePlayer::addBuff(BuffType buffType, int time)
 {
     this->hasBuff[buffType] = max(this->hasBuff[buffType], time);
@@ -219,12 +219,36 @@ void SantaClaus::skill()
 {
     // To be done...
     // 发射三个冰块子弹
+    double dist = 20;
+    int dx = this->opponent->centerX()-this->centerX(),
+        dy = this->opponent->centerY()-this->centerY();
+    double dz = sqrt(dx*dx+dy*dy+1e-5);
     this->generatedObjects.push_back(
         new GameBullet(
-            this->centerX(), this->centerY(),
-            1*BULLET_SPEED, 1*BULLET_SPEED,
+            this->centerX()+dist*dx/dz, this->centerY()+dist*dy/dz,
+            dx/dz*BULLET_SPEED, dy/dz*BULLET_SPEED,
             BULLET_RADIUS, BULLET_MASS, BULLET_DAMAGE, BULLET_TIME_TO_DESPAWN,
-            this, bulletPixmap[this->playerType], this->scene
+            this, bulletPixmap[0], this->scene
+        ));
+    double angle = 15;
+    double new_sin = sin(angle)*dx/dz+cos(angle)*dy/dz,
+           new_cos = cos(angle)*dx/dz-sin(angle)*dy/dz; // 希望是对的
+    this->generatedObjects.push_back(
+        new GameBullet(
+            this->centerX()+dist*new_cos, this->centerY()+dist*new_sin,
+            new_cos*BULLET_SPEED, new_sin*BULLET_SPEED,
+            BULLET_RADIUS, BULLET_MASS, BULLET_DAMAGE, BULLET_TIME_TO_DESPAWN,
+            this, bulletPixmap[0], this->scene
+        ));
+    angle = -15;
+    new_sin = sin(angle)*dx/dz+cos(angle)*dy/dz,
+    new_cos = cos(angle)*dx/dz-sin(angle)*dy/dz; // 希望是对的
+    this->generatedObjects.push_back(
+        new GameBullet(
+            this->centerX()+dist*new_cos, this->centerY()+dist*new_sin,
+            new_cos*BULLET_SPEED, new_sin*BULLET_SPEED,
+            BULLET_RADIUS, BULLET_MASS, BULLET_DAMAGE, BULLET_TIME_TO_DESPAWN,
+            this, bulletPixmap[0], this->scene
         ));
 }
 void AngryBrother::skill()
