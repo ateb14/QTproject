@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QPushButton>
+#include <QPropertyAnimation>
 
 class myBtn : public QPushButton
 {
@@ -12,6 +13,8 @@ public:
     myBtn(QString Img,QWidget *parent);
     void changeImg(QString Img);
     QString ImgPath;
+    QPropertyAnimation *ani1;
+    QPropertyAnimation *ani2;
     //特效
     void press();
     void release();
