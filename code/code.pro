@@ -23,7 +23,6 @@ SOURCES += main.cpp\
     board.cpp \
     mybtn.cpp \
     mywindow.cpp \
-    buff.cpp \
     pausewindow.cpp \
     newgamesetting.cpp \
     pressanykeywindow.cpp \
