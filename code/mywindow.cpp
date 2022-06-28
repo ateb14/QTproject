@@ -262,6 +262,19 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     view->hide();
     view2->hide();
 
+    //game和board的connect
+    connect(gameWindow,&Game::updateBigScore,view2,&boardWindow::addscore);
+    connect(gameWindow,&Game::updateSmallScore,view2,&boardWindow::addsoccer);
+    connect(gameWindow,&Game::updatePlayer1Health,view2,&boardWindow::changehealth1);
+    connect(gameWindow,&Game::updatePlayer2Health,view2,&boardWindow::changehealth2);
+    connect(gameWindow,&Game::updatePlayer1Power,view2,&boardWindow::changepower1);
+    connect(gameWindow,&Game::updatePlayer2Power,view2,&boardWindow::changepower2);
+    connect(gameWindow,&Game::addPlayer1Buff,view2,&boardWindow::addbuff1);
+    connect(gameWindow,&Game::addPlayer2Buff,view2,&boardWindow::addbuff2);
+    connect(gameWindow,&Game::removePlayer1Buff,view2,&boardWindow::removebuff1);
+    connect(gameWindow,&Game::removePlayer2Buff,view2,&boardWindow::removebuff2);
+    connect(gameWindow,&Game::refreshBoard,view2,&boardWindow::refresh);
+
 
     //quit button
 
