@@ -6,10 +6,14 @@
 class GameBullet: public GameObject
 {
 public:
+    enum BulletType{
+        NORMAL, ICEY, LAPTOP
+    } bulletType;
     GameBullet(int x, int y, double vx_, double vy_,
                int r, double m, int damage_, int timeToDespawn_,
                GameObject *owner_,
-               const QPixmap *pixmap_, QGraphicsScene *scene_);
+               const QPixmap *pixmap_, QGraphicsScene *scene_,
+               BulletType bulletType_ = NORMAL);
 
 private:
     // attributes

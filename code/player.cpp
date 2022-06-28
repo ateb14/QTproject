@@ -116,8 +116,9 @@ void GamePlayer::playerAct(ActionSet action)
 
 void GamePlayer::updateInGame()
 {
-    // CD减一，技能点数每秒回复10点
-    this->shootingCD = max(this->shootingCD-1, 0);
+    // CD减一，技能点数每秒回复10点。如果有狂暴buff，那么射击CD减二。
+    if(this->hasBuff[BuffType::RAGE]) this->shootingCD = max(this->shootingCD-2, 0);
+    else this->shootingCD = max(this->shootingCD-1, 0);
     this->skillPointGainCD -= 1;
     if(this->skillPointGainCD<=0)
     {
@@ -161,6 +162,10 @@ void GamePlayer::collides(GameObject *obj)
         this->bounce(obj);
         return;
     case Bullet:
+        if(((GameBullet *)obj)->bulletType==GameBullet::BulletType::ICEY)
+        {
+            this->addBuff(BuffType::FREEZE, BUFF_TIME);
+        }
         this->bounce(obj);
         obj->eatenBy(this);
         return;
@@ -248,14 +253,35 @@ void SantaClaus::skill()
             this->centerX()+dist*new_cos, this->centerY()+dist*new_sin,
             new_cos*BULLET_SPEED, new_sin*BULLET_SPEED,
             BULLET_RADIUS, BULLET_MASS, BULLET_DAMAGE, BULLET_TIME_TO_DESPAWN,
-            this, bulletPixmap[0], this->scene
+            this, SSBulletPixmap[this->playerType], this->scene,
+            GameBullet::BulletType::ICEY
         ));
 }
 void AngryBrother::skill()
 {
     // To be done...
+    this->addBuff(BuffType::SPEED, BUFF_TIME);
+    this->addBuff(BuffType::RAGE, BUFF_TIME);
 }
 void GuoShen::skill()
 {
     // To be done...
+    double dist = 40;
+    double vx[8] = {1, sqrt(2), 0, -sqrt(2), -1, -sqrt(2), 0, sqrt(2)},
+            vy[8] = {0, sqrt(2), 1, sqrt(2), 0, -sqrt(2), -1, -sqrt(2)};
+    double speed_factor = 3;
+    double radius_factor = 5;
+    double mass_factor = 5;
+    for(int i = 0;i<8;i++)
+    {
+        this->generatedObjects.push_back(
+            new GameBullet(
+                this->centerX()+dist*vx[i], this->centerY()+dist*vy[i],
+                vx[i]*BULLET_SPEED*speed_factor, vy[i]*BULLET_SPEED*speed_factor,
+                BULLET_RADIUS*radius_factor, BULLET_MASS*mass_factor,
+                BULLET_DAMAGE, BULLET_TIME_TO_DESPAWN,
+                this, SSBulletPixmap[this->playerType], this->scene,
+                GameBullet::BulletType::LAPTOP
+            ));
+    }
 }

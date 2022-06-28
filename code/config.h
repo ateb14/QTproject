@@ -94,10 +94,7 @@ const char postSrc[] = ":/art/post.png";
 // 子弹贴图
 const int PLAYER_TYPES = 4;
 const char bulletSrc[PLAYER_TYPES][64] = {
-    ":/art/heart.png", ":/art/snowflake.png", ":/art/bottle.png", ":/art/rock.png"
-};
-const char SSBulletSrc[PLAYER_TYPES][64] = {
-    ":/art/heart.png", ":/art/ice.png", ":/art/laptop.png", ":/art/chicken.png"
+    ":/art/football.png", "", "", ""
 };
 
 // 玩家贴图
@@ -116,6 +113,7 @@ const char cheers2Src[] = "qrc:///music/cheers2.mp3";
 
 // 资源对象
 extern const QPixmap *player1Pixmap, *player2Pixmap,
-                     *ballPixmap, *postPixmap, *bulletPixmap[PLAYER_TYPES], *SSBulletPixmap[PLAYER_TYPES];
+                     *ballPixmap, *postPixmap,
+                     *bulletPixmap[PLAYER_TYPES], *SSBulletPixmap[PLAYER_TYPES];
 
 #endif // CONFIG_H
