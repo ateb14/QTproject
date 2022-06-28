@@ -140,17 +140,19 @@ ActionSet Game::parseKeyboard(int playerID){
 /* Generate Player */
 void Game::createPlayers(PlayerType type1, PlayerType type2){
     switch (type1){
-    case SANTA: player1Pixmap = new QPixmap(santaSrc);player1 = new SantaClaus(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
-    case LOVEMAN: player1Pixmap = new QPixmap(loveSrc);player1 = new LovingMan(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
-    case GUOSHEN: player1Pixmap = new QPixmap(glsSrc);player1 = new GuoShen(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
-    case ANGRYBRO: player1Pixmap = new QPixmap(angrySrc);player1 = new AngryBrother(WIDTH/4, HEIGHT/2, player1Pixmap, this, player2, &gameObjects);break;
+    case SANTA: player1Pixmap = new QPixmap(santaSrc);player1 = new SantaClaus(WIDTH/4, HEIGHT/2, player1Pixmap, this, &gameObjects);break;
+    case LOVEMAN: player1Pixmap = new QPixmap(loveSrc);player1 = new LovingMan(WIDTH/4, HEIGHT/2, player1Pixmap, this, &gameObjects);break;
+    case GUOSHEN: player1Pixmap = new QPixmap(glsSrc);player1 = new GuoShen(WIDTH/4, HEIGHT/2, player1Pixmap, this, &gameObjects);break;
+    case ANGRYBRO: player1Pixmap = new QPixmap(angrySrc);player1 = new AngryBrother(WIDTH/4, HEIGHT/2, player1Pixmap, this, &gameObjects);break;
     }
     switch (type2){
-    case SANTA: player2Pixmap = new QPixmap(santaSrc);player2 = new SantaClaus(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, player2, &gameObjects);break;
-    case LOVEMAN: player2Pixmap = new QPixmap(loveSrc);player2 = new LovingMan(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, player2, &gameObjects);break;
-    case GUOSHEN: player2Pixmap = new QPixmap(glsSrc);player2 = new GuoShen(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, player2, &gameObjects);break;
-    case ANGRYBRO: player2Pixmap = new QPixmap(angrySrc);player2 = new AngryBrother(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, player2, &gameObjects);break;
+    case SANTA: player2Pixmap = new QPixmap(santaSrc);player2 = new SantaClaus(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, &gameObjects);break;
+    case LOVEMAN: player2Pixmap = new QPixmap(loveSrc);player2 = new LovingMan(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, &gameObjects);break;
+    case GUOSHEN: player2Pixmap = new QPixmap(glsSrc);player2 = new GuoShen(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, &gameObjects);break;
+    case ANGRYBRO: player2Pixmap = new QPixmap(angrySrc);player2 = new AngryBrother(3*WIDTH/4, HEIGHT/2, player2Pixmap, this, &gameObjects);break;
     }
+    player1->setOpponent(player2);
+    player2->setOpponent(player1);
 }
 /* GameWindowsAction */
 void Game::setGlobalVars(PlayerType player1Type_, PlayerType player2Type_, GameFormat gameFormat_, PlayerSpeed playerSpeed_, bool enemyMode){
