@@ -60,6 +60,7 @@ void Game::keyPressEvent(QKeyEvent *event){
         case Qt::Key_Slash:isPressingDivision = true;break;
         case Qt::Key_E:isPressingE = true;break;
         case Qt::Key_Semicolon:isPressingSemi=true;break;
+    case Qt::Key_F12: boardInfo.player1BigScore=3;break;
         case Qt::Key_F1:{
             if(AIBoardIsShow == false){
                 showAIBoard();
@@ -291,6 +292,7 @@ void Game::start(bool reviewMode){
 }
 
 void Game::endGame(){
+    winMode = HOME;
     backgroundPlayer->stop();
     cheersPlayer->stop();
     delete this->timer;
@@ -476,21 +478,21 @@ void Game::updateGame()
 {
     /* Winner Check */
     if(gameSettings.gameFormat == TWO_THREE){
-        if(boardInfo.player1BigScore == 2){
+        if(boardInfo.player1BigScore >= 2){
             pause();
             emit gameOver(1);
         }
-        else if(boardInfo.player2BigScore == 2){
+        else if(boardInfo.player2BigScore >= 2){
             pause();
             emit gameOver(2);
         }
     }
     else if(gameSettings.gameFormat == THREE_FIVE){
-        if(boardInfo.player1BigScore == 3){
+        if(boardInfo.player1BigScore >= 3){
             pause();
             emit gameOver(1);
         }
-        else if(boardInfo.player2BigScore == 3){
+        else if(boardInfo.player2BigScore >= 3){
             pause();
             emit gameOver(2);
         }

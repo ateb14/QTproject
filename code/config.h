@@ -13,8 +13,8 @@
 typedef enum{
     LOVEMAN=0,
     SANTA,
+    GUOSHEN,
     ANGRYBRO,
-    GUOSHEN
 }PlayerType;
 
 typedef enum{
@@ -94,10 +94,10 @@ const char postSrc[] = ":/art/post.png";
 // 子弹贴图
 const int PLAYER_TYPES = 4;
 const char bulletSrc[PLAYER_TYPES][64] = {
-    ":/art/heart.png", ":/art/snowflake.png" ":/art/rock.png", ":/art/bottle.png",
+    ":/art/heart.png", ":/art/snowflake.png", ":/art/bottle.png", ":/art/rock.png"
 };
 const char SSBulletSrc[PLAYER_TYPES][64] = {
-    ":/art/heart.png", ":/art/ice.png", ":/art/chicken.png", ":/art/laptop.png"
+    ":/art/heart.png", ":/art/freeze.png", ":/art/laptop.png", ":/art/chicken.png"
 };
 
 // 玩家贴图
