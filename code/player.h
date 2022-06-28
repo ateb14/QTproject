@@ -38,9 +38,12 @@ public:
                GamePlayer *opponent_,
                std::list<GameObject *> *gameObjects_);
     void playerAct(ActionSet action); // 接受一个操作集，由这个函数来进行所有操作
+    void reset(int x, int y); // 重置玩家的所有状态
     // proprety
     int getHealth();
-    void addBuff(Buff *buff);
+    int getSkillPoint();
+    int *getBuffSet();
+    void addBuff(BuffType buffType, int time);
 
 private:
     // attributes
@@ -51,7 +54,7 @@ private:
     int maxShootingCD; // 射击总CD（单位：帧）
     int skillPointGainCD; // 回复技能点的CD（单位：帧）
     int maxSkillPointGainCD; // 回复技能点的总CD（单位：帧）
-    set<Buff *> buffSet; // 当前玩家带有的Buff的列表
+    int hasBuff[BuffType::BUFF_TYPE_CNT]; // 当前玩家带有的Buff的列表
     GamePlayer *opponent; // 对手
 
     // methods

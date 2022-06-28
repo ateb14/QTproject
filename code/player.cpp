@@ -26,33 +26,43 @@ GamePlayer::GamePlayer(int x, int y,
     shootingCD = 0;
     maxShootingCD = PLAYER_SHOOTING_CD;
     skillPointGainCD = maxSkillPointGainCD = PLAYER_SKILL_POINT_GAIN_CD;
-    buffSet = {};
+    fill(hasBuff, hasBuff+BuffType::BUFF_TYPE_CNT, 0);
     opponent = opponent_;
     gameObjects = gameObjects_;
 }
 
+void GamePlayer::reset(int x, int y)
+{
+    isDead = false;
+    setPos(x-radius, y-radius);
+    setVelocity(0, 0);
+    health = PLAYER_HEALTH;
+    skillPoint = PLAYER_SKILL_POINT_LIMIT;
+    speed = PLAYER_SPEED;
+    shootingCD = 0;
+    maxShootingCD = PLAYER_SHOOTING_CD;
+    skillPointGainCD = maxSkillPointGainCD = PLAYER_SKILL_POINT_GAIN_CD;
+    fill(hasBuff, hasBuff+BuffType::BUFF_TYPE_CNT, 0);
+}
+
 int GamePlayer::getHealth(){return this->health;}
-void GamePlayer::addBuff(Buff *buff){this->buffSet.insert(buff);}
+int GamePlayer::getSkillPoint(){return this->skillPoint;}
+int *GamePlayer::getBuffSet(){return this->hasBuff;}
+void GamePlayer::addBuff(BuffType buffType, int time)
+{
+    this->hasBuff[buffType] = max(this->hasBuff[buffType], time);
+}
 
 /* Keyboard Control */
 void GamePlayer::playerAct(ActionSet action)
 {
-    // 判断Buff（SPEED, FREEZE, MAGNET, RAGE）
-    bool hasBuff[Buff::BuffType::BUFF_TYPE_CNT];
-    std::fill(hasBuff, hasBuff+Buff::BuffType::BUFF_TYPE_CNT, false);
-    for(Buff *buff: this->buffSet)
-    {
-        hasBuff[buff->type] = true;
-        buff->remainTime -= 1;
-    }
-
     // Need to parse actions and do every action sequentially.
 
     // Walk
     double speedLimit = this->speed;
-    if(hasBuff[Buff::BuffType::FREEZE]) speedLimit /= 2;
-    if(hasBuff[Buff::BuffType::SPEED]) speedLimit *= 1.5;
-    if(hasBuff[Buff::BuffType::RAGE]) speedLimit *= 1.5;
+    if(this->hasBuff[BuffType::FREEZE]) speedLimit /= 2;
+    if(this->hasBuff[BuffType::SPEED]) speedLimit *= 1.5;
+    if(this->hasBuff[BuffType::RAGE]) speedLimit *= 1.5;
 
     double vx_new = this->vx, vy_new = this->vy;
     double ax = 0, ay = 0; // 加速度（我们有完美符合运动学的物理引擎！！！）
@@ -106,17 +116,6 @@ void GamePlayer::playerAct(ActionSet action)
 
 void GamePlayer::updateInGame()
 {
-    // 遍历删除已经过时的Buff
-    for (set<Buff *>::iterator it=this->buffSet.begin(); it!=this->buffSet.end();) {
-        (*it)->remainTime -= 1;
-        if ((*it)->remainTime<=0) {
-            delete *it;
-            it = this->buffSet.erase(it);
-        } else {
-            it++;
-        }
-    }
-
     // CD减一，技能点数每秒回复10点
     this->shootingCD = max(this->shootingCD-1, 0);
     this->skillPointGainCD -= 1;
@@ -124,6 +123,12 @@ void GamePlayer::updateInGame()
     {
         this->skillPoint = min(this->skillPoint+1, PLAYER_SKILL_POINT_LIMIT);
         this->skillPointGainCD = this->maxSkillPointGainCD;
+    }
+
+    // Buff持续时间减一
+    for(int buffType = 0;buffType<BuffType::BUFF_TYPE_CNT;buffType++)
+    {
+        hasBuff[buffType] = max(0, hasBuff[buffType]-1);
     }
 
     // 人的速度会衰减
@@ -134,23 +139,15 @@ void GamePlayer::updateInGame()
     this->bounceWithBorder();
 
     // 人吸引游戏物体（有buff时）
-    // 判断Buff（SPEED, FREEZE, MAGNET, RAGE）
-    bool hasBuff[Buff::BuffType::BUFF_TYPE_CNT];
-    std::fill(hasBuff, hasBuff+Buff::BuffType::BUFF_TYPE_CNT, false);
-    for(Buff *buff: this->buffSet)
-    {
-        hasBuff[buff->type] = true;
-        buff->remainTime -= 1;
-    }
-    if(hasBuff[Buff::BuffType::MAGNET])
+    if(this->hasBuff[BuffType::MAGNET])
     {
         this->magnet(); // 佛祖保佑过过过
     }
 
     // 更新调试信息
     this->debugInfo = QString::asprintf(
-                "Player position: (%d, %d), \nplayer velocity: (%f, %f), \nHP: %d/100, Skill: %d/100, \nBuff count: %d",
-                this->centerX(), this->centerY(), this->vx, this->vy, this->health, this->skillPoint, this->buffSet.size()
+                "Player position: (%d, %d), \nplayer velocity: (%f, %f), \nHP: %d/100, Skill: %d/100",
+                this->centerX(), this->centerY(), this->vx, this->vy, this->health, this->skillPoint
                 );
 
     GameObject::updateInGame();
@@ -192,6 +189,7 @@ void GamePlayer::takeDamage(int damage)
     }
 }
 
+
 // 以下是磁铁buff的效果。
 void GamePlayer::magnet()
 {
@@ -200,9 +198,13 @@ void GamePlayer::magnet()
         double dx = this->centerX()-obj->centerX(),
                dy = this->centerY()-obj->centerY();
         double dz = sqrt(dx*dx+dy*dy+1e-5);
-        double dvz = MAGNET_FORCE/(dz*this->mass);
+        double force = MAGNET_FORCE/dz;
+        double dvz = force/obj->mass;
         double dvx = dvz*dx/dz, dvy = dvz*dy/dz;
         obj->setVelocity(obj->vx+dvx, obj->vy+dvy);
+        double dvz0 = force/this->mass;
+        double dvx0 = -dvz0*dx/dz, dvy0 = -dvz0*dy/dz;
+        this->setVelocity(this->vx+dvx0, this->vy+dvy0);
     }
 }
 
@@ -210,7 +212,7 @@ void GamePlayer::magnet()
 void LovingMan::skill()
 {
     // To be done...
-    this->addBuff(new Buff(Buff::BuffType::MAGNET, BUFF_TIME));
+    this->addBuff(BuffType::MAGNET, BUFF_TIME);
 }
 void SantaClaus::skill()
 {
