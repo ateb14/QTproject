@@ -23,10 +23,12 @@ SOURCES += main.cpp\
     board.cpp \
     mybtn.cpp \
     mywindow.cpp \
+    buff.cpp \
     pausewindow.cpp \
     newgamesetting.cpp \
     pressanykeywindow.cpp \
-    mylabel.cpp
+    mylabel.cpp \
+    boardwindow.cpp
 
 HEADERS  += \
     game.h \
@@ -43,7 +45,8 @@ HEADERS  += \
     pausewindow.h \
     newgamesetting.h \
     pressanykeywindow.h \
-    mylabel.h
+    mylabel.h \
+    boardwindow.h
 
 FORMS    +=
 

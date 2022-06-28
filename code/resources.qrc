@@ -63,5 +63,38 @@
         <file>art/dark.jpg</file>
         <file>art/dark.png</file>
         <file>art/test.png</file>
+        <file>art/five.png</file>
+        <file>art/four.png</file>
+        <file>art/three.png</file>
+        <file>art/two.png</file>
+        <file>art/one.png</file>
+        <file>art/zero.png</file>
+        <file>art/boardwindow.png</file>
+        <file>art/rage.png</file>
+        <file>art/speed.png</file>
+        <file>art/hot1.png</file>
+        <file>art/enemy.png</file>
+        <file>art/love_with_magnet.png</file>
+        <file>art/laptop.png</file>
+        <file>art/bottle.png</file>
+        <file>art/chicken.png</file>
+        <file>art/rock.png</file>
+        <file>art/hot2.png</file>
+        <file>art/snowflake.png</file>
+        <file>art/magnet.png</file>
+        <file>art/heart.png</file>
+        <file>art/playerguoshen.png</file>
+        <file>art/playerangry.png</file>
+        <file>art/playersanta.png</file>
+        <file>art/playerlove.png</file>
+        <file>art/soccerfalse.png</file>
+        <file>art/soccertrue.png</file>
+        <file>art/health.png</file>
+        <file>art/speedsmall.png</file>
+        <file>art/magnetsmall.png</file>
+        <file>art/ragesmall.png</file>
+        <file>art/power.png</file>
+        <file>art/freezesmall.png</file>
+        <file>art/freeze.png</file>
     </qresource>
 </RCC>
