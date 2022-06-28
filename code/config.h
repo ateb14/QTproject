@@ -63,7 +63,8 @@ const int BULLET_RADIUS = 10;
 const int BULLET_DAMAGE = 10;
 const int BULLET_TIME_TO_DESPAWN = 3*100;
 
-
+//BUFF
+const int BUFF_NUM = 4;
 
 // 足球
 const int BALL_RADIUS = 20;

@@ -472,6 +472,25 @@ void Game::updateGameBoard(){
         emit updatePlayer2Power(double(power2*1.0/PLAYER_SKILL_POINT_LIMIT));
         boardInfo.player2Power = power2;
     }
+    int *hasBuff1 = player1->getBuffSet(), *hasBuff2 = player2->getBuffSet();
+    for(int buff=0;buff<BUFF_TYPE_CNT;++buff){
+        if(hasBuff1[buff] && !boardInfo.player1Buff[buff]){
+            emit addPlayer1Buff(buff);
+            boardInfo.player1Buff[buff] = true;
+        }
+        if(hasBuff2[buff] && !boardInfo.player2Buff[buff]){
+            emit addPlayer2Buff(buff);
+            boardInfo.player2Buff[buff] = true;
+        }
+        if(!hasBuff1[buff] && boardInfo.player1Buff[buff]){
+            emit removePlayer1Buff(buff);
+            boardInfo.player1Buff[buff] = false;
+        }
+        if(!hasBuff2[buff] && boardInfo.player2Buff[buff]){
+            emit removePlayer2Buff(buff);
+            boardInfo.player2Buff[buff] = false;
+        }
+    }
 }
 
 void Game::updateGame()
