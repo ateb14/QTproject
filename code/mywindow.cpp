@@ -215,6 +215,29 @@ void startreview(){
     gameWindow->start(true);
 }
 
+void endingthegame(int winner){
+    if(winner==1){
+        pauseWindow->winmode1();
+    }
+    else{
+        pauseWindow->winmode2();
+    }
+    pauseWindow->show();
+
+    ef->setBlurRadius(20);
+    ef->setBlurHints(QGraphicsBlurEffect::AnimationHint);
+    ef2->setBlurRadius(20);
+    ef2->setBlurHints(QGraphicsBlurEffect::AnimationHint);
+    view->setGraphicsEffect(ef);
+    view2->setGraphicsEffect(ef2);
+
+    //qDebug()<<"出现";
+
+    duola->raise();
+    duola->show();
+    duolajump();
+}
+
 
 myWindow::myWindow(QWidget *parent) : QWidget(parent)
 {
@@ -321,6 +344,7 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     //设置esc的connect
     connect(gameWindow,&Game::gameispause,[=](){
 
+        pauseWindow->pausemode();
         pauseWindow->show();
 
         ef->setBlurRadius(20);
@@ -337,6 +361,9 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
         duolajump();
 
     });
+
+    //游戏结束的connect
+    connect(gameWindow,&Game::gameOver,&endingthegame);
 
     //游戏继续
     connect(pauseWindow,&pausewindow::gamecontinue,&continueGame);
