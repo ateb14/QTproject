@@ -4,7 +4,7 @@
 // #define DEBUG
 
 const QPixmap *player1Pixmap, *player2Pixmap,
-              *ballPixmap, *postPixmap, *bulletPixmap;
+              *ballPixmap, *postPixmap, *bulletPixmap[PLAYER_TYPES];
 
 int Game::winFreeTime = -1;
 bool Game::reviewMode = true;
@@ -214,7 +214,7 @@ void Game::start(bool reviewMode){
     /* 资源初始化 */
     ballPixmap = new QPixmap(ballSrc);
     postPixmap = new QPixmap(postSrc);
-    bulletPixmap = new QPixmap(bulletSrc);
+    for(int i = 0;i<PLAYER_TYPES;i++) bulletPixmap[i] = new QPixmap(bulletSrc[i]);
 
 
     /* Player Init */
