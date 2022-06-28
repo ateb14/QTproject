@@ -38,6 +38,7 @@ typedef struct{
     PlayerSpeed playerSpeed;
     bool enemyMode;
 }GameSettings;
+const int MAX_SMALL_SCORE = 3;
 
 // 游戏本体（计时器、窗口等）参数
 const int defaultT = 10;
@@ -91,6 +92,10 @@ const char player2Src[] = ":/art/kuqi.png";
 const char ballSrc[] = ":/art/football.png";
 const char postSrc[] = ":/art/post.png";
 const char bulletSrc[] = ":/art/football.png";
+const char angrySrc[] = ":/art/angry.png";
+const char loveSrc[] = ":/art/love.png";
+const char glsSrc[] = ":/art/gls.png";
+const char santaSrc[] = ":/art/santa.png";
 
 // 音频
 

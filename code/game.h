@@ -38,6 +38,14 @@ struct gameInfo{
     ActionSet action1, action2;
 };
 
+struct BoardInfo{
+    int player1BigScore, player2BigScore;
+    int player1SmallScore, player2SmallScore;
+    int player1Health, player2Health;
+    int player1Power, player2Power;
+    bool player1Buff[Buff::BUFF_TYPE_CNT], player2Buff[Buff::BUFF_TYPE_CNT];
+};
+
 class Game: public QGraphicsScene{
     Q_OBJECT
 public:
@@ -83,7 +91,8 @@ private:
     void showAIBoard();
     void hideAIBoard();
     /* Game Board */
-    GameBoard *board;
+    GameBoard *board; // abandonment
+    BoardInfo boardInfo;
     /* win check */
     static int winFreeTime;
     /* music player*/
@@ -113,9 +122,23 @@ private:
     void goalCheck();
     void newObjectCheck();
     void updateInfoBoard();
+    void updateGameBoard();
+    void createPlayers(PlayerType type1, PlayerType type2);
+
 signals:
     void gameispause();
     void gamecontinue();
+    void updateBigScore(int winner);
+    void updateSmallScore(int winner);
+    void updatePlayer1Health(double rate);
+    void updatePlayer2Health(double rate);
+    void updatePlayer1Power(double rate);
+    void updatePlayer2Power(double rate);
+    void addPlayer1Buff(int buff);
+    void addPlayer2Buff(int buff);
+    void removePlayer1Buff(int buff);
+    void removePlayer2Buff(int buff);
+    void refreshBoard(PlayerType player1, PlayerType player2);
 };
 
 #endif // !GAME_H
