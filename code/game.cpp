@@ -115,9 +115,25 @@ void Game::keyPressEvent(QKeyEvent *event){
         case Qt::Key_A:isPressingA = true;break;
         case Qt::Key_S:isPressingS = true;break;
         case Qt::Key_D:isPressingD = true;break;
-        case Qt::Key_Up:isPressingUp = true;break;
+    case Qt::Key_Up:{
+        if(reviewMode && winMode == GAMING){
+            switch(T){
+            case 10:setTimerT(5);break;
+            case 20:setTimerT(10);break;
+            }
+        }
+        isPressingUp = true;break;
+    }
         case Qt::Key_Left:isPressingLeft = true;break;
-        case Qt::Key_Down:isPressingDown = true;break;
+    case Qt::Key_Down:{
+        if(reviewMode && winMode == GAMING){
+            switch(T){
+            case 5:setTimerT(10);break;
+            case 10:setTimerT(20);break;
+            }
+        }
+        isPressingDown = true;break;
+    }
         case Qt::Key_Right:isPressingRight = true;break;
         case Qt::Key_T:isPressingT = true;break;
         case Qt::Key_F:isPressingF = true;break;
@@ -344,20 +360,23 @@ void Game::start(bool reviewMode){
     /* ball Init */
     GameBall *ball = new GameBall(WIDTH/2, HEIGHT/2, ballPixmap, this);
     ballptr = ball;
-    GameObstacle *post[8]; // 球门柱
-    post[0] = new GameObstacle(70, HEIGHT/2-100, 10, postPixmap, this);
-    post[1] = new GameObstacle(70, HEIGHT/2+100, 10, postPixmap, this);
-    post[2] = new GameObstacle(WIDTH-70, HEIGHT/2-100, 10, postPixmap, this);
-    post[3] = new GameObstacle(WIDTH-70, HEIGHT/2+100, 10, postPixmap, this);
-    post[4] = new GameObstacle(35, HEIGHT/2-100, 10, postPixmap, this);
-    post[5] = new GameObstacle(35, HEIGHT/2+100, 10, postPixmap, this);
-    post[6] = new GameObstacle(WIDTH-35, HEIGHT/2-100, 10, postPixmap, this);
-    post[7] = new GameObstacle(WIDTH-35, HEIGHT/2+100, 10, postPixmap, this);
+    GameObstacle *post[24]; // 球门柱
+    const int tmpr = 16, h=8;
+    for(int i=0;i<=2;++i){
+        post[8*i] = new GameObstacle(i*34, HEIGHT/2-100, tmpr, postPixmap, this);
+        post[8*i+1] = new GameObstacle(i*34, HEIGHT/2+100, tmpr, postPixmap, this);
+        post[8*i+2] = new GameObstacle(WIDTH-i*34, HEIGHT/2-100, tmpr, postPixmap, this);
+        post[8*i+3] = new GameObstacle(WIDTH-i*34, HEIGHT/2+100, tmpr, postPixmap, this);
+        post[8*i+4] = new GameObstacle(i*34+tmpr+1, HEIGHT/2+100+h, 1, postPixmap, this);
+        post[8*i+5] = new GameObstacle(i*34+tmpr+1, HEIGHT/2-100-h, 1, postPixmap, this);
+        post[8*i+6] = new GameObstacle(WIDTH-i*34-tmpr-1, HEIGHT/2+100+h, 1, postPixmap, this);
+        post[8*i+7] = new GameObstacle(WIDTH-i*34-tmpr-1, HEIGHT/2-100-h, 1, postPixmap, this);
+    }
 
     this->gameObjects.push_back(player1);
     this->gameObjects.push_back(player2);
     this->gameObjects.push_back(ball);
-    for(int i = 0;i<8;i++) this->gameObjects.push_back(post[i]);
+    for(int i = 0;i<24;i++) this->gameObjects.push_back(post[i]);
 
     this->globalTime = 0;
     this->timer->start(T);

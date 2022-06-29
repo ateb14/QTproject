@@ -296,6 +296,7 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     QSplashScreen splash(start);
     splash.resize(start.size());
     splash.show();
+    Sleep(1500);
 
     /* Welcome */
     gameWindow = new Game;
