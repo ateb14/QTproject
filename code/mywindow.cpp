@@ -230,8 +230,7 @@ void startgame(){
 void startreview(QString pathstr){
     gameWindow->setRecSrc(pathstr);
     cinemamodewindow->hide();
-    view2->show();
-    view->show();
+    view2->init();
     startBtn->hide();
     quitBtn->hide();
     cinemaBtn->hide();
@@ -243,6 +242,8 @@ void startreview(QString pathstr){
     duola->move(12,1001);
     red->hide();
     gametitle->hide();
+    view2->show();
+    view->show();
     gameWindow->start(true);
 }
 
