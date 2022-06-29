@@ -20,7 +20,7 @@ GamePlayer::GamePlayer(int x, int y,
 {
     type = ObjectType::Player;
     health = PLAYER_HEALTH;
-    skillPoint = 0;
+    skillPoint = 100;
     speed = PLAYER_SPEED;
     shootingCD = 0;
     maxShootingCD = PLAYER_SHOOTING_CD;

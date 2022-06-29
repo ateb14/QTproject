@@ -3,7 +3,8 @@
 
 // #define DEBUG
 
-const QPixmap *player1Pixmap, *player2Pixmap,*ballPixmap, *postPixmap, *bulletPixmap[PLAYER_TYPES], *SSBulletPixmap[PLAYER_TYPES];
+const QPixmap *player1Pixmap, *player2Pixmap,*ballPixmap, *postPixmap, *bulletPixmap[PLAYER_TYPES], *SSBulletPixmap[PLAYER_TYPES],
+*frozenManPMap, *hotManPMap, *magnetManPMap;
 QMediaPlayer *shootPlayer, *skillPlayer[PLAYER_TYPES], *victoryPlayer, *diePlayer, *whistlePlayer;
 QMediaPlaylist *shootPlaylist, *skillPlaylist[PLAYER_TYPES],*victoryPlaylist, *diePlaylist, *whistlePlaylist;
 double PLAYER_SPEED,PLAYER_ACCELERATION;
@@ -72,6 +73,9 @@ Game::Game(){
     /* Resources Init */
     ballPixmap = new QPixmap(ballSrc);
     postPixmap = new QPixmap(postSrc);
+    frozenManPMap = new QPixmap(frozenManSrc);
+    hotManPMap = new QPixmap(hotManSrc);
+    magnetManPMap = new QPixmap(magnetManSrc);
     for(int i = 0;i<PLAYER_TYPES;i++) bulletPixmap[i] = new QPixmap(bulletSrc[i]);
     for(int i = 0;i<PLAYER_TYPES;i++) SSBulletPixmap[i] = new QPixmap(SSBulletSrc[i]);
 
@@ -97,6 +101,9 @@ Game::~Game(){
     for(int i = 0;i<PLAYER_TYPES;i++) delete skillPlaylist[i];
     delete ballPixmap;
     delete postPixmap;
+    delete frozenManPMap;
+    delete hotManPMap;
+    delete magnetManPMap;
 }
 
 /* keyboard reading */
@@ -615,18 +622,52 @@ void Game::updateGameBoard(){
         if(hasBuff1[buff] && !boardInfo.player1Buff[buff]){
             emit addPlayer1Buff(buff);
             boardInfo.player1Buff[buff] = true;
+            if(buff == FREEZE){
+                int r = player1->getR();
+                player1->setPixmap(frozenManPMap->scaled(QSize(2*r, 2*r)));
+            }
+            else if(buff == RAGE){
+                int r = player1->getR();
+                player1->setPixmap(hotManPMap->scaled(QSize(2*r, 2*r)));
+            }
+            else if(buff == MAGNET){
+                int r = player1->getR();
+                player1->setPixmap(magnetManPMap->scaled(QSize(2*r, 2*r)));
+            }
         }
         if(hasBuff2[buff] && !boardInfo.player2Buff[buff]){
             emit addPlayer2Buff(buff);
             boardInfo.player2Buff[buff] = true;
+            if(buff == FREEZE){
+                int r = player2->getR();
+                player2->setPixmap(frozenManPMap->scaled(QSize(2*r, 2*r)));
+            }
+            else if(buff == RAGE){
+                int r = player2->getR();
+                player2->setPixmap(hotManPMap->scaled(QSize(2*r, 2*r)));
+            }
+            else if(buff == MAGNET){
+                int r = player2->getR();
+                player2->setPixmap(magnetManPMap->scaled(QSize(2*r, 2*r)));
+            }
         }
         if(!hasBuff1[buff] && boardInfo.player1Buff[buff]){
             emit removePlayer1Buff(buff);
             boardInfo.player1Buff[buff] = false;
+            if(buff == FREEZE || buff == RAGE || buff == MAGNET){
+                int r = player1->getR();
+                if(!hasBuff1[FREEZE] && !hasBuff1[RAGE] && !hasBuff1[MAGNET])
+                    player1->setPixmap(player1Pixmap->scaled(QSize(2*r, 2*r)));
+            }
         }
         if(!hasBuff2[buff] && boardInfo.player2Buff[buff]){
             emit removePlayer2Buff(buff);
             boardInfo.player2Buff[buff] = false;
+            if(buff == FREEZE || buff == RAGE || buff == MAGNET){
+                int r = player2->getR();
+                if(!hasBuff2[FREEZE] && !hasBuff2[RAGE] && !hasBuff2[MAGNET])
+                    player2->setPixmap(player2Pixmap->scaled(QSize(2*r, 2*r)));
+            }
         }
     }
 }

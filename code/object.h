@@ -13,6 +13,7 @@ class GameObject: public QGraphicsPixmapItem
 public:
     GameObject(int x, int y, int r, double m, const QPixmap *pixmap_, QGraphicsScene *scene_);
     ~GameObject();
+    int getR(){return radius;}
 
     bool isDead;
 protected:
