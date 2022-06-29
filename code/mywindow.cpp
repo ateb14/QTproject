@@ -12,6 +12,7 @@
 #include "mylabel.h"
 #include <QPropertyAnimation>
 #include <boardwindow.h>
+#include <cinemawindow.h>
 
 Game * gameWindow=NULL;
 QGraphicsView *view=NULL;
@@ -23,6 +24,7 @@ QGraphicsBlurEffect* ef=NULL;
 QGraphicsBlurEffect* ef2=NULL;
 pausewindow *pauseWindow =NULL;
 newGameSetting *newgameWindow=NULL;
+cinemaWindow *cinemamodewindow=NULL;
 pressanykeywindow *pakWindow=NULL;
 myLabel *startboard;
 myLabel *cinemaboard;
@@ -32,6 +34,7 @@ myLabel *red;
 myLabel *gametitle;
 QTimer *duolatimer;
 QPropertyAnimation *duolaani;
+
 
 
 //哆啦A梦弹出
@@ -170,6 +173,18 @@ void backtoMainfromsetting(){
     gametitle->show();
 }
 
+void backtoMainfromcinema(){
+    cinemamodewindow->hide();
+    startBtn->show();
+    quitBtn->show();
+    cinemaBtn->show();
+    startboard->show();
+    cinemaboard->show();
+    exitboard->show();
+    red->show();
+    gametitle->show();
+}
+
 
 void tonewgameWindow(){
     startBtn->hide();
@@ -182,6 +197,19 @@ void tonewgameWindow(){
     gametitle->hide();
     newgameWindow->show();
     newgameWindow->movein();
+}
+
+void tocinemaWindow(){
+    startBtn->hide();
+    quitBtn->hide();
+    cinemaBtn->hide();
+    startboard->hide();
+    cinemaboard->hide();
+    exitboard->hide();
+    red->hide();
+    gametitle->hide();
+    cinemamodewindow->init();
+    cinemamodewindow->show();
 }
 
 void startgame(){
@@ -198,7 +226,8 @@ void startgame(){
     view2->show();
 }
 
-void startreview(){
+void startreview(QString pathstr){
+    cinemamodewindow->hide();
     view2->show();
     view->show();
     startBtn->hide();
@@ -317,7 +346,8 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     cinemaBtn = new myBtn(":/art/Cinema_Btn.png",this);
     cinemaBtn->move(724,1001);
     cinemaBtn->sety(797);
-    connect(cinemaBtn, &myBtn::btnClicked,&startreview);
+    connect(cinemaBtn, &myBtn::btnClicked,&tocinemaWindow);
+
 
     //start button
     startBtn=new myBtn(":/art/Start_Btn.png",this);
@@ -337,8 +367,14 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     pauseWindow->setParent(this);
     pauseWindow->hide();
 
-
-
+    //放映厅界面
+    cinemamodewindow=new cinemaWindow;
+    cinemamodewindow->setFixedSize(this->size());
+    cinemamodewindow->move(0,0);
+    cinemamodewindow->setParent(this);
+    cinemamodewindow->hide();
+    connect(cinemamodewindow,&cinemaWindow::backtomain,&backtoMainfromcinema);
+    connect(cinemamodewindow,&cinemaWindow::startreview,&startreview);
 
 
 

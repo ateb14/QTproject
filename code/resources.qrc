@@ -30,9 +30,7 @@
         <file>art/continue.png</file>
         <file>art/exit.png</file>
         <file>art/tmppage.png</file>
-        <file>art/play.png</file>
         <file>art/delete.png</file>
-        <file>art/cinema.png</file>
         <file>art/xyy.png</file>
         <file>art/syy.png</file>
         <file>art/jixu.png</file>
@@ -100,5 +98,8 @@
         <file>art/end.png</file>
         <file>art/player2win.png</file>
         <file>art/player1win.png</file>
+        <file>art/cinema.png</file>
+        <file>art/play.png</file>
+        <file>art/novideo.png</file>
     </qresource>
 </RCC>
