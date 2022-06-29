@@ -35,7 +35,6 @@
         <file>art/syy.png</file>
         <file>art/jixu.png</file>
         <file>art/fanhui.png</file>
-        <file>art/choosecharacter.png</file>
         <file>art/choosevideo.png</file>
         <file>art/gls.png</file>
         <file>art/angry.png</file>
@@ -115,5 +114,6 @@
         <file>music/die.wav</file>
         <file>music/frozen.wav</file>
         <file>music/roar.wav</file>
+        <file>art/choosecharacter.png</file>
     </qresource>
 </RCC>
