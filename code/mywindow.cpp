@@ -228,6 +228,7 @@ void startgame(){
 }
 
 void startreview(QString pathstr){
+    gameWindow->setRecSrc(pathstr);
     cinemamodewindow->hide();
     view2->show();
     view->show();
@@ -246,6 +247,7 @@ void startreview(QString pathstr){
 }
 
 void endingthegame(int winner){
+    gameWindow->saveRecord();
     pauseWindow->init();
     if(winner==1){
         pauseWindow->winmode1();

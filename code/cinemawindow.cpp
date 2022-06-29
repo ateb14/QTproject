@@ -77,8 +77,8 @@ void cinemaWindow::init(){
         filename[i]->hide();
         choosebtn[i]->hide();
     }
-    //"C:\Users\11438\Desktop\TEST"
-    QString dirTemp = "C:/Users/11438/Desktop/TEST";
+
+    QString dirTemp = "./record";
     QDir dirt(dirTemp);
 
     QStringList filterst;
