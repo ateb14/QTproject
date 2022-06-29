@@ -34,7 +34,6 @@
         <file>art/syy.png</file>
         <file>art/jixu.png</file>
         <file>art/fanhui.png</file>
-        <file>art/choosevideo.png</file>
         <file>art/gls.png</file>
         <file>art/angry.png</file>
         <file>art/santa.png</file>
@@ -52,7 +51,6 @@
         <file>art/middle.png</file>
         <file>art/32.png</file>
         <file>art/53.png</file>
-        <file>art/loveintro.png</file>
         <file>art/santaintro.png</file>
         <file>art/angryintro.png</file>
         <file>art/guoshenintro.png</file>
@@ -72,7 +70,6 @@
         <file>art/enemy.png</file>
         <file>art/love_with_magnet.png</file>
         <file>art/laptop.png</file>
-        <file>art/bottle.png</file>
         <file>art/chicken.png</file>
         <file>art/rock.png</file>
         <file>art/hot2.png</file>
@@ -116,5 +113,8 @@
         <file>art/choosecharacter.png</file>
         <file>art/start.png</file>
         <file>art/icon.ico</file>
+        <file>art/loveintro.png</file>
+        <file>art/bottle.png</file>
+        <file>art/choosevideo.png</file>
     </qresource>
 </RCC>
