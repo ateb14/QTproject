@@ -63,6 +63,10 @@ void GamePlayer::playerAct(ActionSet action)
     double acceleration = PLAYER_ACCELERATION;
     if(this->hasBuff[BuffType::FREEZE]) speedLimit /= 3, acceleration /= 3;
     if(this->hasBuff[BuffType::SPEED]) speedLimit *= 2, acceleration *= 2;
+    if(this->hasBuff[BuffType::MAGNET])
+    {
+        speedLimit = speedLimit*this->mass/(this->mass+BALL_MASS);
+    }
 
     double vx_new = this->vx, vy_new = this->vy;
     double ax = 0, ay = 0; // 加速度（我们有完美符合运动学的物理引擎！！！）
@@ -117,8 +121,8 @@ void GamePlayer::playerAct(ActionSet action)
 
 void GamePlayer::updateInGame()
 {
-    // CD减一，技能点数每秒回复10点。如果有狂暴buff，那么射击CD减二。
-    if(this->hasBuff[BuffType::RAGE]) this->shootingCD = max(this->shootingCD-2, 0);
+    // CD减一，技能点数每秒回复10点。如果有狂暴buff，那么射击CD改为减3。（即，3倍射速）
+    if(this->hasBuff[BuffType::RAGE]) this->shootingCD = max(this->shootingCD-3, 0);
     else this->shootingCD = max(this->shootingCD-1, 0);
     this->skillPointGainCD -= 1;
     if(this->skillPointGainCD<=0)
@@ -275,12 +279,13 @@ void GuoShen::skill()
 {
     skillPlayer[GUOSHEN]->play();
     // To be done...
-    double dist = 80;
+    double dist = 120;
     double vx[8] = {1, sqrt(2), 0, -sqrt(2), -1, -sqrt(2), 0, sqrt(2)},
             vy[8] = {0, sqrt(2), 1, sqrt(2), 0, -sqrt(2), -1, -sqrt(2)};
     double speed_factor = 2.5;
     double radius_factor = 5;
     double mass_factor = 5;
+    double damage_factor = 2;
     for(int i = 0;i<8;i++)
     {
         this->generatedObjects.push_back(
@@ -288,7 +293,7 @@ void GuoShen::skill()
                 this->centerX()+dist*vx[i], this->centerY()+dist*vy[i],
                 vx[i]*BULLET_SPEED*speed_factor, vy[i]*BULLET_SPEED*speed_factor,
                 BULLET_RADIUS*radius_factor, BULLET_MASS*mass_factor,
-                BULLET_DAMAGE, BULLET_TIME_TO_DESPAWN,
+                BULLET_DAMAGE*damage_factor, BULLET_TIME_TO_DESPAWN,
                 this, SSBulletPixmap[this->playerType], this->scene,
                 GameBullet::BulletType::LAPTOP
             ));
