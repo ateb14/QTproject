@@ -52,9 +52,9 @@ cinemaWindow::cinemaWindow(QWidget *parent) : QWidget(parent)
         choosebtn[i]->move(1490,250+i*105);
         choosebtn[i]->sety(250+i*105);
         connect(choosebtn[i],&myBtn::btnClicked,[=](){
-            //emit startreview(filename[i]->text());
-             //moveout();
-            qDebug()<<filename[i]->text();
+            emit startreview(filename[i]->text());
+             moveout();
+            //qDebug()<<filename[i]->text();
         });
         filename[i]->hide();
         choosebtn[i]->hide();
@@ -118,7 +118,7 @@ void cinemaWindow::init(){
         {
             filename[i]->setText(file_list[i].baseName());
             filename[i]->move(1290,210+i*105);
-            qDebug()<<i<<" "<<210+i*105;
+            //qDebug()<<i<<" "<<210+i*105;
             choosebtn[i]->move(1490,250+i*105);
             filename[i]->show();
             choosebtn[i]->show();
