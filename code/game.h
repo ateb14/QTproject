@@ -20,6 +20,7 @@
 #include <obstacle.h>
 #include <windows.h>
 #include <board.h>
+#include <item.h>
 #include <list>
 #include <iostream>
 #include <fstream>
@@ -137,6 +138,7 @@ private:
     void newObjectCheck();
     void updateInfoBoard();
     void updateGameBoard();
+    void createItems();
     void createPlayers(PlayerType type1, PlayerType type2);
 
 signals:

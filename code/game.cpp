@@ -4,7 +4,7 @@
 // #define DEBUG
 
 const QPixmap *player1Pixmap, *player2Pixmap,*ballPixmap, *postPixmap, *bulletPixmap[PLAYER_TYPES], *SSBulletPixmap[PLAYER_TYPES],
-*frozenManPMap, *hotManPMap, *magnetManPMap;
+*frozenManPMap, *hotManPMap, *magnetManPMap, *itemPMap[ITEM_NUM];
 QMediaPlayer *shootPlayer, *skillPlayer[PLAYER_TYPES], *victoryPlayer, *diePlayer, *whistlePlayer;
 QMediaPlaylist *shootPlaylist, *skillPlaylist[PLAYER_TYPES],*victoryPlaylist, *diePlaylist, *whistlePlaylist;
 double PLAYER_SPEED,PLAYER_ACCELERATION;
@@ -78,6 +78,7 @@ Game::Game(){
     magnetManPMap = new QPixmap(magnetManSrc);
     for(int i = 0;i<PLAYER_TYPES;i++) bulletPixmap[i] = new QPixmap(bulletSrc[i]);
     for(int i = 0;i<PLAYER_TYPES;i++) SSBulletPixmap[i] = new QPixmap(SSBulletSrc[i]);
+    for(int i = 0;i<ITEM_NUM;i++) itemPMap[i] = new QPixmap(itemSrc[i]);
 
     board = new GameBoard();
 }
@@ -99,6 +100,7 @@ Game::~Game(){
     for(int i = 0;i<PLAYER_TYPES;i++) delete SSBulletPixmap[i];
     for(int i = 0;i<PLAYER_TYPES;i++) delete skillPlayer[i];
     for(int i = 0;i<PLAYER_TYPES;i++) delete skillPlaylist[i];
+    for(int i = 0;i<ITEM_NUM;i++) delete itemPMap[i];
     delete ballPixmap;
     delete postPixmap;
     delete frozenManPMap;
@@ -360,23 +362,25 @@ void Game::start(bool reviewMode){
     /* ball Init */
     GameBall *ball = new GameBall(WIDTH/2, HEIGHT/2, ballPixmap, this);
     ballptr = ball;
-    GameObstacle *post[24]; // 球门柱
+    GameObstacle *post[20]; // 球门柱
     const int tmpr = 16, h=8;
     for(int i=0;i<=2;++i){
         post[8*i] = new GameObstacle(i*34, HEIGHT/2-100, tmpr, postPixmap, this);
         post[8*i+1] = new GameObstacle(i*34, HEIGHT/2+100, tmpr, postPixmap, this);
         post[8*i+2] = new GameObstacle(WIDTH-i*34, HEIGHT/2-100, tmpr, postPixmap, this);
         post[8*i+3] = new GameObstacle(WIDTH-i*34, HEIGHT/2+100, tmpr, postPixmap, this);
-        post[8*i+4] = new GameObstacle(i*34+tmpr+1, HEIGHT/2+100+h, 1, postPixmap, this);
-        post[8*i+5] = new GameObstacle(i*34+tmpr+1, HEIGHT/2-100-h, 1, postPixmap, this);
-        post[8*i+6] = new GameObstacle(WIDTH-i*34-tmpr-1, HEIGHT/2+100+h, 1, postPixmap, this);
-        post[8*i+7] = new GameObstacle(WIDTH-i*34-tmpr-1, HEIGHT/2-100-h, 1, postPixmap, this);
+        if(i<=1){
+            post[8*i+4] = new GameObstacle(i*34+tmpr+1, HEIGHT/2+100+h, 1, postPixmap, this);
+            post[8*i+5] = new GameObstacle(i*34+tmpr+1, HEIGHT/2-100-h, 1, postPixmap, this);
+            post[8*i+6] = new GameObstacle(WIDTH-i*34-tmpr-1, HEIGHT/2+100+h, 1, postPixmap, this);
+            post[8*i+7] = new GameObstacle(WIDTH-i*34-tmpr-1, HEIGHT/2-100-h, 1, postPixmap, this);
+        }
     }
 
     this->gameObjects.push_back(player1);
     this->gameObjects.push_back(player2);
     this->gameObjects.push_back(ball);
-    for(int i = 0;i<24;i++) this->gameObjects.push_back(post[i]);
+    for(int i = 0;i<20;i++) this->gameObjects.push_back(post[i]);
 
     this->globalTime = 0;
     this->timer->start(T);
@@ -617,6 +621,21 @@ void Game::newObjectCheck(){
     }
 }
 
+void Game::createItems(){
+    if(globalTime > 0 && globalTime % (15*100) == 0){
+        int type = globalTime % 5;
+        GameItem *item;
+        switch(type){
+        case 0:item = new GameItem(WIDTH/2, HEIGHT/2, itemPMap[type],this,SPEED,6*100,3*100);break; //speed
+        case 1:item = new GameItem(WIDTH/2, HEIGHT/2, itemPMap[type],this,SPEED,6*100,0);break; //health
+        case 2:item = new GameItem(WIDTH/2, HEIGHT/2, itemPMap[type],this,RAGE,6*100,3*100);break; //rage
+        case 3:item = new GameItem(WIDTH/2, HEIGHT/2, itemPMap[type],this,MAGNET,6*100,3*100);break; //magnet
+        case 4:item = new GameItem(WIDTH/2, HEIGHT/2, itemPMap[type],this,SPEED,6*100,0);break; //power
+        }
+        gameObjects.push_back(item);
+    }
+}
+
 void Game::updateGameBoard(){
     int health1 = player1->getHealth(), health2 = player2->getHealth();
     int power1 = player1->getSkillPoint(), power2 = player2->getSkillPoint();
@@ -777,6 +796,9 @@ void Game::updateGame()
 
     /* Health Check */
     healthCheck();
+
+    /* Generate Items */
+    createItems();
 
     /* ball position */
     goalCheck();
