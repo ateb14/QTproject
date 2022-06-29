@@ -51,6 +51,7 @@ protected:
     friend class GameBall;
     friend class GameBullet;
     friend class GameObstacle;
+    friend class GameItem;
     friend class LovingMan;
     friend class SantaClaus;
 };

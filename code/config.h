@@ -65,7 +65,7 @@ const int DeadTime = 400; // 4s复活
 const double BULLET_SPEED = 7.0;
 const double BULLET_MASS = 0.5;
 const int BULLET_RADIUS = 15;
-const int BULLET_DAMAGE = 10;
+const int BULLET_DAMAGE = 20;
 const int BULLET_TIME_TO_DESPAWN = 3*100;
 
 //BUFF
@@ -78,6 +78,9 @@ const double BALL_VELOCITY_DECAY = 0.985;
 
 // 障碍物
 const double INFINITE_MASS = 1919810.114514;
+
+// 道具
+const int ITEM_RADIUS = 20;
 
 // 技能威力
 const int BUFF_TIME = 5*1000/defaultT; // 5 seconds
