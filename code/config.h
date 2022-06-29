@@ -112,6 +112,10 @@ const char loveSrc[] = ":/art/love.png";
 const char glsSrc[] = ":/art/gls.png";
 const char santaSrc[] = ":/art/santa.png";
 
+const char frozenManSrc[] = ":/art/frozen.png";
+const char hotManSrc[] = ":/art/hot2.png";
+const char magnetManSrc[] = ":/art/love_with_magnet.png";
+
 // 音频
 
 /* エレキ・デ・チョコボ 植松伸夫 */
@@ -138,7 +142,7 @@ const char skillSrc[PLAYER_TYPES][64] ={
 #endif
 
 // 资源对象
-extern const QPixmap *player1Pixmap, *player2Pixmap,
+extern const QPixmap *player1Pixmap, *player2Pixmap, *frozenManPMap, *hotManPMap,*magnetManPMap,
                      *ballPixmap, *postPixmap, *bulletPixmap[PLAYER_TYPES], *SSBulletPixmap[PLAYER_TYPES];
 
 extern QMediaPlayer *shootPlayer, *skillPlayer[PLAYER_TYPES], *victoryPlayer, *diePlayer, *whistlePlayer;
