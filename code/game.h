@@ -25,6 +25,8 @@
 #include <fstream>
 #include <vector>
 #include <QDateTime>
+#include <QStringList>
+#include <QDir>
 
 
 enum windowMode{
@@ -150,7 +152,7 @@ signals:
     void removePlayer1Buff(int buff);
     void removePlayer2Buff(int buff);
     void refreshBoard(PlayerType player1, PlayerType player2);
-    void gameOver(int winner);
+    void gameOver(int winner,bool reviewMode = false);
 };
 
 #endif // !GAME_H
