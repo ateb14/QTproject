@@ -62,7 +62,10 @@ void pausewindow::init(){
 
 }
 
-void pausewindow::winmode1(){
+void pausewindow::winmode1(bool reviewMode){
+    if(reviewMode) duolaend->changeImg("://art/videoover.png");
+    else duolaend->changeImg("://art/end.png");
+
     p1win->show();
     backBtn->move(747,620);
     backBtn->sety(620);
@@ -75,7 +78,10 @@ void pausewindow::winmode1(){
     });
 }
 
-void pausewindow::winmode2(){
+void pausewindow::winmode2(bool reviewMode){
+    if(reviewMode) duolaend->changeImg("://art/videoover.png");
+    else duolaend->changeImg("://art/end.png");
+
     p2win->show();
     backBtn->move(747,620);
     backBtn->sety(620);

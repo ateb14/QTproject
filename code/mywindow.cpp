@@ -247,14 +247,14 @@ void startreview(QString pathstr){
     gameWindow->start(true);
 }
 
-void endingthegame(int winner){
+void endingthegame(int winner,bool reviewMode){
     gameWindow->saveRecord();
     pauseWindow->init();
     if(winner==1){
-        pauseWindow->winmode1();
+        pauseWindow->winmode1(reviewMode);
     }
     else{
-        pauseWindow->winmode2();
+        pauseWindow->winmode2(reviewMode);
     }
     pauseWindow->show();
 

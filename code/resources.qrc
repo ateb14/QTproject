@@ -101,5 +101,6 @@
         <file>art/cinema.png</file>
         <file>art/play.png</file>
         <file>art/novideo.png</file>
+        <file>art/videoover.png</file>
     </qresource>
 </RCC>

@@ -10,8 +10,8 @@ class pausewindow : public QWidget
 public:
     explicit pausewindow(QWidget *parent = 0);
     void pausemode();
-    void winmode1();
-    void winmode2();
+    void winmode1(bool reviewMode);
+    void winmode2(bool reviewMode);
     void init();
 
 signals:
