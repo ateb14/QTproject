@@ -199,6 +199,7 @@ void Game::start(bool reviewMode){
     /* GAMING Mode On */
     this->winMode = GAMING;
     isGameOver = false;
+    winFreeTime = -1;
 
     /* Initialize the clock */
     T = defaultT;
@@ -244,7 +245,26 @@ void Game::start(bool reviewMode){
     for(int i = 0;i<PLAYER_TYPES;i++) bulletPixmap[i] = new QPixmap(bulletSrc[i]);
     for(int i = 0;i<PLAYER_TYPES;i++) SSBulletPixmap[i] = new QPixmap(SSBulletSrc[i]);
 
-
+    /* Review Mode */
+    infoReader = 0;
+    gameInfos.clear();
+    if(Game::reviewMode == true){
+        ifstream inFile(recSrc.c_str(),ios::in|ios::binary);
+        if(!inFile){
+            std::cout << "Failed" << std::endl;
+            isGameOver = true;
+            emit gameOver(1,reviewMode);
+        }
+        else{
+            inFile.read((char *) & gameSettings, sizeof(gameSettings));
+            gameInfo info;
+            std::cout << gameSettings.player1Type << gameSettings.player2Type << gameSettings.gameFormat << std::endl;
+            while(inFile.read((char *) & info, sizeof(info))){
+                gameInfos.push_back(info);
+            }
+            inFile.close();
+        }
+    }
 
     /* Player Init */
     player1DeadTime = -1;
@@ -272,24 +292,6 @@ void Game::start(bool reviewMode){
     this->timer->start(T);
     /* Music! */
     backgroundPlayer->play();
-
-    /* Review Mode */
-    infoReader = 0;
-    if(Game::reviewMode == true){
-        ifstream inFile(recSrc.c_str(),ios::in|ios::binary);
-        if(!inFile){
-            isGameOver = true;
-            emit gameOver(1);
-        }
-        else{
-            inFile.read((char *) & gameSettings, sizeof(gameSettings));
-            gameInfo info;
-            while(inFile.read((char *) & info, sizeof(info))){
-                gameInfos.push_back(info);
-            }
-            inFile.close();
-        }
-    }
 }
 
 void Game::endGame(){
@@ -306,6 +308,7 @@ void Game::endGame(){
 void Game::setRecSrc(const QString & str){
     string name = "./record/"+str.toStdString()+".dat";
     recSrc = name;
+    std::cout << recSrc << std::endl;
 }
 
 void Game::saveRecord(){
@@ -323,6 +326,29 @@ void Game::saveRecord(){
         }
         outFile.close();
         gameInfos.clear();
+
+        QString dirTemp = "./record";
+        QDir dirt(dirTemp);
+
+        QStringList filterst;
+        filterst << QString("*.dat") << QString("*.DAT");
+        QFileInfoList file_list = dirt.entryInfoList(filterst, QDir::Files | QDir::NoSymLinks);
+        dirTemp = "./record/";
+        QString suffix = ".dat";
+
+        if(file_list.size()>=5){
+            int len = file_list.size();
+            vector<QString> tmp;
+            for(int i=0;i<len;++i){
+                tmp.push_back(file_list[i].baseName());
+            }
+            sort(tmp.begin(), tmp.end());
+            for(int i=0;i<len-5;++i){
+                QFile file;
+                file.setFileName(dirTemp+tmp[i]+suffix);
+                file.remove();
+            }
+        }
     }
 }
 
@@ -544,24 +570,24 @@ void Game::updateGame()
         if(boardInfo.player1BigScore >= 2){
             isGameOver = true;
             pause();
-            emit gameOver(1);
+            emit gameOver(1,reviewMode);
         }
         else if(boardInfo.player2BigScore >= 2){
             isGameOver = true;
             pause();
-            emit gameOver(2);
+            emit gameOver(2,reviewMode);
         }
     }
     else if(gameSettings.gameFormat == THREE_FIVE){
         if(boardInfo.player1BigScore >= 3){
             isGameOver = true;
             pause();
-            emit gameOver(1);
+            emit gameOver(1,reviewMode);
         }
         else if(boardInfo.player2BigScore >= 3){
             isGameOver = true;
             pause();
-            emit gameOver(2);
+            emit gameOver(2,reviewMode);
         }
     }
 
@@ -583,9 +609,9 @@ void Game::updateGame()
     /* Review Mode */
     else if(Game::reviewMode == true){
         if(infoReader >= gameInfos.size()){
-            pause();
+            player1->playerAct(ActionSet());
+            player2->playerAct(ActionSet());
             gameInfos.clear();
-            emit gameispause();
         }
         else{
                 if(gameInfos[infoReader].interval == Game::globalTime){
