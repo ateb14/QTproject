@@ -19,7 +19,7 @@ GamePlayer::GamePlayer(int x, int y,
     GameObject(x, y, PLAYER_RADIUS, PLAYER_MASS, pixmap_, scene_)
 {
     type = ObjectType::Player;
-    health = PLAYER_HEALTH;
+    health = maxHealth = PLAYER_HEALTH;
     skillPoint = 0;
     speed = PLAYER_SPEED;
     shootingCD = 0;
@@ -53,27 +53,27 @@ void GamePlayer::addBuff(BuffType buffType, int time)
     this->hasBuff[buffType] = max(this->hasBuff[buffType], time);
     switch(buffType){
         case FREEZE:{
-        if(hasBuff[SPEED] >= time){
-            hasBuff[SPEED] -= time;
-            return;
+            if(hasBuff[SPEED] >= time){
+                hasBuff[SPEED] -= time;
+                return;
+            }
+            else{
+                hasBuff[buffType] = time - hasBuff[SPEED];
+                hasBuff[SPEED] = 0;
+                return;
+            }
         }
-        else{
-            hasBuff[buffType] = time - hasBuff[SPEED];
-            hasBuff[SPEED] = 0;
+        case SPEED:{
+            if(hasBuff[FREEZE] >= time){
+                hasBuff[FREEZE] -= time;
+                return;
+            }
+            else{
+                hasBuff[buffType] = time - hasBuff[FREEZE];
+                hasBuff[FREEZE] = 0;
             return;
+            }
         }
-    }
-    case SPEED:{
-        if(hasBuff[FREEZE] >= time){
-            hasBuff[FREEZE] -= time;
-            return;
-        }
-        else{
-            hasBuff[buffType] = time - hasBuff[FREEZE];
-            hasBuff[FREEZE] = 0;
-            return;
-        }
-    }
     }
     this->hasBuff[buffType] = max(this->hasBuff[buffType], time);
 }
