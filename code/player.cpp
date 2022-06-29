@@ -20,7 +20,7 @@ GamePlayer::GamePlayer(int x, int y,
 {
     type = ObjectType::Player;
     health = PLAYER_HEALTH;
-    skillPoint = PLAYER_SKILL_POINT_LIMIT;
+    skillPoint = 0;
     speed = PLAYER_SPEED;
     shootingCD = 0;
     maxShootingCD = PLAYER_SHOOTING_CD;
@@ -36,7 +36,7 @@ void GamePlayer::reset(int x, int y)
     setPos(x-radius, y-radius);
     setVelocity(0, 0);
     health = PLAYER_HEALTH;
-    skillPoint = PLAYER_SKILL_POINT_LIMIT;
+    skillPoint = PLAYER_SKILL_POINT_LIMIT/2;
     speed = PLAYER_SPEED;
     shootingCD = 0;
     maxShootingCD = PLAYER_SHOOTING_CD;
@@ -92,6 +92,7 @@ void GamePlayer::playerAct(ActionSet action)
         double vz_ = sqrt(vx_*vx_+vy_*vy_);
         if(vz_>=1e-5)
         {
+            //shootPlayer->play();
             this->generatedObjects.push_back(
                 new GameBullet(
                     this->centerX(), this->centerY(),
@@ -218,11 +219,13 @@ void GamePlayer::magnet()
 // 以下是各个角色的技能。
 void LovingMan::skill()
 {
+    skillPlayer[LOVEMAN]->play();
     // 给自己上磁铁的Buff
     this->addBuff(BuffType::MAGNET, BUFF_TIME);
 }
 void SantaClaus::skill()
 {
+    skillPlayer[SANTA]->play();
     // To be done...
     // 发射三个冰块子弹
     double dist = 60;
@@ -263,17 +266,19 @@ void SantaClaus::skill()
 }
 void AngryBrother::skill()
 {
+    skillPlayer[ANGRYBRO]->play();
     // To be done...
     this->addBuff(BuffType::SPEED, BUFF_TIME);
     this->addBuff(BuffType::RAGE, BUFF_TIME);
 }
 void GuoShen::skill()
 {
+    skillPlayer[GUOSHEN]->play();
     // To be done...
     double dist = 80;
     double vx[8] = {1, sqrt(2), 0, -sqrt(2), -1, -sqrt(2), 0, sqrt(2)},
             vy[8] = {0, sqrt(2), 1, sqrt(2), 0, -sqrt(2), -1, -sqrt(2)};
-    double speed_factor = 3;
+    double speed_factor = 2.5;
     double radius_factor = 5;
     double mass_factor = 5;
     for(int i = 0;i<8;i++)

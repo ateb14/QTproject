@@ -35,7 +35,6 @@
         <file>art/syy.png</file>
         <file>art/jixu.png</file>
         <file>art/fanhui.png</file>
-        <file>art/choosecharacter.png</file>
         <file>art/choosevideo.png</file>
         <file>art/gls.png</file>
         <file>art/angry.png</file>
@@ -102,5 +101,19 @@
         <file>art/play.png</file>
         <file>art/novideo.png</file>
         <file>art/videoover.png</file>
+        <file>music/electricity.mp3</file>
+        <file>music/victory.mp3</file>
+        <file>music/whistle.mp3</file>
+        <file>music/shoot.mp3</file>
+        <file>music/bgm.mp3</file>
+        <file>music/frozen.mp3</file>
+        <file>music/bomb.mp3</file>
+        <file>music/die.mp3</file>
+        <file>music/roar.mp3</file>
+        <file>music/bomb.wav</file>
+        <file>music/die.wav</file>
+        <file>music/frozen.wav</file>
+        <file>music/roar.wav</file>
+        <file>art/choosecharacter.png</file>
     </qresource>
 </RCC>

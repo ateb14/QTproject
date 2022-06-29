@@ -3,8 +3,10 @@
 
 // #define DEBUG
 
-const QPixmap *player1Pixmap, *player2Pixmap,
-              *ballPixmap, *postPixmap, *bulletPixmap[PLAYER_TYPES], *SSBulletPixmap[PLAYER_TYPES];
+const QPixmap *player1Pixmap, *player2Pixmap,*ballPixmap, *postPixmap, *bulletPixmap[PLAYER_TYPES], *SSBulletPixmap[PLAYER_TYPES];
+QMediaPlayer *shootPlayer, *skillPlayer[PLAYER_TYPES], *victoryPlayer, *diePlayer, *whistlePlayer;
+QMediaPlaylist *shootPlaylist, *skillPlaylist[PLAYER_TYPES],*victoryPlaylist, *diePlaylist, *whistlePlaylist;
+double PLAYER_SPEED,PLAYER_ACCELERATION;
 
 int Game::winFreeTime = -1;
 bool Game::reviewMode = true;
@@ -13,7 +15,7 @@ std::string int2str(int integer);
 Game::Game(){
     setSceneRect(0,0,WIDTH,HEIGHT);
     winMode = HOME;
-    /* Music Player Init */
+    /* Music Players Init */
     cheersPlaylist = new QMediaPlaylist;
     cheersPlaylist->addMedia(QUrl(cheers1Src));
     cheersPlaylist->addMedia(QUrl(cheers2Src));
@@ -22,11 +24,44 @@ Game::Game(){
     cheersPlayer->setPlaylist(cheersPlaylist);
 
     backgroundPlaylist = new QMediaPlaylist;
-    backgroundPlaylist->addMedia(QUrl::fromLocalFile(backgroundMusic1Src));
+    //backgroundPlaylist->addMedia(QUrl::fromLocalFile(backgroundMusic1Src));
+    backgroundPlaylist->addMedia(QUrl(bgmSrc));
     backgroundPlaylist->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
     backgroundPlayer = new QMediaPlayer;
-    backgroundPlayer->setVolume(70);
+    backgroundPlayer->setVolume(50);
     backgroundPlayer->setPlaylist(backgroundPlaylist);
+
+    shootPlaylist = new QMediaPlaylist;
+    shootPlayer = new QMediaPlayer;
+    shootPlaylist->addMedia(QUrl(shootSrc));
+    shootPlaylist->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
+    shootPlayer->setPlaylist(shootPlaylist);
+
+    victoryPlaylist = new QMediaPlaylist;
+    victoryPlayer = new QMediaPlayer;
+    victoryPlaylist->addMedia(QUrl(victorySrc));
+    victoryPlaylist->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
+    victoryPlayer->setPlaylist(victoryPlaylist);
+
+    whistlePlaylist = new QMediaPlaylist;
+    whistlePlayer = new QMediaPlayer;
+    whistlePlaylist->addMedia(QUrl(whistleSrc));
+    whistlePlaylist->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
+    whistlePlayer->setPlaylist(whistlePlaylist);
+
+    diePlaylist = new QMediaPlaylist;
+    diePlayer = new QMediaPlayer;
+    diePlaylist->addMedia(QUrl(dieSrc));
+    diePlaylist->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
+    diePlayer->setPlaylist(diePlaylist);
+
+    for(int i=0;i<PLAYER_TYPES;++i){
+        skillPlaylist[i] = new QMediaPlaylist;
+        skillPlayer[i] = new QMediaPlayer;
+        skillPlaylist[i]->addMedia(QUrl(skillSrc[i]));
+        skillPlaylist[i]->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
+        skillPlayer[i]->setPlaylist(skillPlaylist[i]);
+    }
 
     /* Information Board Initializing */
     AIBoard = new QGraphicsTextItem;
@@ -34,7 +69,34 @@ Game::Game(){
     AIBoard->setPos(0,0);
     AIBoard->hide();
 
+    /* Resources Init */
+    ballPixmap = new QPixmap(ballSrc);
+    postPixmap = new QPixmap(postSrc);
+    for(int i = 0;i<PLAYER_TYPES;i++) bulletPixmap[i] = new QPixmap(bulletSrc[i]);
+    for(int i = 0;i<PLAYER_TYPES;i++) SSBulletPixmap[i] = new QPixmap(SSBulletSrc[i]);
+
     board = new GameBoard();
+}
+
+Game::~Game(){
+    delete cheersPlaylist;
+    delete cheersPlayer;
+    delete backgroundPlayer;
+    delete backgroundPlaylist;
+    delete shootPlaylist;
+    delete shootPlayer;
+    delete whistlePlayer;
+    delete whistlePlaylist;
+    delete victoryPlayer;
+    delete victoryPlaylist;
+    delete diePlayer;
+    delete diePlaylist;
+    for(int i = 0;i<PLAYER_TYPES;i++) delete bulletPixmap[i];
+    for(int i = 0;i<PLAYER_TYPES;i++) delete SSBulletPixmap[i];
+    for(int i = 0;i<PLAYER_TYPES;i++) delete skillPlayer[i];
+    for(int i = 0;i<PLAYER_TYPES;i++) delete skillPlaylist[i];
+    delete ballPixmap;
+    delete postPixmap;
 }
 
 /* keyboard reading */
@@ -72,6 +134,7 @@ void Game::keyPressEvent(QKeyEvent *event){
         }
         case Qt::Key_Escape:{
             if(winMode == GAMING){
+                whistlePlayer->play();
                 pause();
                 emit gameispause();
             }
@@ -195,7 +258,6 @@ void Game::setTimerT(int T_){
 
 void Game::start(bool reviewMode){
     Game::reviewMode = reviewMode;
-    emit refreshBoard(gameSettings.player1Type, gameSettings.player2Type);
     /* GAMING Mode On */
     this->winMode = GAMING;
     isGameOver = false;
@@ -238,13 +300,6 @@ void Game::start(bool reviewMode){
     memset(boardInfo.player1Buff,false,BUFF_TYPE_CNT);
     memset(boardInfo.player2Buff,false,BUFF_TYPE_CNT);
 
-
-    /* Resources Init */
-    ballPixmap = new QPixmap(ballSrc);
-    postPixmap = new QPixmap(postSrc);
-    for(int i = 0;i<PLAYER_TYPES;i++) bulletPixmap[i] = new QPixmap(bulletSrc[i]);
-    for(int i = 0;i<PLAYER_TYPES;i++) SSBulletPixmap[i] = new QPixmap(SSBulletSrc[i]);
-
     /* Review Mode */
     infoReader = 0;
     gameInfos.clear();
@@ -265,6 +320,15 @@ void Game::start(bool reviewMode){
             inFile.close();
         }
     }
+
+    emit refreshBoard(gameSettings.player1Type, gameSettings.player2Type);
+    /* Speed Init */
+    switch (gameSettings.playerSpeed){
+        case HIGH: PLAYER_SPEED = DEFAULT_PLAYER_SPEED*1.2;break;
+        case MIDDLE: PLAYER_SPEED = DEFAULT_PLAYER_SPEED;break;
+        case LOW:PLAYER_SPEED = DEFAULT_PLAYER_SPEED*0.8;break;
+    }
+    PLAYER_ACCELERATION = PLAYER_SPEED/TIME_TO_REACH_MAX_SPEED;
 
     /* Player Init */
     player1DeadTime = -1;
@@ -299,6 +363,8 @@ void Game::endGame(){
     backgroundPlayer->stop();
     cheersPlayer->stop();
     delete this->timer;
+    delete player1Pixmap;
+    delete player2Pixmap;
     for(GameObject * it:this->gameObjects){
         delete it;
     }
@@ -456,6 +522,7 @@ void Game::goalCheck(){
 void Game::healthCheck(){
     if(player1->getHealth() == 0){
         if(player1DeadTime < 0){
+            diePlayer->play();
             player1DeadTime = DeadTime;
             player1->setPos(-20,-20);
             player1->hide();
@@ -471,6 +538,7 @@ void Game::healthCheck(){
     }
     if(player2->getHealth() == 0){
         if(player2DeadTime < 0){
+            diePlayer->play();
             player2DeadTime = DeadTime;
             player2->setPos(WIDTH+20,HEIGHT+20);
             player2->hide();
@@ -568,23 +636,29 @@ void Game::updateGame()
     /* Winner Check */
     if(gameSettings.gameFormat == TWO_THREE){
         if(boardInfo.player1BigScore >= 2){
+            victoryPlayer->play();
             isGameOver = true;
             pause();
+            std::cout << reviewMode << std::endl;
             emit gameOver(1,reviewMode);
         }
         else if(boardInfo.player2BigScore >= 2){
+            victoryPlayer->play();
             isGameOver = true;
             pause();
+            std::cout << reviewMode << std::endl;
             emit gameOver(2,reviewMode);
         }
     }
     else if(gameSettings.gameFormat == THREE_FIVE){
         if(boardInfo.player1BigScore >= 3){
+            victoryPlayer->play();
             isGameOver = true;
             pause();
             emit gameOver(1,reviewMode);
         }
         else if(boardInfo.player2BigScore >= 3){
+            victoryPlayer->play();
             isGameOver = true;
             pause();
             emit gameOver(2,reviewMode);
