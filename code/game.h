@@ -53,6 +53,7 @@ class Game: public QGraphicsScene{
     Q_OBJECT
 public:
     Game();
+    ~Game();
     friend class GameObject;
     friend class GamePlayer;
     friend class GameBall;
@@ -152,7 +153,7 @@ signals:
     void removePlayer1Buff(int buff);
     void removePlayer2Buff(int buff);
     void refreshBoard(PlayerType player1, PlayerType player2);
-    void gameOver(int winner,bool reviewMode = false);
+    void gameOver(int winner,bool reviewMode);
 };
 
 #endif // !GAME_H

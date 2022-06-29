@@ -1,7 +1,10 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include <QMediaPlayer>
 #include <QGraphicsItem>
+#include <QMediaPlaylist>
+#define WAV
 
 /**
   * 这个文件里定义了所有游戏的的全局变量。
@@ -49,14 +52,15 @@ const int HEIGHT = 800;
 const int PLAYER_RADIUS = 30;
 const int PLAYER_HEALTH = 100;
 const int PLAYER_SKILL_POINT_LIMIT = 100;
-const double PLAYER_SPEED = 3.0;
+extern double PLAYER_SPEED;
+const double DEFAULT_PLAYER_SPEED = 3.0;
 const double PLAYER_MASS = 2.0;
 const double PLAYER_VELOCITY_DECAY = 0.97;
 const double TIME_TO_REACH_MAX_SPEED = 20;
-const double PLAYER_ACCELERATION = PLAYER_SPEED/TIME_TO_REACH_MAX_SPEED;
+extern double PLAYER_ACCELERATION;
 const int PLAYER_SHOOTING_CD = 1*1000/defaultT; // 1s
 const int PLAYER_SKILL_POINT_GAIN_CD = 0.1*1000/defaultT; // 10s回满
-const int DeadTime = 300; // 3s复活
+const int DeadTime = 400; // 4s复活
 
 const double BULLET_SPEED = 7.0;
 const double BULLET_MASS = 0.5;
@@ -77,7 +81,7 @@ const double INFINITE_MASS = 1919810.114514;
 
 // 技能威力
 const int BUFF_TIME = 5*1000/defaultT; // 5 seconds
-const double MAGNET_FORCE = BALL_MASS*40.0;
+const double MAGNET_FORCE = BALL_MASS*20.0;
 
 
 // 以下是资源：
@@ -112,12 +116,32 @@ const char santaSrc[] = ":/art/santa.png";
 
 /* エレキ・デ・チョコボ 植松伸夫 */
 const char backgroundMusic1Src[] = "./music/bg1.mp3";
+const char bgmSrc[] = "qrc:///music/bgm.mp3";
 
+//以下音效均来自https://sc.chinaz.com/yinxiao/
 const char cheers1Src[] = "qrc:///music/cheers1.mp3";
 const char cheers2Src[] = "qrc:///music/cheers2.mp3";
+const char shootSrc[] = "qrc:///music/shoot.mp3";
+const char whistleSrc[] = "qrc:///music/whistle.mp3";
+const char victorySrc[] = "qrc:///music/victory.mp3";
+#ifdef MP3
+const char dieSrc[] = "qrc:///music/die.mp3";
+const char skillSrc[PLAYER_TYPES][64] ={
+    "qrc:///music/electricity.mp3","qrc:///music/frozen.mp3","qrc:///music/bomb.mp3","qrc:///music/roar.mp3"
+};
+#endif
+#ifdef WAV
+const char dieSrc[] = "qrc:///music/die.wav";
+const char skillSrc[PLAYER_TYPES][64] ={
+    "qrc:///music/electricity.mp3","qrc:///music/frozen.wav","qrc:///music/bomb.wav","qrc:///music/roar.wav"
+};
+#endif
 
 // 资源对象
 extern const QPixmap *player1Pixmap, *player2Pixmap,
                      *ballPixmap, *postPixmap, *bulletPixmap[PLAYER_TYPES], *SSBulletPixmap[PLAYER_TYPES];
+
+extern QMediaPlayer *shootPlayer, *skillPlayer[PLAYER_TYPES], *victoryPlayer, *diePlayer, *whistlePlayer;
+extern QMediaPlaylist *shootPlaylist, *skillPlaylist[PLAYER_TYPES], *victoryPlaylist, *diePlaylist, *whistlePlaylist;
 
 #endif // CONFIG_H
