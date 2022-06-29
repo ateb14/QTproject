@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "config.h"
 
+
 class newGameSetting : public QWidget
 {
     Q_OBJECT

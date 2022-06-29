@@ -210,6 +210,7 @@ void tocinemaWindow(){
     gametitle->hide();
     cinemamodewindow->init();
     cinemamodewindow->show();
+    cinemamodewindow->movein();
 }
 
 void startgame(){
