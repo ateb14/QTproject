@@ -24,6 +24,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <QDateTime>
 
 
 enum windowMode{
@@ -104,10 +105,16 @@ private:
     GameSettings gameSettings;
     /* Player Satus */
     int player1DeadTime, player2DeadTime;
+    /* Game Status */
+    bool isGameOver;
+    /* Record File Position */
+    string recSrc;
 public:
     GameBoard *getBoard();
     void playRecord(QString fileSrc);
     void setTimerT(int T_=10);
+    void saveRecord();
+    void setRecSrc(const QString &src);
     void setGlobalVars(PlayerType player1Type_=LOVEMAN, PlayerType player2Type_=LOVEMAN,
                        GameFormat gameFormat_=TWO_THREE, PlayerSpeed playerSpeed_=MIDDLE,bool enemyMode=true);
 private:

@@ -75,7 +75,7 @@ void Game::keyPressEvent(QKeyEvent *event){
                 pause();
                 emit gameispause();
             }
-            else if(winMode == MENU){
+            else if(winMode == MENU && !isGameOver){
                 continueGame();
                 emit gamecontinue();
             }
@@ -125,7 +125,7 @@ ActionSet Game::parseKeyboard(int playerID){
         // Todo
         // shooting parser
     }
-    else if(playerID==2 && player2DeadTime < 0 && winFreeTime < 0){
+    else if(playerID==2 && player2DeadTime < 0){
         if(isPressingUp) res.addAction(UP);
         if(isPressingLeft) res.addAction(LEFT);
         if(isPressingDown) res.addAction(DOWN);
@@ -198,6 +198,7 @@ void Game::start(bool reviewMode){
     emit refreshBoard(gameSettings.player1Type, gameSettings.player2Type);
     /* GAMING Mode On */
     this->winMode = GAMING;
+    isGameOver = false;
 
     /* Initialize the clock */
     T = defaultT;
@@ -275,18 +276,16 @@ void Game::start(bool reviewMode){
     /* Review Mode */
     infoReader = 0;
     if(Game::reviewMode == true){
-        ifstream inFile("./record.dat",ios::in|ios::binary);
+        ifstream inFile(recSrc.c_str(),ios::in|ios::binary);
         if(!inFile){
-            //Todo
-            //throw Exception
+            isGameOver = true;
+            emit gameOver(1);
         }
         else{
+            inFile.read((char *) & gameSettings, sizeof(gameSettings));
             gameInfo info;
             while(inFile.read((char *) & info, sizeof(info))){
                 gameInfos.push_back(info);
-#ifdef DEBUG
-                std::cout << info.interval << " " << info.action1.actions << " " << info.action2.actions << std::endl;
-#endif
             }
             inFile.close();
         }
@@ -302,14 +301,24 @@ void Game::endGame(){
         delete it;
     }
     gameObjects.clear();
-    /* Record Record */
+}
+
+void Game::setRecSrc(const QString & str){
+    string name = "./record/"+str.toStdString()+".dat";
+    recSrc = name;
+}
+
+void Game::saveRecord(){
+    QDateTime timeCurrent = QDateTime::currentDateTime();
+    QString time = timeCurrent.toString("yy-MM-dd_hh-mm-ss");
+    string dst = "./record/"+time.toStdString()+".dat";
     if(Game::reviewMode == false){
-        ofstream outFile("./record.dat",ios::out|ios::binary);
+        ofstream outFile(dst.c_str(),ios::out|ios::binary);
+        // Save Global Settings
+        outFile.write((char *)&gameSettings,sizeof(gameSettings));
         int len = gameInfos.size();
+        // Save Control Information
         for(int i=0;i<len;++i){
-#ifdef DEBUG
-                std::cout << gameInfos[i].interval << " " << gameInfos[i].action1.actions << " " << gameInfos[i].action2.actions << std::endl;
-#endif
             outFile.write((char *)&gameInfos[i], sizeof(gameInfos[i]));
         }
         outFile.close();
@@ -533,20 +542,24 @@ void Game::updateGame()
     /* Winner Check */
     if(gameSettings.gameFormat == TWO_THREE){
         if(boardInfo.player1BigScore >= 2){
+            isGameOver = true;
             pause();
             emit gameOver(1);
         }
         else if(boardInfo.player2BigScore >= 2){
+            isGameOver = true;
             pause();
             emit gameOver(2);
         }
     }
     else if(gameSettings.gameFormat == THREE_FIVE){
         if(boardInfo.player1BigScore >= 3){
+            isGameOver = true;
             pause();
             emit gameOver(1);
         }
         else if(boardInfo.player2BigScore >= 3){
+            isGameOver = true;
             pause();
             emit gameOver(2);
         }
@@ -563,12 +576,7 @@ void Game::updateGame()
         curInfo.interval = globalTime;
         curInfo.action1 = parseKeyboard(1);
         curInfo.action2 = parseKeyboard(2);
-        if(curInfo.action1.actions != 0 || curInfo.action2.actions !=0){
-#ifdef DEBUG
-            std::cout << curInfo.interval << " " << curInfo.action1.actions << " " << curInfo.action2.actions << std::endl;
-#endif
-            gameInfos.push_back(curInfo);
-        }
+        gameInfos.push_back(curInfo);
         player1->playerAct(curInfo.action1);
         player2->playerAct(curInfo.action2);
     }
