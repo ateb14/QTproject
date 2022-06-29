@@ -3,17 +3,18 @@
 #include "config.h"
 
 GameItem::GameItem(int x, int y, const QPixmap *pixmap_, QGraphicsScene *scene_,
-                   BuffType buffType_, int remainTime_):
+                   BuffType buffType_, int remainTime_, int buffTime_):
     GameObject(x, y, ITEM_RADIUS, INFINITE_MASS, pixmap_, scene_)
 {
     buffType = buffType_;
     remainTime = remainTime_;
+    buffTime = buffTime_;
 }
 
 void GameItem::eatenBy(GameObject *obj)
 {
     if(obj->type!=ObjectType::Player) return;
-    ((GamePlayer *)obj)->addBuff(this->buffType, BUFF_TIME);
+    ((GamePlayer *)obj)->addBuff(this->buffType, buffTime);
 }
 
 void GameItem::collides(GameObject *obj)

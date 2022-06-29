@@ -8,11 +8,11 @@ class GameItem : public GameObject
 {
 public:
     GameItem(int x, int y, const QPixmap *pixmap_, QGraphicsScene *scene_,
-             BuffType buffType_, int remainTime_);
-
+             BuffType buffType_, int remainTime_, int buffTime_);
 private:
     BuffType buffType;
     int remainTime;
+    int buffTime;
     virtual void updateInGame();
     virtual void eatenBy(GameObject *obj);
     virtual void collides(GameObject *obj);

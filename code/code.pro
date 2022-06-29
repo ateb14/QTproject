@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     pressanykeywindow.cpp \
     mylabel.cpp \
     boardwindow.cpp \
-    cinemawindow.cpp
+    cinemawindow.cpp \
+    item.cpp
 
 HEADERS  += \
     game.h \
@@ -47,7 +48,8 @@ HEADERS  += \
     pressanykeywindow.h \
     mylabel.h \
     boardwindow.h \
-    cinemawindow.h
+    cinemawindow.h \
+    item.h
 
 FORMS    +=
 

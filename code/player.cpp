@@ -51,6 +51,31 @@ void GamePlayer::setOpponent(GamePlayer *opponent_){this->opponent = opponent_;}
 void GamePlayer::addBuff(BuffType buffType, int time)
 {
     this->hasBuff[buffType] = max(this->hasBuff[buffType], time);
+    switch(buffType){
+        case FREEZE:{
+        if(hasBuff[SPEED] >= time){
+            hasBuff[SPEED] -= time;
+            return;
+        }
+        else{
+            hasBuff[buffType] = time - hasBuff[SPEED];
+            hasBuff[SPEED] = 0;
+            return;
+        }
+    }
+    case SPEED:{
+        if(hasBuff[FREEZE] >= time){
+            hasBuff[FREEZE] -= time;
+            return;
+        }
+        else{
+            hasBuff[buffType] = time - hasBuff[FREEZE];
+            hasBuff[FREEZE] = 0;
+            return;
+        }
+    }
+    }
+    this->hasBuff[buffType] = max(this->hasBuff[buffType], time);
 }
 
 /* Keyboard Control */
