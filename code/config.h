@@ -64,7 +64,7 @@ const int DeadTime = 400; // 4s复活
 
 const double BULLET_SPEED = 7.0;
 const double BULLET_MASS = 0.5;
-const int BULLET_RADIUS = 10;
+const int BULLET_RADIUS = 15;
 const int BULLET_DAMAGE = 10;
 const int BULLET_TIME_TO_DESPAWN = 3*100;
 
