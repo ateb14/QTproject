@@ -9,6 +9,8 @@ class cinemaWindow : public QWidget
 public:
     explicit cinemaWindow(QWidget *parent = 0);
     void init();
+    void movein();
+    void moveout();
 
 signals:
     void startreview(QString cinemafilepath);
