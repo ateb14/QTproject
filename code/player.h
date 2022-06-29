@@ -52,6 +52,7 @@ public:
 private:
     // attributes
     int health;
+    int maxHealth;
     int skillPoint;
     double speed; // 最高速度（单位：像素/帧）
     int shootingCD; // 当前设计CD（单位：帧）
@@ -70,6 +71,8 @@ private:
 protected:
     std::list<GameObject *> *gameObjects;
     GamePlayer *opponent; // 对手
+
+    friend class GameItem;
 
 };
 
