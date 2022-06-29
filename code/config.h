@@ -81,6 +81,7 @@ const double INFINITE_MASS = 1919810.114514;
 
 // 道具
 const int ITEM_RADIUS = 20;
+const int ITEM_NUM = 5;
 
 // 技能威力
 const int BUFF_TIME = 5*1000/defaultT; // 5 seconds
@@ -99,6 +100,9 @@ const char player1Src[] = ":/art/liuhan.png";
 const char player2Src[] = ":/art/kuqi.png";
 const char ballSrc[] = ":/art/football.png";
 const char postSrc[] = ":/art/post.png";
+const char itemSrc[ITEM_NUM][64] = {
+    ":/art/speed.png", ":art/chicken.png", ":art/rage.png", ":art/magnet.png", ":art/star.png"
+};
 
 // 子弹贴图
 const int PLAYER_TYPES = 4;
@@ -146,7 +150,8 @@ const char skillSrc[PLAYER_TYPES][64] ={
 
 // 资源对象
 extern const QPixmap *player1Pixmap, *player2Pixmap, *frozenManPMap, *hotManPMap,*magnetManPMap,
-                     *ballPixmap, *postPixmap, *bulletPixmap[PLAYER_TYPES], *SSBulletPixmap[PLAYER_TYPES];
+                     *ballPixmap, *postPixmap, *bulletPixmap[PLAYER_TYPES], *SSBulletPixmap[PLAYER_TYPES],
+                     *itemPMap[ITEM_NUM];
 
 extern QMediaPlayer *shootPlayer, *skillPlayer[PLAYER_TYPES], *victoryPlayer, *diePlayer, *whistlePlayer;
 extern QMediaPlaylist *shootPlaylist, *skillPlaylist[PLAYER_TYPES], *victoryPlaylist, *diePlaylist, *whistlePlaylist;
