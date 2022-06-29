@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>art/start.png</file>
         <file>art/welcome.jpg</file>
         <file>art/background.png</file>
         <file>art/myplane.png</file>
@@ -115,5 +114,7 @@
         <file>music/frozen.wav</file>
         <file>music/roar.wav</file>
         <file>art/choosecharacter.png</file>
+        <file>art/start.png</file>
+        <file>art/icon.ico</file>
     </qresource>
 </RCC>

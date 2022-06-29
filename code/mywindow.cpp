@@ -287,8 +287,8 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
     gametitle=new myLabel(":/art/title.png",this);
     gametitle->move(335,0-gametitle->height());
 
-
-    setWindowTitle("Game");
+    setWindowIcon(QIcon("://art/icon.ico"));
+    setWindowTitle("砰碰砰大乱斗");
     ef = new QGraphicsBlurEffect;
     ef2 = new QGraphicsBlurEffect;
     /* Start */
