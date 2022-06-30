@@ -29,7 +29,7 @@ Game::Game(){
     backgroundPlaylist->addMedia(QUrl(bgmSrc));
     backgroundPlaylist->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
     backgroundPlayer = new QMediaPlayer;
-    backgroundPlayer->setVolume(50);
+    backgroundPlayer->setVolume(0);
     backgroundPlayer->setPlaylist(backgroundPlaylist);
 
     shootPlaylist = new QMediaPlaylist;
@@ -628,6 +628,7 @@ void Game::newObjectCheck(){
 }
 
 void Game::createItems(){
+    if(!gameSettings.enemyMode) return;
     if(globalTime > 0 && globalTime % (11*100) == 0){
         int type = (globalTime/11/100) % 5;
         GameItem *item;
