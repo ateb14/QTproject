@@ -35,6 +35,7 @@ void GameObject::setVelocity(double vx_, double vy_){vx = vx_, vy = vy_;} // 设
 
 bool GameObject::collideJudge(GameObject *obj) // 检测是否与另一物体碰撞
 {
+    if(type == Item) {std::cout << "judge item" << std::endl;}
     double dx = obj->centerX()-this->centerX();
     double dy = obj->centerY()-this->centerY();
     double dz = sqrt(dx*dx+dy*dy);

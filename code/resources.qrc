@@ -117,5 +117,6 @@
         <file>art/bottle.png</file>
         <file>art/choosevideo.png</file>
         <file>art/star.png</file>
+        <file>music/pick.wav</file>
     </qresource>
 </RCC>

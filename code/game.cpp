@@ -5,8 +5,8 @@
 
 const QPixmap *player1Pixmap, *player2Pixmap,*ballPixmap, *postPixmap, *bulletPixmap[PLAYER_TYPES], *SSBulletPixmap[PLAYER_TYPES],
 *frozenManPMap, *hotManPMap, *magnetManPMap, *itemPMap[ITEM_NUM];
-QMediaPlayer *shootPlayer, *skillPlayer[PLAYER_TYPES], *victoryPlayer, *diePlayer, *whistlePlayer;
-QMediaPlaylist *shootPlaylist, *skillPlaylist[PLAYER_TYPES],*victoryPlaylist, *diePlaylist, *whistlePlaylist;
+QMediaPlayer *shootPlayer, *skillPlayer[PLAYER_TYPES], *victoryPlayer, *diePlayer, *whistlePlayer, *pickPlayer;
+QMediaPlaylist *shootPlaylist, *skillPlaylist[PLAYER_TYPES],*victoryPlaylist, *diePlaylist, *whistlePlaylist, *pickPlaylist;
 double PLAYER_SPEED,PLAYER_ACCELERATION;
 
 int Game::winFreeTime = -1;
@@ -55,6 +55,12 @@ Game::Game(){
     diePlaylist->addMedia(QUrl(dieSrc));
     diePlaylist->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
     diePlayer->setPlaylist(diePlaylist);
+
+    pickPlaylist = new QMediaPlaylist;
+    pickPlayer = new QMediaPlayer;
+    pickPlaylist->addMedia(QUrl(pickSrc));
+    pickPlaylist->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
+    pickPlayer->setPlaylist(pickPlaylist);
 
     for(int i=0;i<PLAYER_TYPES;++i){
         skillPlaylist[i] = new QMediaPlaylist;
@@ -622,15 +628,15 @@ void Game::newObjectCheck(){
 }
 
 void Game::createItems(){
-    if(globalTime > 0 && globalTime % (15*100) == 0){
-        int type = globalTime % 5;
+    if(globalTime > 0 && globalTime % (11*100) == 0){
+        int type = (globalTime/11/100) % 5;
         GameItem *item;
         switch(type){
-        case 0:item = new GameItem(WIDTH/2, HEIGHT/2, itemPMap[type],this,SPEED,6*100,3*100);break; //speed
-        case 1:item = new GameItem(WIDTH/2, HEIGHT/2, itemPMap[type],this,SPEED,6*100,0);break; //health
-        case 2:item = new GameItem(WIDTH/2, HEIGHT/2, itemPMap[type],this,RAGE,6*100,3*100);break; //rage
-        case 3:item = new GameItem(WIDTH/2, HEIGHT/2, itemPMap[type],this,MAGNET,6*100,3*100);break; //magnet
-        case 4:item = new GameItem(WIDTH/2, HEIGHT/2, itemPMap[type],this,SPEED,6*100,0);break; //power
+        case 0:item = new GameItem(WIDTH/2, HEIGHT/2, itemPMap[type],this,SPEED,5*100,3*100,0,0);break; //speed
+        case 1:item = new GameItem(WIDTH/2, HEIGHT/2, itemPMap[type],this,SPEED,5*100,0,40,0);break; //health
+        case 2:item = new GameItem(WIDTH/2, HEIGHT/2, itemPMap[type],this,RAGE,5*100,3*100,0,0);break; //rage
+        case 3:item = new GameItem(WIDTH/2, HEIGHT/2, itemPMap[type],this,MAGNET,5*100,3*100,0,0);break; //magnet
+        case 4:item = new GameItem(WIDTH/2, HEIGHT/2, itemPMap[type],this,SPEED,5*100,0,0,40);break; //power
         }
         gameObjects.push_back(item);
     }
@@ -786,6 +792,9 @@ void Game::updateGame()
     // call Function for all object->fetchGeneratedObject() returns vector<GameObject *>
     newObjectCheck();
 
+    /* Generate Items */
+    createItems();
+
     /* Update Objects in the scene */
     for(GameObject *ptr: this->gameObjects)
     {
@@ -796,9 +805,6 @@ void Game::updateGame()
 
     /* Health Check */
     healthCheck();
-
-    /* Generate Items */
-    createItems();
 
     /* ball position */
     goalCheck();

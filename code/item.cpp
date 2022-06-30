@@ -7,6 +7,7 @@ GameItem::GameItem(int x, int y, const QPixmap *pixmap_, QGraphicsScene *scene_,
                    int gainHP_, int gainSkillPoint_):
     GameObject(x, y, ITEM_RADIUS, INFINITE_MASS, pixmap_, scene_)
 {
+    type = ObjectType::Item;
     buffType = buffType_;
     remainTime = remainTime_;
     buffTime = buffTime_;
@@ -19,10 +20,12 @@ void GameItem::eatenBy(GameObject *obj)
     if(obj->type!=ObjectType::Player) return;
     GamePlayer *player = (GamePlayer *)obj;
     player->addBuff(this->buffType, buffTime);
-    player->health = max(player->health+this->gainHP,
+    player->health = min(player->health+this->gainHP,
                          player->maxHealth);
-    player->skillPoint = max(player->skillPoint+this->gainSkillPoint,
+    player->skillPoint = min(player->skillPoint+this->gainSkillPoint,
                              PLAYER_SKILL_POINT_LIMIT);
+    isDead = true;
+    pickPlayer->play();
 }
 
 void GameItem::collides(GameObject *obj)
@@ -40,6 +43,7 @@ void GameItem::updateInGame()
 {
     // 道具不会动
     this->setVelocity(0, 0);
-
+    --remainTime;
+    if(remainTime <= 0) isDead = true;
     GameObject::updateInGame();
 }

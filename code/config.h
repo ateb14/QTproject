@@ -65,7 +65,7 @@ const int DeadTime = 400; // 4s复活
 const double BULLET_SPEED = 7.0;
 const double BULLET_MASS = 0.5;
 const int BULLET_RADIUS = 15;
-const int BULLET_DAMAGE = 20;
+const int BULLET_DAMAGE = 10;
 const int BULLET_TIME_TO_DESPAWN = 3*100;
 
 //BUFF
@@ -134,7 +134,8 @@ const char cheers1Src[] = "qrc:///music/cheers1.mp3";
 const char cheers2Src[] = "qrc:///music/cheers2.mp3";
 const char shootSrc[] = "qrc:///music/shoot.mp3";
 const char whistleSrc[] = "qrc:///music/whistle.mp3";
-const char victorySrc[] = "qrc:///music/victory.mp3";
+const char victorySrc[] = "qrc:///music/victory.mp3";\
+const char pickSrc[] = "qrc:///music/pick.wav";
 #ifdef MP3
 const char dieSrc[] = "qrc:///music/die.mp3";
 const char skillSrc[PLAYER_TYPES][64] ={
@@ -153,7 +154,7 @@ extern const QPixmap *player1Pixmap, *player2Pixmap, *frozenManPMap, *hotManPMap
                      *ballPixmap, *postPixmap, *bulletPixmap[PLAYER_TYPES], *SSBulletPixmap[PLAYER_TYPES],
                      *itemPMap[ITEM_NUM];
 
-extern QMediaPlayer *shootPlayer, *skillPlayer[PLAYER_TYPES], *victoryPlayer, *diePlayer, *whistlePlayer;
-extern QMediaPlaylist *shootPlaylist, *skillPlaylist[PLAYER_TYPES], *victoryPlaylist, *diePlaylist, *whistlePlaylist;
+extern QMediaPlayer *shootPlayer, *skillPlayer[PLAYER_TYPES], *victoryPlayer, *diePlayer, *whistlePlayer, *pickPlayer;
+extern QMediaPlaylist *shootPlaylist, *skillPlaylist[PLAYER_TYPES], *victoryPlaylist, *diePlaylist, *whistlePlaylist, *pickPlaylist;
 
 #endif // CONFIG_H
