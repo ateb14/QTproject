@@ -4,6 +4,7 @@
 #include "mylabel.h"
 #include<QTimer>
 
+
 myBtn *backBtn=NULL;
 myBtn *continueBtn = NULL;
 myBtn *exitBtn=NULL;

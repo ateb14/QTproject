@@ -11,6 +11,7 @@ class myBtn : public QPushButton
 public:
 //    explicit myBtn(QWidget *parent = 0);
     myBtn(QString Img,QWidget *parent);
+    ~myBtn();
     void changeImg(QString Img);
     QString ImgPath;
     QPropertyAnimation *ani1;

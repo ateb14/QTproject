@@ -10,6 +10,7 @@ class cinemaWindow : public QWidget
 
 public:
     explicit cinemaWindow(QWidget *parent = 0);
+    ~cinemaWindow();
     void init();
     void movein();
     void moveout();

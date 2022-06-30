@@ -155,3 +155,12 @@ void cinemaWindow::moveout(){
         choosebtn[i]->move(1490,250+i*105);
     }
 }
+
+cinemaWindow::~cinemaWindow(){
+    delete aniback;
+    delete anicinema;
+    for(int i=0;i<6;++i){
+        delete aniname[i];
+        delete aniplay[i];
+    }
+}

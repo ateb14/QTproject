@@ -1,6 +1,6 @@
 #include "boardwindow.h"
 #include "mylabel.h"
-#include <QPropertyAnimation>
+
 
 myLabel *boardbg;
 myLabel *player1name;
@@ -17,10 +17,6 @@ myLabel *player2health;
 myLabel *player2power;
 myLabel *player1buff[3];
 myLabel *player2buff[3];
-QPropertyAnimation *anihealth1;
-QPropertyAnimation *anihealth2;
-QPropertyAnimation *anipower1;
-QPropertyAnimation *anipower2;
 QString scorepic[6]={":/art/zero.png",":/art/one.png",":/art/two.png",":/art/three.png",":/art/four.png",":/art/five.png"};
 QString buffpic[4]={":/art/speedsmall.png",":/art/freezesmall.png",":/art/magnetsmall.png",":/art/ragesmall.png"};
 
@@ -322,3 +318,9 @@ void boardWindow::removebuff2(int num){
     }
 }
 
+boardWindow::~boardWindow(){
+    delete anihealth1;
+    delete anihealth2;
+    delete anipower1;
+    delete anipower2;
+}
