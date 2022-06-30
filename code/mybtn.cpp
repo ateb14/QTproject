@@ -7,8 +7,8 @@
 //{
 
 //}
-QSound *presssound=new  QSound(":/music/mousepress.wav");
-QSound *releasesound=new  QSound(":/music/mouserelease.wav");
+QSound presssound(":/music/mousepress.wav");
+QSound releasesound(":/music/mouserelease.wav");
 
 
 //音效来自网络
@@ -24,6 +24,10 @@ myBtn::myBtn(QString Img,QWidget *parent){
     setParent(parent);
     ani1 = new QPropertyAnimation(this,"geometry");
     ani2 = new QPropertyAnimation(this,"geometry");
+    ani1->setDuration(100);
+    ani1->setEasingCurve(QEasingCurve::OutBounce);
+    ani2->setDuration(100);
+    ani2->setEasingCurve(QEasingCurve::OutBounce);
     connect(this,&myBtn::clicked,[=](){
         QTimer::singleShot(100,this,[=](){
             emit btnClicked();
@@ -46,21 +50,17 @@ void myBtn::changeImg(QString Img){
 }
 
 void myBtn::press(){
-    presssound->play();    
-    ani1->setDuration(100);
+    presssound.play();
     ani1->setStartValue(QRect(this->x(),posy,this->width(),this->height()));
-    ani1->setEndValue(QRect(this->x(), posy_dy,this->width(),this->height()));
-    ani1->setEasingCurve(QEasingCurve::OutBounce);
+    ani1->setEndValue(QRect(this->x(), posy_dy,this->width(),this->height()));    
     ani1->start();
 
 }
 
 void myBtn::release(){
-    releasesound->play();   
-    ani2->setDuration(100);
+    releasesound.play();
     ani2->setStartValue(QRect(this->x(),this->y(),this->width(),this->height()));
-    ani2->setEndValue(QRect(this->x(),posy,this->width(),this->height()));
-    ani2->setEasingCurve(QEasingCurve::OutBounce);
+    ani2->setEndValue(QRect(this->x(),posy,this->width(),this->height()));   
     QTimer::singleShot(100,this,[=](){
         ani2->start();
     });
@@ -91,5 +91,8 @@ void myBtn::mouseReleaseEvent(QMouseEvent *ev)
     return QPushButton::mouseReleaseEvent(ev);
 }
 
-
+myBtn::~myBtn(){
+    if(ani1) delete ani1;
+    if(ani2) delete ani2;
+}
 

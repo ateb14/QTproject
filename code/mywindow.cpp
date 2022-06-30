@@ -14,14 +14,13 @@
 #include <boardwindow.h>
 #include <cinemawindow.h>
 
+myLabel *mainbg;
 Game * gameWindow=NULL;
 QGraphicsView *view=NULL;
 boardWindow *view2 =NULL;
 myBtn *quitBtn=NULL;
 myBtn *startBtn=NULL;
 myBtn *cinemaBtn=NULL;
-QGraphicsBlurEffect* ef=NULL;
-QGraphicsBlurEffect* ef2=NULL;
 pausewindow *pauseWindow =NULL;
 newGameSetting *newgameWindow=NULL;
 cinemaWindow *cinemamodewindow=NULL;
@@ -33,13 +32,23 @@ myLabel *duola;
 myLabel *red;
 myLabel *gametitle;
 QTimer *duolatimer;
+QGraphicsBlurEffect* ef;
+QGraphicsBlurEffect* ef2;
 QPropertyAnimation *duolaani;
+QPropertyAnimation *ani1;
+QPropertyAnimation *ani2;
+QPropertyAnimation *ani3;
+QPropertyAnimation *ani4;
+QPropertyAnimation *ani5;
+QPropertyAnimation *ani6;
+QPropertyAnimation *ani7;
+QPropertyAnimation *ani8;
+
 
 
 
 //哆啦A梦弹出
 void duolajump(){
-    duolaani = new QPropertyAnimation(duola,"geometry");
     duolaani->setDuration(800);
     duolaani->setStartValue(QRect(12,1001,duola->width(),duola->height()));
     duolaani->setEndValue(QRect(12,665,duola->width(),duola->height()));
@@ -68,45 +77,37 @@ void duolamoving(){
 
 //控件进入画面的动画
 void allmovein(){
-    QPropertyAnimation *ani1 = new QPropertyAnimation(startboard,"geometry");
     ani1->setDuration(300);
     ani1->setStartValue(QRect(450,1001,startboard->width(),startboard->height()));
     ani1->setEndValue(QRect(450,750,startboard->width(),startboard->height()));
 
-    QPropertyAnimation *ani2 = new QPropertyAnimation(cinemaboard,"geometry");
     ani2->setDuration(300);
     ani2->setStartValue(QRect(700,1001,cinemaboard->width(),cinemaboard->height()));
     ani2->setEndValue(QRect(700,750,cinemaboard->width(),cinemaboard->height()));
 
-    QPropertyAnimation *ani3 = new QPropertyAnimation(exitboard,"geometry");
     ani3->setDuration(300);
     ani3->setStartValue(QRect(950,1001,exitboard->width(),exitboard->height()));
     ani3->setEndValue(QRect(950,750,exitboard->width(),exitboard->height()));
 
-    QPropertyAnimation *ani4 = new QPropertyAnimation(startBtn,"geometry");
     ani4->setDuration(400);
     ani4->setStartValue(QRect(480,1001,startBtn->width(),startBtn->height()));
     ani4->setEndValue(QRect(480,802,startBtn->width(),startBtn->height()));
     ani4->setEasingCurve(QEasingCurve::OutBounce);
 
-    QPropertyAnimation *ani5 = new QPropertyAnimation(cinemaBtn,"geometry");
     ani5->setDuration(400);
     ani5->setStartValue(QRect(724,1001,cinemaBtn->width(),cinemaBtn->height()));
     ani5->setEndValue(QRect(724,797,cinemaBtn->width(),cinemaBtn->height()));
     ani5->setEasingCurve(QEasingCurve::OutBounce);
 
-    QPropertyAnimation *ani6 = new QPropertyAnimation(quitBtn,"geometry");
     ani6->setDuration(400);
     ani6->setStartValue(QRect(983,1001,quitBtn->width(),quitBtn->height()));
     ani6->setEndValue(QRect(983,804,quitBtn->width(),quitBtn->height()));
     ani6->setEasingCurve(QEasingCurve::OutBounce);
 
-    QPropertyAnimation *ani7 = new QPropertyAnimation(red,"geometry");
     ani7->setDuration(300);
     ani7->setStartValue(QRect(78,0-red->height(),red->width(),red->height()));
     ani7->setEndValue(QRect(78,150,red->width(),red->height()));
 
-    QPropertyAnimation *ani8 = new QPropertyAnimation(gametitle,"geometry");
     ani8->setDuration(400);
     ani8->setStartValue(QRect(335,0-gametitle->height(),gametitle->width(),gametitle->height()));
     ani8->setEndValue(QRect(335,36,gametitle->width(),gametitle->height()));
@@ -276,6 +277,8 @@ void endingthegame(int winner,bool reviewMode){
 myWindow::myWindow(QWidget *parent) : QWidget(parent)
 {
 
+    mainbg=new myLabel(":/art/main_backgroud.jpg",this);
+    mainbg->move(0,0);
     startboard=new myLabel(":/art/button_board.png",this);
     startboard->move(450,1001);
     cinemaboard=new myLabel(":/art/button_board.png",this);
@@ -448,6 +451,15 @@ myWindow::myWindow(QWidget *parent) : QWidget(parent)
         setFocus();
     });
 
+    duolaani = new QPropertyAnimation(duola,"geometry");
+    ani1 = new QPropertyAnimation(startboard,"geometry");
+    ani2 = new QPropertyAnimation(cinemaboard,"geometry");
+    ani3 = new QPropertyAnimation(exitboard,"geometry");
+    ani4 = new QPropertyAnimation(startBtn,"geometry");
+    ani5 = new QPropertyAnimation(cinemaBtn,"geometry");
+    ani6 = new QPropertyAnimation(quitBtn,"geometry");
+    ani7 = new QPropertyAnimation(red,"geometry");
+    ani8 = new QPropertyAnimation(gametitle,"geometry");
 
 }
 
@@ -463,9 +475,19 @@ void myWindow::keyReleaseEvent(QKeyEvent *event){
 }
 
 
-void myWindow::paintEvent(QPaintEvent *){
-    QPainter painter(this);
-    QPixmap pix;
-    pix.load("://art/main_backgroud.jpg");
-    painter.drawPixmap(0,0,this->width(),this->height(),pix);
+
+
+myWindow::~myWindow(){
+    delete duolatimer;
+    delete ef;
+    delete ef2;
+    delete duolaani;
+    delete ani1;
+    delete ani2;
+    delete ani3;
+    delete ani4;
+    delete ani5;
+    delete ani6;
+    delete ani7;
+    delete ani8;
 }
