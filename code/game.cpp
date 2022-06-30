@@ -29,7 +29,7 @@ Game::Game(){
     backgroundPlaylist->addMedia(QUrl(bgmSrc));
     backgroundPlaylist->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
     backgroundPlayer = new QMediaPlayer;
-    backgroundPlayer->setVolume(0);
+    backgroundPlayer->setVolume(50);
     backgroundPlayer->setPlaylist(backgroundPlaylist);
 
     shootPlaylist = new QMediaPlaylist;
